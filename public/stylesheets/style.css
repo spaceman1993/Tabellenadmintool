@@ -10,3 +10,7 @@ a {
 .highlight {
 	background-color:green;
 }
+
+.selected {
+    background-color: lightblue;
+}

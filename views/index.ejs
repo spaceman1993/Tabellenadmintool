@@ -27,9 +27,9 @@
 			
 			<!-- erstes Design -->
 			<div ng-show="design == 1" class="panel-body">
-      <div ng-controller="MenuController">
+      <div ng-controller="MenuController" ng-init="getAllLeagues()">
 				<!-- Menü für erstes Design -->
-				<div >
+				<div>
 					 <!-- Simple dropdown -->
 					<span ng-repeat="item in items" class="dropdown" dropdown>
 					  <button class="dropdown-toggle" dropdown-toggle>
@@ -48,61 +48,63 @@
 				<!-- Tabelle für erstes Design -->
 				<div>
 					<table width="100%" ng-show="mannschaften">
-            <thead>
-              <tr>
-      					<th>Rang</th>
-      					<th>Mannschaft</th>
-      					<th>Begegnungen</th>
-      					<th>S</th>
-      					<th>U</th>
-      					<th>N</th>
-      					<th>Tore</th>
-      					<th>Verh&auml;ltnis</th>
-                <th>Punkte</th>
-      				</tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="mannschaft in mannschaften | orderObjectBy:'rang':false" data-ng-class="isHighlight(mannschaft)">
-                <td>{{mannschaft.rang}}</td>
-          			<td>{{mannschaft.mannschaft}}</td>
-          			<td>{{mannschaft.begegnungen}}</td>
-          			<td>{{mannschaft.siege}}</td>
-          			<td>{{mannschaft.unentschieden}}</td>
-          			<td>{{mannschaft.niederlagen}}</td>
-          			<td>{{mannschaft.tore}}</td>
-          			<td>{{mannschaft.verhaeltnis}}</td>
-                <td>{{mannschaft.punkte}}</td>
-              </tr>
-            </tbody>
-          </table>	
+           	 			<thead>
+              				<tr>
+      							<th>Rang</th>
+      							<th>Mannschaft</th>
+      							<th>Begegnungen</th>
+      							<th>S</th>
+      							<th>U</th>
+      							<th>N</th>
+      							<th>Tore</th>
+      							<th>Verh&auml;ltnis</th>
+                				<th>Punkte</th>
+      						</tr>
+            			</thead>
+           				<tbody>
+              				<tr ng-repeat="mannschaft in mannschaften | orderObjectBy:'rang':false" data-ng-class="isHighlight(mannschaft)">
+                				<td>{{mannschaft.rang}}</td>
+          						<td>{{mannschaft.mannschaft}}</td>
+          						<td>{{mannschaft.begegnungen}}</td>
+          						<td>{{mannschaft.siege}}</td>
+          						<td>{{mannschaft.unentschieden}}</td>
+          						<td>{{mannschaft.niederlagen}}</td>
+          						<td>{{mannschaft.tore}}</td>
+          						<td>{{mannschaft.verhaeltnis}}</td>
+                				<td>{{mannschaft.punkte}}</td>
+             				 </tr>
+           				 </tbody>
+          			</table>	
           
           
-          <table class="table table-striped table-condensed" width="100% ng-show="nextGames">
-            <thead>
-              <tr>
-                <th>Tag</th>
-                <th>Datum</th>
-                <th>Zeit</th>
-                <th>Halle</th>
-                <th>Nr</th>
-                <th>Heimmannschaft</th>
-                <th>Gastmannschaft</th>
-                <th>Tore</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="nextGame in nextGames">
-                <td>{{nextGame.tag}}</td>
-          			<td>{{nextGame.datum}}</td>
-          			<td>{{nextGame.zeit}}</td>
-          			<td>{{nextGame.halle}}</td>
-          			<td>{{nextGame.nr}}</td>
-          			<td>{{nextGame.heimmannschaft}}</td>
-          			<td>{{nextGame.gastmannschaft}}</td>
-                <td>{{nextGame.tore}}</td>
-              </tr>
-            </tbody>
-          </table>
+          			<table class="table table-striped table-condensed" width="100%" ng-show="nextGames">
+            			<thead>
+              				<tr>
+                				<th>Tag</th>
+                				<th>Datum</th>
+                				<th>Zeit</th>
+               					<th>Halle</th>
+                				<th>Nr</th>
+                				<th>Heimmannschaft</th>
+                				<th>Gastmannschaft</th>
+                				<th>Tore</th>
+              				</tr>
+            			</thead>
+            			<tbody>
+              				<tr ng-repeat="nextGame in nextGames">
+                				<td>{{nextGame.tag}}</td>
+          						<td>{{nextGame.datum}}</td>
+          						<td>{{nextGame.zeit}}</td>
+          						<td>{{nextGame.halle}}</td>
+          						<td>{{nextGame.nr}}</td>
+          						<td>{{nextGame.heimmannschaft}}</td>
+          						<td>{{nextGame.gastmannschaft}}</td>
+                				<td>{{nextGame.tore}}</td>
+              				</tr>
+            			</tbody>
+          			</table>
+
+					
 				</div>
         </div>
 				<!-- ENDE Tabelle für erstes Design -->
@@ -135,29 +137,51 @@
 		
 		<!-- settings.html -->
 		<script type="text/ng-template" id="/settings.html">
-			<div class="page-header">
-				<h1>ÜBERSCHRIFT EINSTELLUNGEN</h1>
-			</div>
+			<div ng-controller="MenuController">
+
+				<div class="page-header">
+					<h1>ÜBERSCHRIFT EINSTELLUNGEN</h1>
+				</div>
 			
-			<div class="btn-group" role="group" aria-label="...">
-				<button type="button" class="btn btn-default" ng-click="show = 'teams'">Mannschaften</button>
-				<button type="button" class="btn btn-default" ng-click="show = 'tables'">Tabellen</button>
-				<button type="button" class="btn btn-default" ng-click="show = '...'">...</button>
-			</div>
+				<div class="btn-group" role="group" aria-label="...">
+					<button type="button" class="btn btn-default" ng-click="show = 'teams'">Mannschaften</button>
+					<button type="button" class="btn btn-default" ng-click="show = 'tables'">Tabellen</button>
+					<button type="button" class="btn btn-default" ng-click="show = 'ligen'; getAllLeagues()">Ligen</button>
+					<button type="button" class="btn btn-default" ng-click="show = '...'">...</button>
+				</div>
 			
-			<div ng-show="show == 'teams'">
-				Mannschaften
-			</div>
+				<div ng-show="show == 'teams'">
+					Mannschaften
+				</div>
 			
-			<div ng-show="show == 'tables'">
-				Tabellen
-			</div>
+				<div ng-show="show == 'tables'">
+					Tabellen
+				</div>
+
+				<div ng-show="show == 'ligen'">
+
+					<div ng-repeat="group in groups" >
+						<div class="list-group">
+        					<ul class="list-group-item active" ng-click="isShow = !isShow">
+								{{ group.label }}
+							</ul>
+								<div ng-show="isShow">
+									<ul class="list-group-item" ng-repeat="league in group.leagues" ng-click="changeActiv(league)" ng-class="{selected: league.isActiv}">
+										{{league.name}}
+									</ul>
+								</div>
+						</div>
+    				</div>
+
+				</div>
 			
-			<div ng-show="show == '...'">
-				...
-			</div>
+				<div ng-show="show == '...'">
+					...
+				</div>
 			
-			<a href="#/table" type="button" class="btn btn-default glyphicon glyphicon-list">Tabelle</a>
+				<a href="#/table" type="button" class="btn btn-default glyphicon glyphicon-list">Tabelle</a>
+
+			</div>
 		</script>
 		<!-- ENDE settings.html -->
 	</body>

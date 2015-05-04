@@ -30,7 +30,7 @@ app.factory('teams', [function(){
 
 app.controller('MainCtrl', ['$scope', '$filter', 'teams', function($scope, $filter, teams){
 	$scope.teams = teams.activeTeams;
-	console.log('Standard-Auswahl: ' + $scope.teams)
+	console.log('Standard-Auswahl: ' + $scope.teams);
 	
 	$scope.incrementUpvotes = function(team) {
 		team.points += 1;
@@ -75,6 +75,7 @@ app.controller("MenuController", ['$scope', '$http', 'teams', function($scope, $
     };
   };
   
+  
 	$scope.getTableForLeague = function(adresse) {
         // Get data of team and show it in table
 		/*
@@ -86,7 +87,7 @@ app.controller("MenuController", ['$scope', '$http', 'teams', function($scope, $
 		teams.activeTeams = adresse;
     adresse = adresse.replace('/','%2F').replace('?','%3F').replace('=','%3D').replace('+','%2B').replace('&','%26').replace('+','%2B');
 
-    var jsonFeed ="https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22"+adresse+"%22%20and%20xpath%3D%22%2F%2Ftable%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys"
+    var jsonFeed ="https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22"+adresse+"%22%20and%20xpath%3D%22%2F%2Ftable%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
 
 // https%3A%2F%2Fbremerhv-handball.liga.nu%2Fcgi-bin%2FWebObjects%2FnuLigaHBDE.woa%2Fwa%2FgroupPage%3Fchampionship%3DBremer%2BHV%2B14%252F15%26group%3D176607;
 
@@ -159,8 +160,141 @@ app.controller("MenuController", ['$scope', '$http', 'teams', function($scope, $
     
 }]);
 
-app.controller('SettingsCtrl', ['$scope', function($scope){
-		
+app.controller('SettingsCtrl', ['$scope', '$http', '$filter', function($scope, $http, $filter){
+	  $scope.getAllLeagues = function() {
+		  var jsonFeed = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22https%3A%2F%2Fbremerhv-handball.liga.nu%2Fcgi-bin%2FWebObjects%2FnuLigaHBDE.woa%2Fwa%2FleaguePage%3Fchampionship%3DBremer%2BHV%2B14%2F15%22%20and%20xpath%3D%22%2F%2Ftable%2F%2Ftr%2F%2Ftd%2F%2Ful%2F%2Fli%2F%2Fspan%2F%2Fa%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
+		  // Actually fetch the data
+		    $http.get(jsonFeed).success(function (data) {
+		      // Define the unique market cities
+		      
+		      var leagues = new Array();
+
+		      var daten = data.query.results.a;
+		      for(i = 1; i < daten.length; i++){
+		        var leagueData = daten[i];
+		       
+		        var league = new Object();
+		        
+		        var namensnennung = leagueData.content;
+		        
+		        league.id = i;
+		        
+		        if(namensnennung.indexOf(" M") != -1 || namensnennung.indexOf("MJ") != -1){
+		        	league.gender = "Männlich";
+		        	league.jugend = "Herren";
+		        }
+		        else if(namensnennung.indexOf(" F") != -1 || namensnennung.indexOf("WJ") != -1){
+		        	league.gender = "Weiblich";
+		        	league.jugend = "Damen";
+		        }
+		        else{
+		        	league.gender = "undefined";
+		        	league.jugend = "undefined";
+		        }
+		        
+		        if(namensnennung.indexOf("MJ") != -1){
+		        	league.jugend = "Männliche " + namensnennung.substr(namensnennung.indexOf("MJ")+2, 1) + "-Jugend";
+		        }
+		        else if(leagueData.content.indexOf("WJ") != -1){
+		        	league.jugend = "Weibliche " + namensnennung.substr(namensnennung.indexOf("WJ")+2, 1) + "-Jugend";
+		        }
+		        
+		        league.name = namensnennung;
+		        league.linkage = "https://bremerhv-handball.liga.nu" + leagueData.href;
+		        league.isActiv = false;
+		       
+		        leagues.push(league);
+		      }
+
+		      $scope.leagues = leagues;
+		      
+		      $scope.groupBy( 'jugend' )
+		    });
+	  };
+	  
+	  $scope.changeActiv = function(league) {
+		  if(league.isActiv){
+			  league.isActiv = false;
+		  }
+		  else{
+			  league.isActiv = true;
+		  }
+	  };
+	  
+	  
+	  // I sort the given collection on the given property.
+      function sortOn( collection, name ) {
+
+    	  
+          collection.sort(
+              function( a, b ) {
+
+                  if ( a[ name ] <= b[ name ] ) {
+
+                      return( -1 );
+
+                  }
+
+                  return( 1 );
+
+              }
+          );
+
+      }
+
+
+      // -- Define Scope Methods. ----------------- //
+
+
+      // I group the friends list on the given property.
+      $scope.groupBy = function( attribute ) {
+
+          // First, reset the groups.
+          $scope.groups = [];
+
+          // Now, sort the collection of friend on the
+          // grouping-property. This just makes it easier
+          // to split the collection.
+          //$filter('orderObjectBy')( $scope.leagues, attribute );
+
+          // I determine which group we are currently in.
+          var groupValue = "_INVALID_GROUP_VALUE_";
+
+          var leagues = $scope.leagues;
+          // As we loop over each friend, add it to the
+          // current group - we'll create a NEW group every
+          // time we come across a new attribute value.
+          for ( var i = 0 ; i < leagues.length ; i++ ) {
+
+              var league = leagues[ i ];
+
+              // Should we create a new group?
+              if ( league[ attribute ] !== groupValue ) {
+
+                  var group = {
+                      label: league[ attribute ],
+                      leagues: []
+                  };
+
+                  groupValue = group.label;
+
+                  $scope.groups.push( group );
+
+              }
+
+              // Add the friend to the currently active
+              // grouping.
+              group.leagues.push( league );
+
+          }
+
+      };
+      
+      // I am the grouped collection. Each one of these
+      // will contain a sub-collection of friends.
+      $scope.groups = [];
+	  
+	  
 }]);
 
 app.filter('orderObjectBy', function() {
