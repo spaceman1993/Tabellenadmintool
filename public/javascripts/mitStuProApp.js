@@ -71,7 +71,7 @@ app.controller("MenuController", ['$scope', '$http', 'teams', function($scope, $
 	
    $scope.isHighlight = function (mannschaft) {
     return {
-      highlight: mannschaft.mannschaft === 'HSG Vegesack/Hammersbeck'
+      success: mannschaft.mannschaft === 'HSG Vegesack/Hammersbeck'
     };
   };
   
@@ -138,7 +138,7 @@ app.controller("MenuController", ['$scope', '$http', 'teams', function($scope, $
         var nextGame = new Object();
         nextGame.tag = spieldaten[0].content;
         nextGame.datum = spieldaten[1].content;
-        nextGame.zeit = spieldaten[2].content;
+        nextGame.zeit = spieldaten[2].content.substr(35, 5);
         nextGame.halle = spieldaten[3].span.a.content;
         nextGame.nr = spieldaten[4];
         nextGame.heimmannschaft = spieldaten[5].content;
