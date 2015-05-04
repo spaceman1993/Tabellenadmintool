@@ -166,8 +166,8 @@
 								{{ group.label }}
 							</ul>
 								<div ng-show="isShow">
-									<ul class="list-group-item" ng-repeat="league in group.leagues" ng-click="changeActiv(league)" ng-class="{selected: league.isActiv}">
-										{{league.name}}
+									<ul class="list-group-item" ng-repeat="data in group.list" ng-click="changeActiv(data)" ng-class="{selected: data.isActiv}">
+										{{data.name}}
 									</ul>
 								</div>
 						</div>

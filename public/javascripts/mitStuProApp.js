@@ -61,7 +61,7 @@ app.controller("MenuController", ['$scope', '$http', 'teams', function($scope, $
 		},
 		{"itemId":2, "title":"Damen", "description":"Teams der Damen", 
 			"teams":[
-				{"name":"Damen", display: "Damen", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176609"},
+				{"name":"Damen", display: "Damen", link: "https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Cuxhaven+2014%2F15&group=196510"},
 				{"name":"A-Jugend", display: "A-Jugend", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Cuxhaven+2014%2F15&group=176740"},
 				{"name":"B-Jugend", display: "B-Jugend", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176709"},
 				{"name":"D-Jugend", display: "D-Jugend", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176713"}
@@ -170,7 +170,7 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', function($scope, $
 		      var leagues = new Array();
 
 		      var daten = data.query.results.a;
-		      for(i = 1; i < daten.length; i++){
+		      for(var i = 1; i < daten.length; i++){
 		        var leagueData = daten[i];
 		       
 		        var league = new Object();
@@ -179,24 +179,30 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', function($scope, $
 		        
 		        league.id = i;
 		        
-		        if(namensnennung.indexOf(" M") != -1 || namensnennung.indexOf("MJ") != -1){
+		       
+		        if(namensnennung.indexOf("MJ") !== -1){
+		        	league.gender = "Männlich";
+		        	league.jugend = "Männliche " + namensnennung.substr(namensnennung.indexOf("MJ")+2, 1) + "-Jugend";
+		        	namensnennung = namensnennung.replace(" MJ"+namensnennung.substr(namensnennung.indexOf("MJ")+2, 1), "");
+		        }
+		        else if(leagueData.content.indexOf("WJ") !== -1){
+		        	league.gender = "Weiblich";
+		        	league.jugend = "Weibliche " + namensnennung.substr(namensnennung.indexOf("WJ")+2, 1) + "-Jugend";
+		        	namensnennung = namensnennung.replace(" WJ"+namensnennung.substr(namensnennung.indexOf("WJ")+2, 1), "");
+		        }
+		        else if(namensnennung.indexOf(" M") !== -1){
 		        	league.gender = "Männlich";
 		        	league.jugend = "Herren";
+		        	namensnennung = namensnennung.replace(" M", "");
 		        }
-		        else if(namensnennung.indexOf(" F") != -1 || namensnennung.indexOf("WJ") != -1){
+		        else if(namensnennung.indexOf(" F") !== -1){
 		        	league.gender = "Weiblich";
 		        	league.jugend = "Damen";
+		        	namensnennung = namensnennung.replace(" F", "");
 		        }
 		        else{
 		        	league.gender = "undefined";
 		        	league.jugend = "undefined";
-		        }
-		        
-		        if(namensnennung.indexOf("MJ") != -1){
-		        	league.jugend = "Männliche " + namensnennung.substr(namensnennung.indexOf("MJ")+2, 1) + "-Jugend";
-		        }
-		        else if(leagueData.content.indexOf("WJ") != -1){
-		        	league.jugend = "Weibliche " + namensnennung.substr(namensnennung.indexOf("WJ")+2, 1) + "-Jugend";
 		        }
 		        
 		        league.name = namensnennung;
@@ -208,7 +214,7 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', function($scope, $
 
 		      $scope.leagues = leagues;
 		      
-		      $scope.groupBy( 'jugend' )
+		      $scope.listGroupBy( leagues, 'jugend');
 		    });
 	  };
 	  
@@ -220,34 +226,10 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', function($scope, $
 			  league.isActiv = true;
 		  }
 	  };
-	  
-	  
-	  // I sort the given collection on the given property.
-      function sortOn( collection, name ) {
-
-    	  
-          collection.sort(
-              function( a, b ) {
-
-                  if ( a[ name ] <= b[ name ] ) {
-
-                      return( -1 );
-
-                  }
-
-                  return( 1 );
-
-              }
-          );
-
-      }
-
-
-      // -- Define Scope Methods. ----------------- //
-
+	 
 
       // I group the friends list on the given property.
-      $scope.groupBy = function( attribute ) {
+      $scope.listGroupBy = function( list, attribute ) {
 
           // First, reset the groups.
           $scope.groups = [];
@@ -260,20 +242,19 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', function($scope, $
           // I determine which group we are currently in.
           var groupValue = "_INVALID_GROUP_VALUE_";
 
-          var leagues = $scope.leagues;
           // As we loop over each friend, add it to the
           // current group - we'll create a NEW group every
           // time we come across a new attribute value.
-          for ( var i = 0 ; i < leagues.length ; i++ ) {
+          for ( var i = 0 ; i < list.length ; i++ ) {
 
-              var league = leagues[ i ];
+              var data = list[ i ];
 
               // Should we create a new group?
-              if ( league[ attribute ] !== groupValue ) {
+              if ( data[ attribute ] !== groupValue ) {
 
                   var group = {
-                      label: league[ attribute ],
-                      leagues: []
+                      label: data[ attribute ],
+                      list: []
                   };
 
                   groupValue = group.label;
@@ -282,9 +263,8 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', function($scope, $
 
               }
 
-              // Add the friend to the currently active
-              // grouping.
-              group.leagues.push( league );
+  
+              group.list.push( data );
 
           }
 
