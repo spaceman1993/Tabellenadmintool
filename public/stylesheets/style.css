@@ -14,3 +14,19 @@ a {
 .selected {
     background-color: lightblue;
 }
+
+.btn-group:hover>.dropdown-menu {
+  	display: block;
+  	margin-top: 0;
+ 	cursor: pointer;
+}
+
+.dropdown-menu { width: 100%; }
+
+.dropdown-menu:target {
+	width:50%;
+}
+
+.btn-lg {
+	border-radius: 0px;
+}

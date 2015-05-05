@@ -76,10 +76,20 @@ app.controller("MenuController", ['$scope', '$http', 'teams', function($scope, $
     
     $scope.isHighlight = function (mannschaft) {
     	return {
-    		success: mannschaft.mannschaft === 'HSG Vegesack/Hammersbeck'
+    		'success': mannschaft.mannschaft === 'HSG Vegesack/Hammersbeck'
     	};
     };
-  
+    
+    $scope.chooseColor = function (input) {
+    	
+    	if(input == 'Herren'){
+    		return 'btn-primary';
+    	}
+    	else if(input == 'Damen'){
+    		return 'btn-danger';
+    	}
+    	
+    };
   
 	$scope.getTableForLeague = function(adresse) {
         // Get data of team and show it in table
