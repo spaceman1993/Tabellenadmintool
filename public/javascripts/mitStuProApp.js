@@ -1,4 +1,4 @@
-var app = angular.module('mitStuPro', ['ui.router', 'ui.bootstrap']);
+var app = angular.module('mitStuPro', ['ui.router', 'ui.bootstrap', 'colorpicker.module']);
 
 
 
