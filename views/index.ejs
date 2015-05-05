@@ -26,120 +26,59 @@
 		<!-- table.html -->
 		<script type="text/ng-template" id="/table.html">
 			<!-- Kopfnavigation -->
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-  <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="navbar-body">
-      <ul class="nav navbar-nav">
-        <li><a href="#/table" type="button" class="btn btn-default navbar-btn glyphicon glyphicon-list"> Tabelle</a></li>
-        <li><a href="#/settings" type="button" class="btn btn-default navbar-btn glyphicon glyphicon-wrench"> Einstellungen</a></li>
-      </ul>
+			<nav class="navbar navbar-default">
+  				<div class="container-fluid">
+  					<!-- Collect the nav links, forms, and other content for toggling -->
+    				<div class="navbar-body">
+      					<ul class="nav navbar-nav">
+        					<li><a href="#/table" type="button" class="btn btn-default navbar-btn glyphicon glyphicon-list"> Tabelle</a></li>
+        					<li><a href="#/settings" type="button" class="btn btn-default navbar-btn glyphicon glyphicon-wrench"> Einstellungen</a></li>
+      					</ul>
 
-      <ul class="nav navbar-nav navbar-right" ng-init="design = 1">
-        <li><a type="button" class="btn btn-default navbar-btn" ng-click="design = 1">Design 1</a></li>
-		<li><a type="button" class="btn btn-default navbar-btn" ng-click="design = 2">Design 2</a></li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
+      					<ul class="nav navbar-nav navbar-right" ng-init="design = 1">
+        					<li><a type="button" class="btn btn-default navbar-btn" ng-click="design = 1">Design 1</a></li>
+							<li><a type="button" class="btn btn-default navbar-btn" ng-click="design = 2">Design 2</a></li>
+      					</ul>
+    				</div><!-- /.navbar-collapse -->
+  				</div><!-- /.container-fluid -->
+			</nav>
 			<!-- ENDE Kopfnavigation -->
 
 			<!-- erstes Design -->
 			<div ng-show="design == 1" class="panel-body">
-				<div ng-controller="MenuController">
-      <div ng-controller="MenuController" ng-init="getAllLeagues()">
+      			<div ng-controller="MenuController" ng-init="getAllLeagues()">
+				<!-- Menü für erstes Design -->
+				<div>
+					 <!-- Simple dropdown -->
+					<span ng-repeat="item in items" class="dropdown" dropdown>
+					  <button class="dropdown-toggle" dropdown-toggle>
+						{{item.title}} <span class="caret"></span>
+					  </button>
+					  <ul class="dropdown-menu" role="menu">
+						<li ng-repeat="team in item.teams">
+							<a ng-click="getTableForLeague(team.link)">{{team.display}}</a>
+						</li>
+					  </ul>
+					</span>
+				</div>
 				
-				
-					<!-- Menü für erstes Design -->
-					<div >
-						 <!-- Simple dropdown -->
-						<span ng-repeat="item in items" class="dropdown" dropdown>
-						  <a class="dropdown-toggle btn btn-default" dropdown-toggle>
-							{{item.title}} <span class="caret"></span>
-						  </a>
-						  <ul class="dropdown-menu" role="menu">
-							<li ng-repeat="team in item.teams">
-								<a ng-click="getTableForLeague(team.link)">{{team.display}}</a>
-							</li>
-					  	</ul>
-						</span>
-					</div>
-					<!-- ENDE Menü für erstes Design -->
-
-					<!-- Tabelle für erstes Design -->
-					<div>
-						<table ng-show="mannschaften" class="table table-condensed table-bordered">
-							<thead>
-            					<tr>
-									<th>Rang</th>
-    	  							<th>Mannschaft</th>
-      								<th>Begegnungen</th>
-      								<th>S</th>
-     	 							<th>U</th>
-      								<th>N</th>
-      								<th>Tore</th>
-      								<th>Verh&auml;ltnis</th>
-                					<th>Punkte</th>
-      							</tr>
-            				</thead>
-            				<tbody>
-								<tr ng-repeat="mannschaft in mannschaften | orderObjectBy:'rang':false" data-ng-class="isHighlight(mannschaft)">
-									<td>{{mannschaft.rang}}</td>
-			          				<td>{{mannschaft.mannschaft}}</td>
-          							<td>{{mannschaft.begegnungen}}</td>
-			          				<td>{{mannschaft.siege}}</td>
-          							<td>{{mannschaft.unentschieden}}</td>
-          							<td>{{mannschaft.niederlagen}}</td>
-          							<td>{{mannschaft.tore}}</td>
-          							<td>{{mannschaft.verhaeltnis}}</td>
-                					<td>{{mannschaft.punkte}}</td>
-              					</tr>
-            				</tbody>
-          				</table>	
-
-      			    	<table class="table table-striped table-condensed table-bordered" ng-show="nextGames">
-       				    	<thead>
-          				    	<tr>
-     					        	<th>Tag</th>
-               						<th>Datum</th>
-                					<th>Zeit</th>
-                					<th>Halle</th>
-                					<th>Nr</th>
-                					<th>Heimmannschaft</th>
-                					<th>Gastmannschaft</th>
-                					<th>Tore</th>
-              					</tr>
-            				</thead>
-            				<tbody>
-              					<tr ng-repeat="nextGame in nextGames">
-                					<td>{{nextGame.tag}}</td>
-          							<td>{{nextGame.datum}}</td>
-          							<td>{{nextGame.zeit}}</td>
-          							<td>{{nextGame.halle}}</td>
-          							<td>{{nextGame.nr}}</td>
-          							<td>{{nextGame.heimmannschaft}}</td>
-          							<td>{{nextGame.gastmannschaft}}</td>
-               						<td>{{nextGame.tore}}</td>
-              					</tr>
-            				</tbody>
-          				</table>
-					</div>
-        		</div>
 				   
 				<!-- ENDE Menü für erstes Design -->
 				<!-- Tabelle für erstes Design -->
-				<div>
-					<table class="table table-striped" width="100%" ng-show="mannschaften">
+				<div ng-show="mannschaften">
+
+					<h2>Tabelle der {{teams.name}}</h2>
+					<table class="table table-striped table-condensed" width="100%">
            	 			<thead>
               				<tr>
       							<th>Rang</th>
       							<th>Mannschaft</th>
-      							<th>Begegnungen</th>
+      							<th>Spiele</th>
       							<th>S</th>
       							<th>U</th>
       							<th>N</th>
       							<th>Tore</th>
-      							<th>Verh&auml;ltnis</th>
+      							<th>+/-</th>
                 				<th>Punkte</th>
       						</tr>
             			</thead>
@@ -148,17 +87,18 @@
                 				<td>{{mannschaft.rang}}</td>
           						<td>{{mannschaft.mannschaft}}</td>
           						<td>{{mannschaft.begegnungen}}</td>
-          						<td>{{mannschaft.siege}}</td>
-          						<td>{{mannschaft.unentschieden}}</td>
-          						<td>{{mannschaft.niederlagen}}</td>
-          						<td>{{mannschaft.tore}}</td>
-          						<td>{{mannschaft.verhaeltnis}}</td>
-                				<td>{{mannschaft.punkte}}</td>
+        						<td ng-if="isNumber(mannschaft.siege)">{{mannschaft.siege}}</td>
+								<td ng-if="!isNumber(mannschaft.siege)" colspan="100%">{{mannschaft.siege}}</td>
+          						<td ng-if="isNumber(mannschaft.siege)">{{mannschaft.unentschieden}}</td>
+          						<td ng-if="isNumber(mannschaft.siege)">{{mannschaft.niederlagen}}</td>
+          						<td ng-if="isNumber(mannschaft.siege)">{{mannschaft.tore}}</td>
+          						<td ng-if="isNumber(mannschaft.siege)">{{mannschaft.verhaeltnis}}</td>
+                				<td ng-if="isNumber(mannschaft.siege)">{{mannschaft.punkte}}</td>
              				 </tr>
            				 </tbody>
           			</table>	
           
-          
+          			<h2>Spielplan</h2>
           			<table class="table table-striped table-condensed" width="100%" ng-show="nextGames">
             			<thead>
               				<tr>
@@ -186,13 +126,12 @@
             			</tbody>
           			</table>
 
-					
 				</div>
         </div>
 				<!-- ENDE Tabelle für erstes Design -->
 			</div>
 			<!-- ENDE erstes Design -->
-						
+			
 			<!-- zweites Design -->
 			<div ng-show="design == 2" class="panel-body">
 				<!-- Menü für zweites Design -->
@@ -207,52 +146,48 @@
 		</script>
 		<!-- ENDE table.html -->
 		
+		
 		<!-- settings.html -->
 		<script type="text/ng-template" id="/settings.html">
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-  <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="navbar-body">
-      <ul class="nav navbar-nav">
-        <li><a href="#/table" type="button" class="btn btn-default navbar-btn glyphicon glyphicon-list"> Tabelle</a></li>
-        <li><a href="#/settings" type="button" class="btn btn-default navbar-btn glyphicon glyphicon-wrench"> Einstellungen</a></li>
-      </ul>
+			<nav class="navbar navbar-default">
+  				<div class="container-fluid">
+  					<!-- Collect the nav links, forms, and other content for toggling -->
+    				<div class="navbar-body">
+      					<ul class="nav navbar-nav">
+        					<li><a href="#/table" type="button" class="btn btn-default navbar-btn glyphicon glyphicon-list"> Tabelle</a></li>
+        					<li><a href="#/settings" type="button" class="btn btn-default navbar-btn glyphicon glyphicon-wrench"> Einstellungen</a></li>
+      					</ul>
 
-      <ul class="nav navbar-nav navbar-right">
-        <li><a type="button" class="btn btn-default navbar-btn" ng-click="show = 'teams'">Mannschaften</a></li>
-		<li><a type="button" class="btn btn-default navbar-btn" ng-click="show = 'tables'">Tabellen</a></li>
-		<li><a type="button" class="btn btn-default navbar-btn" ng-click="show = 'ligen'; getAllLeagues()">Ligen</a></li>
-		<li><a type="button" class="btn btn-default navbar-btn" ng-click="show = '...'">...</a></li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
-
-
+      					<ul class="nav navbar-nav navbar-right">
+        					<li><a type="button" class="btn btn-default navbar-btn" ng-click="show = 'teams'">Mannschaften</a></li>
+							<li><a type="button" class="btn btn-default navbar-btn" ng-click="show = 'tables'">Tabellen</a></li>
+							<li><a type="button" class="btn btn-default navbar-btn" ng-click="show = 'ligen'; getAllLeagues()">Ligen</a></li>
+							<li><a type="button" class="btn btn-default navbar-btn" ng-click="show = '...'">...</a></li>
+      					</ul>
+    				</div><!-- /.navbar-collapse -->
+  				</div><!-- /.container-fluid -->
+			</nav>
 
 
+			<div ng-show="show == 'tables'">
+				Tabellen
+			</div>
 
-
-				<div ng-show="show == 'tables'">
-					Tabellen
-				</div>
-
-				<div ng-show="show == 'ligen'">
-
-					<div ng-repeat="group in groups" >
-						<div class="list-group">
-        					<ul class="list-group-item active" ng-click="isShow = !isShow">
-								{{ group.label }}
-							</ul>
-								<div ng-show="isShow">
-									<ul class="list-group-item" ng-repeat="data in group.list" ng-click="changeActiv(data)" ng-class="{selected: data.isActiv}">
-										{{data.name}}
-									</ul>
-								</div>
-						</div>
-    				</div>
-
-				</div>
+			<div ng-show="show == 'ligen'">
+				<div ng-repeat="group in groups" >
+					<div class="list-group">
+        				<ul class="list-group-item active" ng-click="isShow = !isShow">
+							{{ group.label }}
+						</ul>
+						
+							<div ng-show="isShow">
+								<ul class="list-group-item" ng-repeat="data in group.list" ng-click="changeActiv(data)" ng-class="{selected: data.isActiv}">
+									{{data.name}}
+								</ul>
+							</div>
+					</div>
+    			</div>
+			</div>
 			
 			<div ng-show="show == 'tables'" class="row" style="outline: 1px solid #AAAAAA;">
 				<div class="col-md-6">
