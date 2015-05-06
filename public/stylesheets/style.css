@@ -30,3 +30,8 @@ a {
 .btn-lg {
 	border-radius: 0px;
 }
+
+.table > caption {
+	font-size: 30px;
+	color: #333333;
+}
