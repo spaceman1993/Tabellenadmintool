@@ -61,7 +61,7 @@ app.controller("TableController", ['$scope', '$http', 'teams', function($scope, 
 		},
 		{"itemId":2, "title":"Damen", "description":"Teams der Damen", 
 			"teams":[
-				{"name":"Damen", display: "Damen", link: "https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Cuxhaven+2014%2F15&group=196510"},
+				{"name":"Damen", display: "Damen", link: "https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176609"},
 				{"name":"A-Jugend", display: "A-Jugend", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Cuxhaven+2014%2F15&group=176740"},
 				{"name":"B-Jugend", display: "B-Jugend", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176709"},
 				{"name":"D-Jugend", display: "D-Jugend", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176713"}
