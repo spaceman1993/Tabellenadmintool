@@ -56,29 +56,43 @@
 
 				<!-- erstes Design -->
 				<div ng-show="design == 1">
-      				<div ng-init="getTableForLeague(items[0].teams[0].link)">
+      				<div>
       				
 						<!-- Menü für erstes Design -->
-
+							
 							<!-- Simple dropdown -->
-							<div ng-repeat="item in items" class="btn-group" style="width : 50%;">
-								<button class="btn btn-block btn-lg active dropdown-toggle" data-toggle="dropdown" data-ng-class="chooseColor(item.title)"> 
-									{{item.title}}
-								</button>
-								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-        							<li ng-repeat="team in item.teams">
-										<a ng-click="getTableForLeague(team.link)">{{team.display}}</a>
-									</li>
-      							</ul>
+							<div class="btn-group" style="width:100%">
+								<div class="btn-group" style="width:50%">
+									<button class="btn btn-primary btn-lg btn-block  active dropdown-toggle " data-toggle="dropdown"> 
+										Männlich
+									</button>
+									<ul class="dropdown-menu" role="menu">
+        								<li ng-repeat="league in activeLeagues | filter: { gender: 'Männlich' }:true">
+											<a ng-click="getTableForLeague(league)">{{league.jugend}} ({{league.name}})</a>
+										</li>
+      								</ul>
+								</div>
+
+								<div class="btn-group " style="width:50%">
+									<button class="btn btn-danger btn-lg btn-block active dropdown-toggle " data-toggle="dropdown"> 
+										Weiblich
+									</button>
+									<ul class="dropdown-menu" role="menu">
+        								<li ng-repeat="league in activeLeagues | filter: { gender: 'Weiblich' }:true">
+											<a ng-click="getTableForLeague(league)">{{league.jugend}} ({{league.name}})</a>
+										</li>
+      								</ul>
+								</div>
 							</div>
+
 				   
 						<!-- ENDE Menü für erstes Design -->
 				
 						<!-- Tabelle für erstes Design -->
 						<div ng-show="mannschaften">
 
-							<table class="table table-striped table-condensed">
-								<caption>Tabelle der {{teams.name}}</caption>
+           	 				<table class="table table-striped table-condensed">
+								<caption>Tabelle der {{leagueName}}</caption>	
            	 					<thead>
               						<tr>
       									<th>Rang</th>
@@ -242,7 +256,7 @@
       					<ul class="nav navbar-nav navbar-right">
         					<li><a type="button" class="btn btn-default navbar-btn" ng-click="show = 'teams'">Mannschaften</a></li>
 							<li><a type="button" class="btn btn-default navbar-btn" ng-click="show = 'tables'">Tabellen</a></li>
-							<li><a type="button" class="btn btn-default navbar-btn" ng-click="show = 'ligen'; getAllLeagues()">Ligen</a></li>
+							<li><a type="button" class="btn btn-default navbar-btn" ng-click="show = 'ligen'">Ligen</a></li>
 							<li><a type="button" class="btn btn-default navbar-btn" ng-click="show = '...'">...</a></li>
       					</ul>
     				</div><!-- /.navbar-collapse -->
@@ -250,19 +264,28 @@
 			</nav>
 
 			<div ng-show="show == 'ligen'">
-				<div ng-repeat="group in groups" >
+
+				<div>
+					Ligenplan Webseite: <input type="text" ng-model="ligenplanLink">
+					<input type="button" value="Übernehmen" ng-click="getAllLeagues(ligenplanLink)">
+					<input type="button" value="Übernehmen Ligen" ng-click="setActiveLeagues()">
+				</div>
+				
+				<!-- Listen gruppiert nach Jugenden -->
+				<div ng-repeat="jugend in jugenden" >
 					<div class="list-group">
         				<ul class="list-group-item active" ng-click="isShow = !isShow">
-							{{ group.label }}
+							{{ jugend.label }}
 						</ul>
 						
 						<div ng-show="isShow">
-							<ul class="list-group-item" ng-repeat="data in group.list" ng-click="changeActiv(data)" ng-class="{selected: data.isActiv}">
+							<ul class="list-group-item" ng-repeat="data in jugend.list" ng-click="changeActiv(data)" ng-class="{selected: data.isActiv}">
 								{{data.name}}
 							</ul>
 						</div>
 					</div>
     			</div>
+
 			</div>
 			
 			<div ng-show="show == 'tables'" class="row" style="outline: 1px solid #AAAAAA;">
