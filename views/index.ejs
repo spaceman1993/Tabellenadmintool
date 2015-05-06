@@ -165,7 +165,7 @@
 									{{item.title}} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
 								</accordion-heading>
 								<div class="btn-group-vertical" role="group">
-									<button type="button" class="btn btn-default" ng-repeat="team in item.teams" ng-click="getTableForLeague(team.link)">{{team.display}}</button>
+									<button type="button" class="btn btn-default" ng-repeat="team in item.teams" ng-click="getTableForLeague(team)">{{team.display}}</button>
 								</div>
 							</accordion-group>
 						</accordion>

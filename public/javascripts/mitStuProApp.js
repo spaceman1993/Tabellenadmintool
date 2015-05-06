@@ -58,59 +58,38 @@ app.controller('MainCtrl', ['$scope', '$filter', 'teams', function($scope, $filt
 app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 'teams', function($scope, $http, $filter, dataService, teams) {
 	
 	$scope.activeLeagues = dataService.activeLeagues;
-	
-	
-	
-    $scope.items = [
-		{"itemId":1, "title":"Herren", "description":"Teams der Herren", 
-			"teams":[
-				{"name":"Herren", display: "Herren", link: "https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176607"},
-				{"name":"A-Jugend", display: "A-Jugend", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176706"},
-				{"name":"D-Jugend", display: "D-Jugend", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176712"},
-				{"name":"E-Jugend", display: "E-Jugend", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176714"}
-			]
-		},
-		{"itemId":2, "title":"Damen", "description":"Teams der Damen", 
-			"teams":[
-				{"name":"Damen", display: "Damen", link: "https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176609"},
-				{"name":"A-Jugend", display: "A-Jugend", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Cuxhaven+2014%2F15&group=176740"},
-				{"name":"B-Jugend", display: "B-Jugend", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176709"},
-				{"name":"D-Jugend", display: "D-Jugend", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176713"}
-			]
-		}
-    ];
     
     $scope.items2 = [
 		{"itemId":1, "title":"Herren", "description":"Teams der Herren", 
 			"teams":[
-				{"name":"Herren", display: "Herren", link: "https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176607"}
+				{"name":"Herren", display: "Herren", linkage: "https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176607"}
 			]
 		},
 		{"itemId":1, "title":"Damen", "description":"Teams der Damen", 
 			"teams":[
-			    {"name":"Damen", display: "Damen", link: "https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Cuxhaven+2014%2F15&group=196510"}
+			    {"name":"Damen", display: "Damen", linkage: "https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Cuxhaven+2014%2F15&group=196510"}
 			]
 		},
 		{"itemId":1, "title":"A-Jugend", "description":"Teams der A-Jugend", 
 			"teams":[
-			    {"name":"Herren", display: "Männlich", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176706"},
-			    {"name":"Damen", display: "Weiblich", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Cuxhaven+2014%2F15&group=176740"}
+			    {"name":"Herren", display: "Männlich", linkage: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176706"},
+			    {"name":"Damen", display: "Weiblich", linkage: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Cuxhaven+2014%2F15&group=176740"}
 			]
 		},
 		{"itemId":1, "title":"B-Jugend", "description":"Teams der B-Jugend", 
 			"teams":[
-			    {"name":"Damen", display: "Weiblich", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176709"}
+			    {"name":"Damen", display: "Weiblich", linkage: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176709"}
 			]
 		},
 		{"itemId":1, "title":"D-Jugend", "description":"Teams der D-Jugend", 
 			"teams":[
-			    {"name":"Herren", display: "Männlich", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176712"}, 
-			    {"name":"Damen", display: "Weiblich", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176713"}
+			    {"name":"Herren", display: "Männlich", linkage: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176712"}, 
+			    {"name":"Damen", display: "Weiblich", linkage: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176713"}
 			]
 		},
 		{"itemId":1, "title":"E-Jugend", "description":"Teams der E-Jugend", 
 			"teams":[
-			    {"name":"Herren", display: "Männlich", link: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176714"}
+			    {"name":"Herren", display: "Männlich", linkage: "http://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=Bremer+HV+14%2F15&group=176714"}
 			 ]
 		}
     ];
