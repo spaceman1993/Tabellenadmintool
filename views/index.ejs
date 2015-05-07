@@ -265,26 +265,28 @@
 
 			<div ng-show="show == 'ligen'">
 
-				<div>
-					Ligenplan Webseite: <input type="text" ng-model="ligenplanLink">
-					<input type="button" value="Übernehmen" ng-click="getAllLeagues(ligenplanLink)">
-					<input type="button" value="Übernehmen Ligen" ng-click="setActiveLeagues()">
-				</div>
-				
-				<!-- Listen gruppiert nach Jugenden -->
-				<div ng-repeat="jugend in jugenden" >
-					<div class="list-group">
-        				<ul class="list-group-item active" ng-click="isShow = !isShow">
-							{{ jugend.label }}
-						</ul>
-						
-						<div ng-show="isShow">
-							<ul class="list-group-item" ng-repeat="data in jugend.list" ng-click="changeActiv(data)" ng-class="{selected: data.isActiv}">
-								{{data.name}}
-							</ul>
-						</div>
+				<h2> Liga-Manager </h2>
+
+			
+					<div>
+						Ligenplan Webseite: <input type="text" ng-model="ligenplanLink">
+						<input type="button" value="Übernehmen" ng-click="getAllLeagues(ligenplanLink)">
 					</div>
-    			</div>
+				
+					<!-- Listen gruppiert nach Jugenden -->
+					<div ng-repeat="jugend in jugenden" >
+						<div class="list-group">
+        					<ul class="list-group-item active" ng-click="isShow = !isShow">
+								{{ jugend.label }}
+							</ul>
+						
+							<div ng-show="isShow">
+								<ul class="list-group-item" ng-repeat="data in jugend.list" ng-click="changeActiv(data)" ng-class="{selected: data.isActiv}">
+									{{data.name}}
+								</ul>
+							</div>
+						</div>
+    				</div>
 
 			</div>
 			

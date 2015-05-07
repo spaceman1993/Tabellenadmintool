@@ -3,9 +3,14 @@ var app = angular.module('mitStuPro', ['ui.router', 'ui.bootstrap', 'colorpicker
 
 app.service('dataService', function() {
 	  // private variable
+	  var _leagues = new Array();
 	  var _activeLeagues = new Array();
 	  
+	  var _jugenden = new Array();
+	  
+	  this.leagues = _leagues;
 	  this.activeLeagues = _activeLeagues;
+	  this.jugenden = _jugenden;
 	})
 
 
@@ -205,11 +210,16 @@ app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 
 
 app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', function($scope, $http, $filter, dataService){
 	
+	$scope.ligenplanLink = "https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/leaguePage?championship=Bremer+HV+14/15";
+	
+	
+	$scope.leagues = dataService.leagues;
+	$scope.jugenden = dataService.jugenden;
+	
 	$scope.getAllLeagues = function(ligenplanLink) {
 			
 		console.log(ligenplanLink);
 			
-		https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/leaguePage?championship=Bremer+HV+14/15
 		ligenplanLink = ligenplanLink.replace('"', '%3A').replace('/','%2F').replace('?','%3F').replace('=','%3D').replace('+','%2B').replace('&','%26').replace('+','%2B');
 		
 		var jsonFeed = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22" + ligenplanLink + "%22%20and%20xpath%3D%22%2F%2Ftable%2F%2Ftr%2F%2Ftd%2F%2Ful%2F%2Fli%2F%2Fspan%2F%2Fa%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
@@ -260,35 +270,34 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', fun
 		    	}
 
 		    	$scope.leagues = leagues;
-		    	$scope.jugenden = $filter('listGroupBy')( leagues, 'jugend');
+		    	dataService.leagues = $scope.leagues;
+		    	$scope.jugenden = $filter('listGroupBy')( leagues, 'jugend')
+		    	dataService.jugenden = $scope.jugenden;
 		});
 	};
 	  
 	  $scope.changeActiv = function(league) {
 		  if(league.isActiv){
+			  var pos = dataService.activeLeagues.indexOf(league);
+			  dataService.activeLeagues.splice(pos, 1);
 			  league.isActiv = false;
 		  }
 		  else{
 			  league.isActiv = true;
+			  dataService.activeLeagues.push(league)
 		  }
 	  };
-	 
-	  $scope.setActiveLeagues = function() {
-		  
-		  activeLeagues = new Array();
-		  
-		  for (var i=0; i<$scope.leagues.length; i++){
-			  league = $scope.leagues[i]
-			  
-			  if(league.isActiv){
-				  activeLeagues.push(league);
-			  }
-		  }
-		  
-		  dataService.activeLeagues = activeLeagues;
-	  }
 	  
 }]);
+
+
+app.filter('findObjectBy', function() {
+	return function(objects, property, value) {
+		return objects.filter(function (value) {
+            return val[property] !== value;
+           });
+	}
+});
 
 
 app.filter('listGroupBy', function() {
