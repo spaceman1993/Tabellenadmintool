@@ -11,7 +11,8 @@
 		<script src="/javascripts/bootstrap-colorpicker-module.js"></script>
 		<script src="/javascripts/mitStuProApp.js"></script>
 		<script src="/javascripts/ui-bootstrap-tpls-0.12.1.min.js"></script>
-		<style> .glyphicon-thumbs-up { cursor:pointer } </style>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-animate.js"></script>
+		<style> .glyphicon { cursor:pointer } </style>
 	</head>
 	<body ng-app="mitStuPro">
 	  
@@ -23,71 +24,76 @@
 			</div>
 		</div>
 
+
 		<!-- table.html -->
  		<script type="text/ng-template" id="/table.html">
-			<div ng-controller="TableController">
-				<!-- Kopfnavigation -->
-				<nav class="navbar navbar-default">
-  					<div class="container-fluid">
-  						<!-- Collect the nav links, forms, and other content for toggling -->
-    					<div class="navbar-body">
-      						<ul class="nav navbar-nav">
-        						<li><a href="#/table" type="button" class="btn btn-default navbar-btn glyphicon glyphicon-list"> Tabelle</a></li>
-        						<li><a href="#/settings" type="button" class="btn btn-default navbar-btn glyphicon glyphicon-wrench"> Einstellungen</a></li>
-      						</ul>
+			<div ng-controller="TableController" ng-init="design = 1">
 
-      						<ul class="nav navbar-nav navbar-right" ng-init="design = 1">
-        						<li><a type="button" class="btn btn-default navbar-btn" ng-click="design = 1">Design 1</a></li>
-								<li><a type="button" class="btn btn-default navbar-btn" ng-click="design = 2">Design 2</a></li>
-      						</ul>
-							<form class="navbar-form navbar-right" role="search">
-			                    <div class="form-group">
-			                        <input type="text" class="form-control" name="username" placeholder="Username">
-			                    </div>
-			                    <div class="form-group">
-			                    	<input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
-			                    </div>
-			                    <button type="submit" class="btn btn-default">Sign In</button>
-			                </form>
-    					</div><!-- /.navbar-collapse -->
-  					</div><!-- /.container-fluid -->
-				</nav>
-				<!-- ENDE Kopfnavigation -->
+				<div class="panel panel-default">
+					
+				<div class="panel panel-heading clearfix">
+					<a href="#" ng-click="design = 1"><span class="glyphicon glyphicon-list"></span> 1.Design</a>
+					<a class="space" href="#" ng-click="design = 2"><span class="glyphicon glyphicon-th"></span> 2.Design</a>
 
-				<!-- erstes Design -->
-				<div ng-show="design == 1">
-      				<div>
-      				
+					<a class="pull-right space" href="#" ng-click="login = !login"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+					<a class="pull-right" href="#"><span class="glyphicon glyphicon-edit"></span> Registrieren</a>
+				</div>
+
+				<div class="panel panel-heading clearfix" ng-show="login">
+
+					<div class="pull-right">
+						<div class="inner-addon left-addon" style="width:200px; display: inline-block;">
+    						<i class="glyphicon glyphicon-user"></i>
+    						<input type="text" class="form-control" placeholder="Benutzername" />
+						</div>
+
+						<div class="inner-addon left-addon" style="width:200px; display: inline-block;">
+    						<i class="glyphicon glyphicon-lock"></i>
+    						<input type="password" class="form-control" placeholder="Passwort" />
+						</div>
+
+						<button class="btn btn-default" ng-click="login = false">Sign Up</button>
+					</div>
+				</div>
+
+				<div class="panel panel-heading-nostyle">
+
+					<div ng-show="design == 1">
 						<!-- Menü für erstes Design -->
-							
-							<!-- Simple dropdown -->
-							<div class="btn-group" style="width:100%">
-								<div class="btn-group" style="width:50%">
-									<button class="btn btn-primary btn-lg btn-block  active dropdown-toggle " data-toggle="dropdown"> 
-										Männlich
-									</button>
-									<ul class="dropdown-menu" role="menu">
-        								<li ng-repeat="league in activeLeagues | filter: { gender: 'Männlich' }:true">
-											<a ng-click="getTableForLeague(league)">{{league.jugend}} ({{league.name}})</a>
-										</li>
-      								</ul>
-								</div>
-
-								<div class="btn-group " style="width:50%">
-									<button class="btn btn-danger btn-lg btn-block active dropdown-toggle " data-toggle="dropdown"> 
-										Weiblich
-									</button>
-									<ul class="dropdown-menu" role="menu">
-        								<li ng-repeat="league in activeLeagues | filter: { gender: 'Weiblich' }:true">
-											<a ng-click="getTableForLeague(league)">{{league.jugend}} ({{league.name}})</a>
-										</li>
-      								</ul>
-								</div>
+						<!-- Simple dropdown -->
+						<div class="btn-group" style="width:100%">
+							<div class="btn-group" style="width:50%">
+								<button class="btn btn-primary btn-lg btn-block  active dropdown-toggle " data-toggle="dropdown"> 
+									Männlich
+								</button>
+								<ul class="dropdown-menu" role="menu">
+	      								<li ng-repeat="league in activeLeagues | filter: { gender: 'Männlich' }:true">
+										<a ng-click="getTableForLeague(league)">{{league.jugend}} ({{league.name}})</a>
+									</li>
+	    								</ul>
 							</div>
+	
+							<div class="btn-group " style="width:50%">
+								<button class="btn btn-danger btn-lg btn-block active dropdown-toggle " data-toggle="dropdown"> 
+									Weiblich
+								</button>
+								<ul class="dropdown-menu" role="menu">
+	      								<li ng-repeat="league in activeLeagues | filter: { gender: 'Weiblich' }:true">
+										<a ng-click="getTableForLeague(league)">{{league.jugend}} ({{league.name}})</a>
+									</li>
+	    								</ul>
+							</div>
+						</div>
+						<!-- ENDE Menü für erstes Design -->							
+					</div>
 
-				   
-						<!-- ENDE Menü für erstes Design -->
+				</div>
+
+				<div class="panel-body">
 				
+					<!-- erstes Design -->
+					<div ng-show="design == 1">
+      				<div>
 						<!-- Tabelle für erstes Design -->
 						<div ng-show="mannschaften">
 
@@ -237,6 +243,19 @@
 					<!-- ENDE Tabelle für zweites Design -->
 				</div>
 				<!-- ENDE zweites Design -->
+
+				</div>
+
+				<div class="panel-footer clearfix">	
+
+					© Copyright by Jan Günther, Michael Weber & René Röse
+
+					<a href="#/settings" class="pull-right">
+						<span class="glyphicon glyphicon-wrench"></span> Zu den Einstellungen
+					</a>
+
+				</div>
+
 			</div>
 		</script>
 		<!-- ENDE table.html -->
@@ -244,106 +263,197 @@
 		
 		<!-- settings.html -->
 		<script type="text/ng-template" id="/settings.html">
-			<nav class="navbar navbar-default">
-  				<div class="container-fluid">
-  					<!-- Collect the nav links, forms, and other content for toggling -->
-    				<div class="navbar-body">
-      					<ul class="nav navbar-nav">
-        					<li><a href="#/table" type="button" class="btn btn-default navbar-btn glyphicon glyphicon-list"> Tabelle</a></li>
-        					<li><a href="#/settings" type="button" class="btn btn-default navbar-btn glyphicon glyphicon-wrench"> Einstellungen</a></li>
-      					</ul>
 
-      					<ul class="nav navbar-nav navbar-right">
-        					<li><a type="button" class="btn btn-default navbar-btn" ng-click="show = 'teams'">Mannschaften</a></li>
-							<li><a type="button" class="btn btn-default navbar-btn" ng-click="show = 'tables'">Tabellen</a></li>
-							<li><a type="button" class="btn btn-default navbar-btn" ng-click="show = 'ligen'">Ligen</a></li>
-							<li><a type="button" class="btn btn-default navbar-btn" ng-click="show = '...'">...</a></li>
-      					</ul>
-    				</div><!-- /.navbar-collapse -->
-  				</div><!-- /.container-fluid -->
-			</nav>
+			<div class="panel panel-default">
 
-			<div ng-show="show == 'ligen'">
 
-				<h2> Liga-Manager </h2>
+				<div class="panel-heading">
+					<div class="btn-group" style="width:100%">
+						<button style="width:25%" class="btn btn-lg btn btn-primary" ng-click="show = 'teams'"> Mannschaften </button>
+						<button style="width:25%" class="btn btn-lg btn btn-success" ng-click="show = 'tables'"> Tabellen </button>
+						<button style="width:25%" class="btn btn-lg btn btn-info" ng-click="show = 'ligaManager'; initLigaManagerVars()"> Liga-Manager </button>
+						<button style="width:25%" class="btn btn-lg btn btn-warning" ng-click="show = '...'"> ... </button>
+					</div>
+				</div>
 
 			
-					<div>
-						Ligenplan Webseite: <input type="text" ng-model="ligenplanLink">
-						<input type="button" value="Übernehmen" ng-click="getAllLeagues(ligenplanLink)">
-					</div>
-				
-					<!-- Listen gruppiert nach Jugenden -->
-					<div ng-repeat="jugend in jugenden" >
-						<div class="list-group">
-        					<ul class="list-group-item active" ng-click="isShow = !isShow">
-								{{ jugend.label }}
-							</ul>
-						
-							<div ng-show="isShow">
-								<ul class="list-group-item" ng-repeat="data in jugend.list" ng-click="changeActiv(data)" ng-class="{selected: data.isActiv}">
-									{{data.name}}
-								</ul>
+				<div class="panel-body">
+					<!--Anzeige Ligamanager -->
+					<div ng-show="show == 'ligaManager'">
+	
+	  					<div class="row">
+							<div class="col-md-12">
+								<a ng-show="settings" ng-click="settings = false" style="padding-right:10px;">
+									<span class="glyphicon glyphicon-circle-arrow-left"></span>
+								</a>
+
+	  							<h2> Liga-Manager </h2>
+
+								<a ng-show="!settings" ng-click="settings = true">
+	          						<span class="glyphicon glyphicon-wrench space" style="font-size:1.5em"></span>
+	        					</a>
+
+								<div ng-show="settings" class="pull-right">
+									<button ng-show="!quelle" ng-click="quelle = true"> Quelle ändern </button>
+									<div ng-show="quelle"> 
+										Ligenplan:
+										<input type="text" ng-model="ligenplanLink">
+										<input type="button" value="Übernehmen" ng-click="getAllLeagues(ligenplanLink); quelle = false">
+									</div>
+								</div>
 							</div>
 						</div>
-    				</div>
+	
+						<!-- Normale Ligamanager-Anzeige -->
+	  					<div class="row" ng-hide="settings">
+							
+							<!-- Anzeige, wenn keine Daten vorhanden sind -->
+	    					<div ng-hide="activJugenden.length > 0">
+								<div class="col-md-12">
+    									<strong>Hinweis!</strong></br>
+										Sie haben noch keine Ligen gewählt, die Sie verwalten können!</br>
+										Um dies zu Ändern, begeben Sie sich bitte in den <a href="#" ng-click="settings = true">Einstellungsmanager</a> des Liga-Managers.
+								</div>
+							</div>
+							<!-- ENDE Anzeige, wenn keine Daten vorhanden sind -->
+	
+							<!-- Anzeige, wenn Daten vorhanden sind -->
+	    					<div ng-show="activJugenden.length > 0">
+								<div class="col-md-12">
+	
+									<!-- Listen gruppiert nach Jugenden -->
+									<div ng-repeat="jugend in activJugenden">
+	
+										<!-- Listeneinträge -->
+										<div class="list-group">
+	        								<ul class="list-group-item active">
+												<strong>{{ jugend.label }}</strong>
+											</ul>
+											<ul class="list-group-item clearfix" ng-repeat="data in jugend.list">
+													{{data.name}} 
+													<span ng-show="data.specialName"> ({{data.specialName}}) </span>
+	
+													<a ng-click="deleteActivLeague(data)">
+	         											<span class="pull-right glyphicon glyphicon-trash space"></span>
+	        										</a>
+	
+													<a ng-click="edit = true">
+	          											<span class="pull-right glyphicon glyphicon-pencil space"></span>
+	        										</a>
+	
+													<span class="pull-right vcenter" ng-show="edit">
+														<input type="text" ng-model="specialName" ng-enter="changeSpecialName(data, specialName); edit = false" autofocus>
+														<button type="button" class="btn btn-success" ng-click="changeSpecialName(data, specialName); edit = false">
+															Name ändern
+														</button>
+													</span>
+											</ul>
+										</div>
+										<!-- ENDE Listeneinträge -->
+	
+	    							</div>
+									<!-- ENDE Listen gruppiert nach Jugenden -->
+								</div>
+							</div>
+							<!-- ENDE Anzeige, wenn Daten vorhanden sind -->
+						</div>
+						<!-- ENDE Normale Ligamanager-Anzeige -->
+	  				
+	
+						<!-- Settings der Ligamanager-Anzeige -->
+						<div class="row" ng-show="settings">
+							<div class="col-md-12">
+								<!-- Listen gruppiert nach Jugenden -->
+								<div ng-repeat="jugend in jugenden">
+									<div class="list-group">
+	        							<ul class="list-group-item active" ng-click="isShow = !isShow">
+											<strong>{{ jugend.label }}</strong>
+											<span ng-show="!isShow" class="pull-right glyphicon glyphicon-chevron-down"></span>
+											<span ng-show="isShow" class="pull-right glyphicon glyphicon-chevron-up"></span>	
+										</ul>
+								
+										<div ng-show="isShow">
+											<ul class="list-group-item" ng-repeat="data in jugend.list" ng-click="changeActiv(data)" ng-class="{selected: data.isActiv}">
+												{{data.name}}
+											</ul>
+										</div>
+									</div>
+	    						</div>
+							</div>
+						</div>
+						<!-- ENDE Settings der Ligamanager-Anzeige -->
+					</div>
+					<!-- ENDE Liga-Manager Anzeige -->
+				
+					<!--Anzeige Tabellenmanager -->
+					<div ng-show="show == 'tables'" class="row">
+						<div class="col-md-6">
+							<table class="table" ng-class="{'table-striped': tableStriped}" style="border: 2px solid {{tableBorder.color}}; color:{{tableText.color}};">
+								<caption style="color:{{tableCaption.color}};">Tabellen</caption>
+								<tbody>
+									<tr>
+										<td>test</td>
+									</tr>
+									<tr>
+										<td>test2</td>
+									</tr>
+									<tr>
+										<td>test3</td>
+									</tr>
+									<tr>
+										<td>test4</td>
+									</tr>
+									<tr>
+										<td>test5</td>
+									</tr>
+									<tr>
+										<td>test6</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col-md-6">
+							<form>
+								<div class="form-group">
+									<label for="tableCaption">Überschrift</label>
+									<input colorpicker ng-model="tableCaption.color" type="text" class="form-control" id="tableCaption" placeholder="{{tableCaption.color}}">
+								</div>
+								<div class="form-group">
+									<label for="tableBorder">Rahmen</label>
+									<input colorpicker ng-model="tableBorder.color" type="text" class="form-control" id="tableBorder" placeholder="{{tableBorder.color}}">
+								</div>
+								<div class="form-group">
+									<label for="tableText">Text</label>
+									<input colorpicker ng-model="tableText.color" type="text" class="form-control" id="tableText" placeholder="{{tableText.color}}">
+								</div>
+								<div class="checkbox">
+									<label>
+										<input ng-model="tableStriped" type="checkbox">Striped?
+									</label>
+								</div>
+								<div class="form-group">
+									<select class="form-group">
+										<option value="1" selected="selected">1</option>
+										<option value="2">2</option>
+									</select>
+								</div>
+							</form>
+						</div>
+					</div>
+					<!-- Ende Anzeige Tabellenmanager -->
+				</div>
+
+				<div class="panel-footer clearfix">	
+						© Copyright by Jan Günther, Michael Weber & René Röse
+
+						<a href="#/table" class="pull-right">
+							<span class="glyphicon glyphicon-list"></span> Zu den Tabellen
+						</a>
+				</div>
 
 			</div>
-			
-			<div ng-show="show == 'tables'" class="row" style="outline: 1px solid #AAAAAA;">
-				<div class="col-md-6">
-					<table class="table" ng-class="{'table-striped': tableStriped}" style="border: 2px solid {{tableBorder.color}}; color:{{tableText.color}};">
-						<caption style="color:{{tableCaption.color}};">Tabellen</caption>
-						<tbody>
-							<tr>
-								<td>test</td>
-							</tr>
-							<tr>
-								<td>test2</td>
-							</tr>
-							<tr>
-								<td>test3</td>
-							</tr>
-							<tr>
-								<td>test4</td>
-							</tr>
-							<tr>
-								<td>test5</td>
-							</tr>
-							<tr>
-								<td>test6</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="col-md-6">
-					<form>
-						<div class="form-group">
-							<label for="tableCaption">Überschrift</label>
-							<input colorpicker ng-model="tableCaption.color" type="text" class="form-control" id="tableCaption" placeholder="{{tableCaption.color}}">
-						</div>
-						<div class="form-group">
-							<label for="tableBorder">Rahmen</label>
-							<input colorpicker ng-model="tableBorder.color" type="text" class="form-control" id="tableBorder" placeholder="{{tableBorder.color}}">
-						</div>
-						<div class="form-group">
-							<label for="tableText">Text</label>
-							<input colorpicker ng-model="tableText.color" type="text" class="form-control" id="tableText" placeholder="{{tableText.color}}">
-						</div>
-						<div class="checkbox">
-							<label>
-								<input ng-model="tableStriped" type="checkbox">Striped?
-							</label>
-						</div>
-						<div class="form-group">
-							<select class="form-group">
-								<option value="1" selected="selected">1</option>
-								<option value="2">2</option>
-							</select>
-						</div>
-					</form>
-				</div>
-			</div>
+
+					
 		</script>
 		<!-- ENDE settings.html -->
 	</body>

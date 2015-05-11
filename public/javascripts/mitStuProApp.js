@@ -1,4 +1,4 @@
-var app = angular.module('mitStuPro', ['ui.router', 'ui.bootstrap', 'colorpicker.module']);
+var app = angular.module('mitStuPro', ['ui.router', 'ui.bootstrap', 'colorpicker.module', 'ngAnimate']);
 
 
 app.service('dataService', function() {
@@ -61,9 +61,9 @@ app.controller('MainCtrl', ['$scope', '$filter', 'teams', function($scope, $filt
 }]);
 
 app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 'teams', function($scope, $http, $filter, dataService, teams) {
-	
-	$scope.activeLeagues = dataService.activeLeagues;
     
+	$scope.activeLeagues = $filter('filter')(dataService.leagues, {isActiv: 'true'});
+	
     $scope.items2 = [
 		{"itemId":1, "title":"Herren", "description":"Teams der Herren", 
 			"teams":[
@@ -210,16 +210,21 @@ app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 
 
 app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', function($scope, $http, $filter, dataService){
 	
+	//Liga-Manager Init-Var
+	$scope.initLigaManagerVars = function() {
+		$scope.leagues = dataService.leagues;
+		$scope.jugenden = $filter('listGroupBy')( $scope.leagues, 'jugend');
+		
+		$scope.activeLeagues = $filter('filter')($scope.leagues, {isActiv: 'true'});
+		$scope.activJugenden =  $filter('listGroupBy')( $scope.activeLeagues, 'jugend');
+	}
+	
 	$scope.ligenplanLink = "https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/leaguePage?championship=Bremer+HV+14/15";
+
 	
-	
-	$scope.leagues = dataService.leagues;
-	$scope.jugenden = dataService.jugenden;
 	
 	$scope.getAllLeagues = function(ligenplanLink) {
-			
-		console.log(ligenplanLink);
-			
+
 		ligenplanLink = ligenplanLink.replace('"', '%3A').replace('/','%2F').replace('?','%3F').replace('=','%3D').replace('+','%2B').replace('&','%26').replace('+','%2B');
 		
 		var jsonFeed = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22" + ligenplanLink + "%22%20and%20xpath%3D%22%2F%2Ftable%2F%2Ftr%2F%2Ftd%2F%2Ful%2F%2Fli%2F%2Fspan%2F%2Fa%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
@@ -263,32 +268,60 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', fun
 			        }
 			        
 			        league.name = namensnennung;
+			        league.specialName = "";
 			        league.linkage = "https://bremerhv-handball.liga.nu" + leagueData.href;
 			        league.isActiv = false;
 			       
 			        leagues.push(league);
 		    	}
 
-		    	$scope.leagues = leagues;
-		    	dataService.leagues = $scope.leagues;
-		    	$scope.jugenden = $filter('listGroupBy')( leagues, 'jugend')
-		    	dataService.jugenden = $scope.jugenden;
+		    	dataService.leagues = leagues;
+		    	$scope.initLigaManagerVars();
 		});
 	};
-	  
+	 
 	  $scope.changeActiv = function(league) {
 		  if(league.isActiv){
-			  var pos = dataService.activeLeagues.indexOf(league);
-			  dataService.activeLeagues.splice(pos, 1);
-			  league.isActiv = false;
+			  $scope.deleteActivLeague(league);
 		  }
 		  else{
-			  league.isActiv = true;
-			  dataService.activeLeagues.push(league)
+			  $scope.addActivLeague(league);
 		  }
 	  };
 	  
+	  $scope.addActivLeague = function(league) {
+		  league.isActiv = true;
+		  $scope.activeLeagues = $filter('filter')($scope.leagues, {isActiv: 'true'});
+		  $scope.activJugenden =  $filter('listGroupBy')( $scope.activeLeagues, 'jugend');
+	  };
+	  
+	  $scope.deleteActivLeague = function(league) {
+		  league.isActiv = false;
+		  $scope.activeLeagues = $filter('filter')($scope.leagues, {isActiv: 'true'});
+		  $scope.activJugenden =  $filter('listGroupBy')( $scope.activeLeagues, 'jugend');
+	  };
+	  
+	  $scope.changeSpecialName = function(league, specialName) {
+		  league.specialName = specialName
+	  };
+	  
+	  
+	  
 }]);
+
+app.directive('ngEnter', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if(event.which === 13) {
+                scope.$apply(function (){
+                    scope.$eval(attrs.ngEnter);
+                });
+ 
+                event.preventDefault();
+            }
+        });
+    };
+});
 
 
 app.filter('findObjectBy', function() {
@@ -302,7 +335,7 @@ app.filter('findObjectBy', function() {
 
 app.filter('listGroupBy', function() {
 	return function(list, attribute) {
-		groups = [];
+		var groups = [];
 
         var groupValue = "_INVALID_GROUP_VALUE_";
 
@@ -340,23 +373,10 @@ app.filter('orderObjectBy', function() {
   };
 });
 
-app.filter('getObjectsWhereFieldIs', function() {
-	  return function(items, field, value) {
-	        var result = new Array();
-	        
-	        for (var i=0; i<items.length; i++){
-	        	if(items[i].field.contains(value)){
-	        		result.push(items[i]);
-	        	}
-	        }
-	        
-	        return result;
-	    };
-	});
 
 app.config(['$stateProvider','$urlRouterProvider',function($stateProvider, $urlRouterProvider) {
 
-  $stateProvider
+	$stateProvider
     .state('table', {
       url: '/table',
       templateUrl: '/table.html',
