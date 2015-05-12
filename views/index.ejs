@@ -70,7 +70,7 @@
 	      								<li ng-repeat="league in activeLeagues | filter: { gender: 'Männlich' }:true">
 										<a ng-click="getTableForLeague(league)">{{league.jugend}} ({{league.name}})</a>
 									</li>
-	    								</ul>
+	    						</ul>
 							</div>
 	
 							<div class="btn-group " style="width:50%">
@@ -81,7 +81,7 @@
 	      								<li ng-repeat="league in activeLeagues | filter: { gender: 'Weiblich' }:true">
 										<a ng-click="getTableForLeague(league)">{{league.jugend}} ({{league.name}})</a>
 									</li>
-	    								</ul>
+	    						</ul>
 							</div>
 						</div>
 						<!-- ENDE Menü für erstes Design -->							
@@ -181,7 +181,7 @@
 					<!-- Tabelle für zweites Design -->
 					<div class="col-md-11" ng-show="mannschaften">
 	
-						<h2>Tabelle der {{teams.name}}</h2>
+						<h2>Tabelle der {{leagueName}}</h2>
 						<table class="table table-striped table-condensed table-bordered">
 	           	 			<thead>
 	              				<tr>

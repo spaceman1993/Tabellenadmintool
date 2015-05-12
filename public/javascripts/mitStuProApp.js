@@ -128,7 +128,7 @@ app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 
 		 Hier wird ein Name übergeben, über den die entsprechende Tabelle geholt wurde.
 		 An dieser Stelle muss nun natürlich die Tabelle extern geholt werden.
 		*/
-		$scope.leagueName = league.jugend + ' (' + league.name + ')';
+		$scope.leagueName = league.jugend + " (" + league.name + ")";
 		adresse = league.linkage;
 		
     console.log(adresse);
