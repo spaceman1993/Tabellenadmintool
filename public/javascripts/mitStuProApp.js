@@ -128,7 +128,7 @@ app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 
 		 Hier wird ein Name übergeben, über den die entsprechende Tabelle geholt wurde.
 		 An dieser Stelle muss nun natürlich die Tabelle extern geholt werden.
 		*/
-		$scope.leagueName = league.jugend + " (" + league.name + ")";
+		$scope.leagueName = league.jugend + ' (' + league.name + ')';
 		adresse = league.linkage;
 		
     console.log(adresse);
@@ -152,7 +152,12 @@ app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 
         
         var mannschaft = new Object();
         mannschaft.rang = parseInt(mannschaftsdaten[1].content);
-        mannschaft.mannschaft = mannschaftsdaten[2].a.content;
+        if (typeof mannschaftsdaten[2].a != "undefined"){
+        	mannschaft.mannschaft = mannschaftsdaten[2].a.content;
+        }else{
+        	mannschaft.mannschaft = mannschaftsdaten[2].content;
+        }
+        
         mannschaft.begegnungen = mannschaftsdaten[3].content;
         mannschaft.siege = mannschaftsdaten[4].content;
         if (typeof mannschaftsdaten[5] != "undefined"){
@@ -188,13 +193,15 @@ app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 
         nextGame.datum = spieldaten[1].content;
         nextGame.zeit = spieldaten[2].content.substr(35, 5);
         nextGame.halle = spieldaten[3].span.a.content;
+        nextGame.hallenname = spieldaten[3].span.title;
+        nextGame.hallenlink = spieldaten[3].span.a.href;
         nextGame.nr = spieldaten[4];
         nextGame.heimmannschaft = spieldaten[5].content;
         nextGame.gastmannschaft = spieldaten[6].content;
-        if (typeof spieldaten[7].span.content != "undefined"){
+        if (typeof spieldaten[7].span.content.length  !== "undefined"){
           nextGame.tore = spieldaten[7].span.content;
         }
-        else if (typeof spieldaten[7].span != "undefined"){
+        else if (typeof spieldaten[7].span !== "undefined"){
           nextGame.tore = spieldaten[7].span;
         }
         
@@ -205,6 +212,24 @@ app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 
       
     });
   }
+	
+	$scope.getHallenadresseForHalle = function (hallenlink){
+		
+		hallenlink = "https://bremerhv-handball.liga.nu" + hallenlink;
+		
+		adresse = hallenlink.replace(/\//g,'%2F').replace(/\?/g,'%3F').replace(/\=/g,'%3D').replace(/\+/g,'%2B').replace(/\&/g,'%26').replace(/\+/g,'%2B').replace(/\:/g, '%3A');
+
+	    var jsonFeed ="https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22"+adresse+"%22%20and%20xpath%3D%22%2F%2Fbody%2F%2Fdiv%2F%2Fdiv%2F%2Fdiv%2F%2Fdiv%2F%2Fp%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
+	     
+	    
+	    $http.get(jsonFeed).success(function (data) {
+	      
+	      var hallenaddress = data.query.results.p.content;
+
+	      $scope.hallenaddress = hallenaddress;
+	    });   
+	    
+	};
     
 }]);
 
@@ -279,6 +304,57 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', fun
 		    	$scope.initLigaManagerVars();
 		});
 	};
+	
+	
+	$scope.findAllLeaguesOfVerein = function (verein){
+		
+		leagues = $scope.leagues;
+		$scope.countTo = leagues.length;
+		
+		for(var i=0; i<leagues.length; i++){
+			checkIfVereinInLeague(leagues[i], verein);
+			
+		}
+	}
+	
+	checkIfVereinInLeague = function(league, verein) {
+		
+		adresse = league.linkage;
+
+	    adresse = adresse.replace('/','%2F').replace('?','%3F').replace('=','%3D').replace('+','%2B').replace('&','%26').replace('+','%2B');
+
+	    var jsonFeed ="https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22"+adresse+"%22%20and%20xpath%3D%22%2F%2Ftable%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
+
+	    $http.get(jsonFeed).success(function (data) {
+	      
+	      var mannschaften = new Array();
+
+	      var daten = data.query.results.table[0].tbody.tr;
+	      
+	      for(i = 1; i < daten.length; i++){
+	        var mannschaftsdaten = daten[i].td;
+	        var mannschaft = new Object();
+	        if (typeof mannschaftsdaten[2].a != "undefined"){
+	        	mannschaft = mannschaftsdaten[2].a.content;
+	        }else{
+	        	mannschaft = mannschaftsdaten[2].content;
+	        }
+	        mannschaften.push(mannschaft);
+	      }
+
+	      var found = false;
+	      var j=0;
+	      while(j < mannschaften.length && !found){
+			if(mannschaften[j].indexOf(verein) > -1){
+				league.isActiv = true;
+				found = true;
+			}
+			j++;
+	      }
+
+	    });
+	  }
+	
 	 
 	  $scope.changeActiv = function(league) {
 		  if(league.isActiv){
@@ -323,6 +399,52 @@ app.directive('ngEnter', function () {
     };
 });
 
+app.directive('addressBasedGoogleMap', function () {
+    return {
+        restrict: "A",
+        template: "<div id='addressMap'></div>",
+        scope: {
+            address: "=",
+            zoom: "="
+        },
+        controller: function ($scope) {
+            var geocoder;
+            var latlng;
+            var map;
+            var marker;
+            var initialize = function () {
+                geocoder = new google.maps.Geocoder();
+                latlng = new google.maps.LatLng(-34.397, 150.644);
+                var mapOptions = {
+                    zoom: $scope.zoom,
+                    center: latlng,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                map = new google.maps.Map
+(document.getElementById('addressMap'), mapOptions);
+            };
+            var markAdressToMap = function () {
+                geocoder.geocode({ 'address': $scope.address }, 
+                function (results, status) 
+                  {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        map.setCenter(results[0].geometry.location);
+                        marker = new google.maps.Marker({
+                            map: map,
+                            position: results[0].geometry.location
+                        });
+                    }
+                });
+            };
+            $scope.$watch("address", function () {
+                if ($scope.address != undefined) {
+                    markAdressToMap();
+                }
+            });
+            initialize();
+        },
+    };
+});
 
 app.filter('findObjectBy', function() {
 	return function(objects, property, value) {

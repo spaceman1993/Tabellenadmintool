@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<title>MitStuPro</title>
-		<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+		<link href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/readable/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="/stylesheets/style.css">
 		<link rel="stylesheet" href="/stylesheets/colorpicker.css">
 
@@ -12,6 +12,7 @@
 		<script src="/javascripts/mitStuProApp.js"></script>
 		<script src="/javascripts/ui-bootstrap-tpls-0.12.1.min.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-animate.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 		<style> .glyphicon { cursor:pointer } </style>
 	</head>
 	<body ng-app="mitStuPro">
@@ -147,7 +148,7 @@
                 						<td>{{nextGame.tag}}</td>
           								<td>{{nextGame.datum}}</td>
           								<td>{{nextGame.zeit}}</td>
-          								<td>{{nextGame.halle}}</td>
+          								<td ng-click="getHallenadresseForHalle(nextGame.hallenlink)"> <a href="#" ng-attr-title="{{nextGame.hallenname}}" data-toggle="tooltip">{{nextGame.halle}}</a></td>
           								<td>{{nextGame.nr}}</td>
           								<td>{{nextGame.heimmannschaft}}</td>
           								<td>{{nextGame.gastmannschaft}}</td>
@@ -155,6 +156,9 @@
               						</tr>
             					</tbody>
           					</table>
+
+							<div ng-show="hallenaddress" address-based-google-map address="hallenaddress" zoom="16"> </div>							
+
         				</div>
 						<!-- ENDE Tabelle für erstes Design -->
 					</div>
@@ -281,29 +285,54 @@
 					<!--Anzeige Ligamanager -->
 					<div ng-show="show == 'ligaManager'">
 	
-	  					<div class="row">
-							<div class="col-md-12">
-								<a ng-show="settings" ng-click="settings = false" style="padding-right:10px;">
-									<span class="glyphicon glyphicon-circle-arrow-left"></span>
-								</a>
+						<!-- Menu Ligamanager-Anzeige -->
+						<div class="clearfix" style="margin-bottom:1em;">
+							<a ng-show="settings" ng-click="settings = false" style="margin-right:1em;">
+								<span class="glyphicon glyphicon-circle-arrow-left bigSizeGlyph"></span>
+							</a>
 
-	  							<h2> Liga-Manager </h2>
+  							<h2> Liga-Manager </h2>
 
-								<a ng-show="!settings" ng-click="settings = true">
-	          						<span class="glyphicon glyphicon-wrench space" style="font-size:1.5em"></span>
-	        					</a>
+							<a ng-show="!settings" ng-click="settings = true">
+          						<span class="glyphicon glyphicon-wrench space bigSizeGlyph"></span>
+        					</a>
 
-								<div ng-show="settings" class="pull-right">
-									<button ng-show="!quelle" ng-click="quelle = true"> Quelle ändern </button>
-									<div ng-show="quelle"> 
-										Ligenplan:
-										<input type="text" ng-model="ligenplanLink">
-										<input type="button" value="Übernehmen" ng-click="getAllLeagues(ligenplanLink); quelle = false">
-									</div>
-								</div>
+							<div ng-show="settings" class="pull-right">
+								<input class="input-sm pull-left" type="text" placeholder="Autosearch Ligen-Finder">
+
+								<a ng-click="findAllLeaguesOfVerein('HSG Vegesack'); searchStart = true">
+          							<span class="glyphicon glyphicon-search bigSizeGlyph space vcenter"></span>
+        						</a>
+
+								<a ng-click="quelle = !quelle">
+          							<span class="glyphicon glyphicon-refresh bigSizeGlyph space vcenter"></span>
+        						</a>
 							</div>
+
+
+							<div class="row bottom-buffer" >
+  								<div ng-show="quelle" class="col-md-12">
+   									<div class="input-group input-group-sm">
+										<span class="input-group-addon success">
+       										Ligenplan:
+     									</span>
+     									<input type="text" class="form-control" ng-model="ligenplanLink" placeholder="Link zur Übersicht der Ligen">
+     									<span class="input-group-btn">
+       										<button class="btn btn btn-success btn-lg" type="submit" ng-click="getAllLeagues(ligenplanLink); quelle = false"><span class="glyphicon glyphicon-ok"></span></button>
+     									</span>
+   									</div><!-- /input-group -->
+ 								</div>
+
+								<div ng-show="searchStart" class="progress">
+  									<progressbar class="progress-striped active" animate="true" max="100" value="progressValue" type="success">
+										<i><span count-to="{{countTo}}" duration="1" count-from="0"></span> / 100</i>
+									</progressbar>
+								</div>
+
+							</div><!-- /.row -->
 						</div>
-	
+						<!-- ENDE Menu Ligamanager-Anzeige -->
+
 						<!-- Normale Ligamanager-Anzeige -->
 	  					<div class="row" ng-hide="settings">
 							
