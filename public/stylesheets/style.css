@@ -80,6 +80,16 @@ h2 {
 	color: #333333;
 }
 
+alertText {
+	color: #FF0000;
+	font-size: 18px;
+}
+
+meldungText {
+	color: #009900;
+	font-size: 18px;
+}
+
 .space {  
 	margin-left: 10px;
 }

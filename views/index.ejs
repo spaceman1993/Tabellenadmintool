@@ -98,8 +98,10 @@
 						<!-- Tabelle für erstes Design -->
 						<div ng-show="mannschaften">
 
+							<h2>{{leagueName}}</h2>
+
            	 				<table class="table table-striped table-condensed">
-								<caption>Tabelle der {{leagueName}}</caption>	
+								<caption>Tabelle</caption>	
            	 					<thead>
               						<tr>
       									<th>Rang</th>
@@ -273,10 +275,9 @@
 
 				<div class="panel-heading">
 					<div class="btn-group" style="width:100%">
-						<button style="width:25%" class="btn btn-lg btn btn-primary" ng-click="show = 'teams'"> Mannschaften </button>
-						<button style="width:25%" class="btn btn-lg btn btn-success" ng-click="show = 'tables'"> Tabellen </button>
-						<button style="width:25%" class="btn btn-lg btn btn-info" ng-click="show = 'ligaManager'; initLigaManagerVars()"> Liga-Manager </button>
-						<button style="width:25%" class="btn btn-lg btn btn-warning" ng-click="show = '...'"> ... </button>
+						<button style="width:33.3%" class="btn btn-lg btn btn-primary" ng-click="show = 'teams'"> Anzeigen-Manager </button>
+						<button style="width:33.3%" class="btn btn-lg btn btn-success" ng-click="show = 'tables'"> Design-Manager </button>
+						<button style="width:33.3%" class="btn btn-lg btn btn-danger" ng-click="show = 'ligaManager'; initLigaManagerVars()"> Liga-Manager </button>
 					</div>
 				</div>
 
@@ -298,9 +299,7 @@
         					</a>
 
 							<div ng-show="settings" class="pull-right">
-								<input class="input-sm pull-left" type="text" placeholder="Autosearch Ligen-Finder">
-
-								<a ng-click="findAllLeaguesOfVerein('HSG Vegesack'); searchStart = true">
+								<a ng-click="checkSearchVerein()">
           							<span class="glyphicon glyphicon-search bigSizeGlyph space vcenter"></span>
         						</a>
 
@@ -309,8 +308,17 @@
         						</a>
 							</div>
 
+							<div ng-show="settings" class="pull-right">
+								<input ng-show="search && leagues.length > 0" ng-model="searchVerein" ng-enter="checkSearchVerein()" class="input-sm pull-left" type="text" placeholder="Ligen-Finder">
+								<span ng-show="search && leagues.length == 0"><alertText>Keine Daten vorhanden</alertText></span>
+								
+								<progressbar style="margin:0px; margin-bottom:2px;" ng-show="searchStart" max="100" value="progressbaraktuellprozent" class="progress-striped active" type="success"><b>{{progressbaraktuellprozent | number:1}}%</b></progressbar>
+								<span ng-show="searchStart"><meldungText style="margin-left:20px; margin-right:20px;">{{anzahlSearch}} Ligen gefunden</meldungText></span>
+							</div>
 
-							<div class="row bottom-buffer" >
+
+
+							<div ng-show="settings" class="row bottom-buffer" >
   								<div ng-show="quelle" class="col-md-12">
    									<div class="input-group input-group-sm">
 										<span class="input-group-addon success">
@@ -322,13 +330,6 @@
      									</span>
    									</div><!-- /input-group -->
  								</div>
-
-								<div ng-show="searchStart" class="progress">
-  									<progressbar class="progress-striped active" animate="true" max="100" value="progressValue" type="success">
-										<i><span count-to="{{countTo}}" duration="1" count-from="0"></span> / 100</i>
-									</progressbar>
-								</div>
-
 							</div><!-- /.row -->
 						</div>
 						<!-- ENDE Menu Ligamanager-Anzeige -->
@@ -390,25 +391,23 @@
 	  				
 	
 						<!-- Settings der Ligamanager-Anzeige -->
-						<div class="row" ng-show="settings">
-							<div class="col-md-12">
-								<!-- Listen gruppiert nach Jugenden -->
-								<div ng-repeat="jugend in jugenden">
-									<div class="list-group">
-	        							<ul class="list-group-item active" ng-click="isShow = !isShow">
-											<strong>{{ jugend.label }}</strong>
-											<span ng-show="!isShow" class="pull-right glyphicon glyphicon-chevron-down"></span>
-											<span ng-show="isShow" class="pull-right glyphicon glyphicon-chevron-up"></span>	
+						<div ng-show="settings">
+							<!-- Listen gruppiert nach Jugenden -->
+							<div ng-repeat="jugend in jugenden">
+								<div class="list-group">
+	        						<ul class="list-group-item active" ng-click="isShow = !isShow">
+										<strong>{{ jugend.label }}</strong>
+										<span ng-show="!isShow" class="pull-right glyphicon glyphicon-chevron-down"></span>
+										<span ng-show="isShow" class="pull-right glyphicon glyphicon-chevron-up"></span>	
+									</ul>
+							
+									<div ng-show="isShow">
+										<ul class="list-group-item" ng-repeat="data in jugend.list" ng-click="changeActiv(data)" ng-class="{selected: data.isActiv}">
+											{{data.name}}
 										</ul>
-								
-										<div ng-show="isShow">
-											<ul class="list-group-item" ng-repeat="data in jugend.list" ng-click="changeActiv(data)" ng-class="{selected: data.isActiv}">
-												{{data.name}}
-											</ul>
-										</div>
 									</div>
-	    						</div>
-							</div>
+								</div>
+	    					</div>
 						</div>
 						<!-- ENDE Settings der Ligamanager-Anzeige -->
 					</div>

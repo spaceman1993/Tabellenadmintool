@@ -137,8 +137,6 @@ app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 
 
     var jsonFeed ="https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22"+adresse+"%22%20and%20xpath%3D%22%2F%2Ftable%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
 
-// https%3A%2F%2Fbremerhv-handball.liga.nu%2Fcgi-bin%2FWebObjects%2FnuLigaHBDE.woa%2Fwa%2FgroupPage%3Fchampionship%3DBremer%2BHV%2B14%252F15%26group%3D176607;
-
 
     // Actually fetch the data
     $http.get(jsonFeed).success(function (data) {
@@ -198,10 +196,10 @@ app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 
         nextGame.nr = spieldaten[4];
         nextGame.heimmannschaft = spieldaten[5].content;
         nextGame.gastmannschaft = spieldaten[6].content;
-        if (typeof spieldaten[7].span.content.length  !== "undefined"){
+        if (typeof spieldaten[7].span.content != "undefined"){
           nextGame.tore = spieldaten[7].span.content;
         }
-        else if (typeof spieldaten[7].span !== "undefined"){
+        else if (typeof spieldaten[7].span != "undefined"){
           nextGame.tore = spieldaten[7].span;
         }
         
@@ -212,7 +210,7 @@ app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 
       
     });
   }
-	
+    
 	$scope.getHallenadresseForHalle = function (hallenlink){
 		
 		hallenlink = "https://bremerhv-handball.liga.nu" + hallenlink;
@@ -230,7 +228,7 @@ app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 
 	    });   
 	    
 	};
-    
+	
 }]);
 
 app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', function($scope, $http, $filter, dataService){
@@ -244,9 +242,8 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', fun
 		$scope.activJugenden =  $filter('listGroupBy')( $scope.activeLeagues, 'jugend');
 	}
 	
-	$scope.ligenplanLink = "https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/leaguePage?championship=Bremer+HV+14/15";
-
 	
+	$scope.ligenplanLink = "https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/leaguePage?championship=Bremer+HV+14/15";
 	
 	$scope.getAllLeagues = function(ligenplanLink) {
 
@@ -259,7 +256,7 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', fun
 			var leagues = new Array();
 
 			var daten = data.query.results.a;
-		    	for(var i = 1; i < daten.length; i++){
+		    	for(var i = 0; i < daten.length; i++){
 		    		
 		    		var leagueData = daten[i];
 		    		var league = new Object();
@@ -302,18 +299,35 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', fun
 
 		    	dataService.leagues = leagues;
 		    	$scope.initLigaManagerVars();
+		    	
 		});
 	};
 	
+	$scope.checkSearchVerein = function(){
+		
+		if(!$scope.search && !$scope.searchStart){
+			$scope.search = true;
+		}
+		else if($scope.searchVerein  && !$scope.searchStart){
+			$scope.search = false;
+			$scope.searchStart = true;
+			findAllLeaguesOfVerein($scope.searchVerein);
+		}
+		else{
+			$scope.search = false;
+		}
+	}
 	
-	$scope.findAllLeaguesOfVerein = function (verein){
+	$scope.progressbaraktuell = 0;
+	$scope.progressbaraktuellprozent = 0;
+	
+	findAllLeaguesOfVerein = function (verein){
 		
 		leagues = $scope.leagues;
-		$scope.countTo = leagues.length;
+		$scope.anzahlSearch = 0;
 		
 		for(var i=0; i<leagues.length; i++){
 			checkIfVereinInLeague(leagues[i], verein);
-			
 		}
 	}
 	
@@ -347,11 +361,14 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', fun
 	      while(j < mannschaften.length && !found){
 			if(mannschaften[j].indexOf(verein) > -1){
 				league.isActiv = true;
+				$scope.anzahlSearch = $scope.anzahlSearch + 1;
 				found = true;
 			}
 			j++;
 	      }
-
+	      
+	      $scope.progressbaraktuell = $scope.progressbaraktuell + 1;
+	      $scope.progressbaraktuellprozent = (($scope.progressbaraktuell / $scope.leagues.length) * 100);
 	    });
 	  }
 	
