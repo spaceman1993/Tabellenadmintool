@@ -18,11 +18,28 @@ benutzerSchema.methods.check = function(name, passwort) {
 		for ( var benutzer in benutzers) {
 			if (benutzer.name === name) {
 				if (benutzer.passwort === passwort) {
+					  console.error("Willkomen " + benutzer.name);
 					// TODO Login
 				}
 			}
 		}
 	});
-}
+};
+
+
+benutzerSchema.methods.signUp = function(n, p){
+	var newBenutzer = new this.Benutzer({
+		name: n,
+		passwort: p
+		
+	});
+	this.Benutzer.save(function (err, newBenutzer) {
+		  if (err){
+			  return console.error(err);
+		  }
+		  console.error("Neuer Benutzer " + newBenutzer.name);
+		});
+	
+};
 
 mongoose.model('Passwort', benutzerSchema);
