@@ -7,8 +7,7 @@ var benutzerSchema = mongoose.Schema({
 	id: String,
     name: String,
     passwort: String,
-    einstellung: Int8Array
-    
+    einstellung: Array
 });
 
 mongoose.model('Passwort', benutzerSchema);
