@@ -4,6 +4,7 @@
 		<link href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/readable/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="/stylesheets/style.css">
 		<link rel="stylesheet" href="/stylesheets/colorpicker.css">
+		<link rel="stylesheet" href="/stylesheets/angular-spinkit.min.css">
 
 		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular.min.js"></script>
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
@@ -12,7 +13,9 @@
 		<script src="/javascripts/mitStuProApp.js"></script>
 		<script src="/javascripts/ui-bootstrap-tpls-0.12.1.min.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-animate.js"></script>
-		<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>	
+		<script src="/javascripts/angular-spinkit.min.js"></script>
+
 		<style> .glyphicon { cursor:pointer } </style>
 	</head>
 	<body ng-app="mitStuPro">
@@ -91,10 +94,18 @@
 				</div>
 
 				<div class="panel-body">
-				
+
 					<!-- erstes Design -->
 					<div ng-show="design == 1">
+
+						<!-- Ladebildschirm -->
+							<div class="center-vertical center-horizontal" ng-show="loading">
+								<img src="images/loading-animation.gif"/ height="200" width="200">
+							</div>
+						<!-- ENDE Ladebildschirm -->
+
       				<div>
+
 						<!-- Tabelle für erstes Design -->
 						<div ng-show="mannschaften">
 
@@ -163,6 +174,7 @@
 
         				</div>
 						<!-- ENDE Tabelle für erstes Design -->
+
 					</div>
 				</div>
 				<!-- ENDE erstes Design -->
@@ -275,20 +287,89 @@
 
 				<div class="panel-heading">
 					<div class="btn-group" style="width:100%">
-						<button style="width:33.3%" class="btn btn-lg btn btn-primary" ng-click="show = 'teams'"> Anzeigen-Manager </button>
+						<button style="width:33.3%" class="btn btn-lg btn btn-primary" ng-click="show = 'anzeigeManager'; initAnzeigenManagerVars()"> Anzeigen-Manager </button>
 						<button style="width:33.3%" class="btn btn-lg btn btn-success" ng-click="show = 'tables'"> Design-Manager </button>
-						<button style="width:33.3%" class="btn btn-lg btn btn-danger" ng-click="show = 'ligaManager'; initLigaManagerVars()"> Liga-Manager </button>
+						<button style="width:33.3%" class="btn btn-lg btn btn-danger" ng-click="show = 'ligaManager'; settings = false; initLigaManagerVars()"> Liga-Manager </button>
 					</div>
 				</div>
 
 			
 				<div class="panel-body">
+
+					<!--Anzeige Anzeigen-Manager -->
+					<div ng-show="show == 'anzeigeManager'">
+						
+						<div style="margin-bottom:1em;">
+							<h2> Anzeigen-Manager </h2>
+						</div>
+
+						<div>
+							<h4>Designauswahl</h4>
+  							<p>Wählen Sie die Designsansichten, die Sie zur Verfügung stellen möchten:</p>
+  							<form role="form" ng-click="changeDesignauswahl(benutzer.designauswahl)">
+    							<label class="checkbox-inline">
+     								<input type="checkbox" value="first" ng-model="benutzer.designauswahl.first">1.Design
+    							</label>
+    							<label class="checkbox-inline">
+      								<input type="checkbox" value="second" ng-model="benutzer.designauswahl.second">2.Design
+    							</label>
+  							</form>
+							<br/>
+
+							<h4>Standard Design</h4>
+  							<p>Wählen Sie das Design, das als Standard angezeigt werden soll:</p>
+  							<form role="form" ng-click="changeStandardDesign(benutzer.standardDesign)">
+    							<label class="radio-inline">
+      								<input type="radio" name="standard" value="1" ng-model="benutzer.standardDesign">1.Design
+    							</label>
+    							<label class="radio-inline">
+      								<input type="radio" name="standard" value="2" ng-model="benutzer.standardDesign">2.Design
+    							</label>
+  							</form>
+							<br/>
+
+							<h4>Favorisierter Verein</h4>
+  							<p>Tragen Sie (wenn gewünscht) Ihren favorisierten Verein in das dafür vorgesehene Feld ein.<br/> Ihr Verein wird hervorgehoben angezeigt.</p>
+							
+							<form role="form">
+								<label for="vereinsname">Vereinsname:</label>
+  								<input ng-blur="changeFavorisierterVerein(benutzer.favoritVerein)" ng-model="benutzer.favoritVerein" type="text" class="form-control" id="vereinsname" placeholder="Genauen Vereinsnamen angeben">
+  							</form>  								
+							<br/>
+
+							<h4>Spielplan</h4>
+  							<p>Entscheiden Sie, ob Sie die Spielpläne angezeigt bekommen wollen:</p>
+  							<form role="form" ng-click="changeSpielplan(benutzer.spielplan)">
+    							<label class="radio-inline">
+      								<input type="radio" name="spielplan" value="ja" ng-model="benutzer.spielplan">JA
+    							</label>
+    							<label class="radio-inline">
+      								<input type="radio" name="spielplan" value="nein" ng-model="benutzer.spielplan">NEIN
+    							</label>
+  							</form>
+							<br/>
+
+							<h4>Individuelle Verwaltung</h4>
+  							<p>Wollen Sie, dass sich Benutzer registrieren können und eigenständig ihre eigenen Einstellungen verwalten können?</p>
+  							<form role="form" ng-click="changeLogin(benutzer.verwaltung)">
+    							<label class="radio-inline">
+      								<input type="radio" name="verwaltung" value="ja" ng-model="benutzer.verwaltung">JA
+    							</label>
+    							<label class="radio-inline">
+      								<input type="radio" name="verwaltung" value="nein" ng-model="benutzer.verwaltung">NEIN
+    							</label>
+  							</form>
+						</div>
+
+					</div>
+					<!--ENDE Anzeige Anzeigen-Manager -->
+
 					<!--Anzeige Ligamanager -->
 					<div ng-show="show == 'ligaManager'">
 	
 						<!-- Menu Ligamanager-Anzeige -->
 						<div class="clearfix" style="margin-bottom:1em;">
-							<a ng-show="settings" ng-click="settings = false" style="margin-right:1em;">
+							<a ng-show="settings" ng-click="settings = false; initLigaManagerVars()" style="margin-right:1em;">
 								<span class="glyphicon glyphicon-circle-arrow-left bigSizeGlyph"></span>
 							</a>
 
@@ -309,6 +390,7 @@
 							</div>
 
 							<div ng-show="settings" class="pull-right">
+								<span ng-show="!search && !searchStart" class="pull-left"><meldungText>{{activeLeagues.length}} Ligen gewählt</meldungText></span>
 								<input ng-show="search && leagues.length > 0" ng-model="searchVerein" ng-enter="checkSearchVerein()" class="input-sm pull-left" type="text" placeholder="Ligen-Finder">
 								<span ng-show="search && leagues.length == 0"><alertText>Keine Daten vorhanden</alertText></span>
 								
@@ -334,6 +416,8 @@
 						</div>
 						<!-- ENDE Menu Ligamanager-Anzeige -->
 
+						
+
 						<!-- Normale Ligamanager-Anzeige -->
 	  					<div class="row" ng-hide="settings">
 							
@@ -357,10 +441,10 @@
 										<!-- Listeneinträge -->
 										<div class="list-group">
 	        								<ul class="list-group-item active">
-												<strong>{{ jugend.label }}</strong>
+												<strong class="default-cursor">{{ jugend.label }}</strong>
 											</ul>
 											<ul class="list-group-item clearfix" ng-repeat="data in jugend.list">
-													{{data.name}} 
+													<span ng-click="changeFavorit(data)" style="cursor:pointer;">{{data.name}}</span> 
 													<span ng-show="data.specialName"> ({{data.specialName}}) </span>
 	
 													<a ng-click="deleteActivLeague(data)">
@@ -370,6 +454,10 @@
 													<a ng-click="edit = true">
 	          											<span class="pull-right glyphicon glyphicon-pencil space"></span>
 	        										</a>
+
+													<span ng-show="favorit == data">
+	          											<span class="pull-right glyphicon glyphicon-heart red space"></span>
+	        										</span>
 	
 													<span class="pull-right vcenter" ng-show="edit">
 														<input type="text" ng-model="specialName" ng-enter="changeSpecialName(data, specialName); edit = false" autofocus>
@@ -395,14 +483,14 @@
 							<!-- Listen gruppiert nach Jugenden -->
 							<div ng-repeat="jugend in jugenden">
 								<div class="list-group">
-	        						<ul class="list-group-item active" ng-click="isShow = !isShow">
+	        						<ul class="list-group-item active hand-cursor" ng-click="isShow = !isShow">
 										<strong>{{ jugend.label }}</strong>
 										<span ng-show="!isShow" class="pull-right glyphicon glyphicon-chevron-down"></span>
 										<span ng-show="isShow" class="pull-right glyphicon glyphicon-chevron-up"></span>	
 									</ul>
 							
 									<div ng-show="isShow">
-										<ul class="list-group-item" ng-repeat="data in jugend.list" ng-click="changeActiv(data)" ng-class="{selected: data.isActiv}">
+										<ul class="list-group-item hand-cursor" ng-repeat="data in jugend.list" ng-click="changeActiv(data)" ng-class="{selected: data.isActiv}">
 											{{data.name}}
 										</ul>
 									</div>
@@ -410,6 +498,13 @@
 	    					</div>
 						</div>
 						<!-- ENDE Settings der Ligamanager-Anzeige -->
+
+						<!-- Ladebildschirm -->
+						<div class="center-vertical center-horizontal" ng-show="loading">
+							<img src="images/loading-animation.gif"/ height="200" width="200">
+						</div>
+						<!-- ENDE Ladebildschirm -->
+
 					</div>
 					<!-- ENDE Liga-Manager Anzeige -->
 				

@@ -32,6 +32,33 @@ body {
 	overflow-y:auto;
 }
 
+.panel-body > div {
+	height: 100%;
+}
+
+.center-vertical {
+  	position: relative;
+  	top: 50%;
+  	transform: translateY(-50%);
+}
+
+.center-horizontal{
+	margin: 0px auto;
+	text-align: center;
+}
+
+.red {
+    color: red;
+}
+
+.default-cursor {
+	cursor: default;
+}
+
+.hand-cursor {
+	cursor: pointer;
+}
+
 a {
   color: #00B7FF;
 }
