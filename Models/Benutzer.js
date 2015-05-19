@@ -1,16 +1,51 @@
-/**
- * 
- */
-var mongoose = require('mongoose');
+'use strict';
 
-var benutzerSchema = mongoose.Schema({
-	id : String,
-	name : String,
-	passwort : String,
-	einstellung : Array
+/**
+ * Module dependencies.
+ */
+var mongoose = require('mongoose'),
+	Schema = mongoose.Schema,
+	crypto = require('crypto');
+
+/**
+ * Benutzer Schema
+ */
+
+var BenutzerSchema = new Schema({
+	name:{
+		type: String,
+		trim: true,
+	},
+	passwort:{
+		type: String,
+		trim: true,
+	},
+	einstellung:{
+		type: Array,
+	},
+	crypt: {
+		type: String
+	},
 });
 
-benutzerSchema.methods.check = function(name, passwort) {
+BenutzerSchema.pre('save', function(next) {
+	if (this.password && this.password.length > 6) {
+ 		this.crypt = crypto.randomBytes(16).toString('base64');
+		this.password = this.hashPassword(this.password);
+	}
+
+	next();
+});
+
+BenutzerSchema.methods.hashPassword = function(password) {
+	if (this.crypt && password) {
+		return crypto.pbkdf2Sync(password, new Buffer(this.crypt, 'base64'), 10000, 64).toString('base64');
+	} else {
+		return password;
+	}
+};
+
+BenutzerSchema.methods.check = function(name, passwort) {
 	this.Benutzer.find(function(err, benutzers) {
 		if (err) {
 			return console.error(err);
@@ -18,16 +53,20 @@ benutzerSchema.methods.check = function(name, passwort) {
 		for ( var benutzer in benutzers) {
 			if (benutzer.name === name) {
 				if (benutzer.passwort === passwort) {
-					  console.error("Willkomen " + benutzer.name);
+					return console.info("Willkomen " + benutzer.name);
 					// TODO Login
+					  
+				}else{
+					return console.error("Falsches Passwort!");
 				}
 			}
 		}
+		return console.error("Benutzer nicht vorhanden!");
 	});
 };
 
 
-benutzerSchema.methods.signUp = function(n, p){
+BenutzerSchema.methods.signUp = function(n, p){
 	var newBenutzer = new this.Benutzer({
 		name: n,
 		passwort: p
@@ -37,9 +76,10 @@ benutzerSchema.methods.signUp = function(n, p){
 		  if (err){
 			  return console.error(err);
 		  }
-		  console.error("Neuer Benutzer " + newBenutzer.name);
+		  return console.error("Neuer Benutzer " + newBenutzer.name);
+		  
 		});
 	
 };
 
-mongoose.model('Passwort', benutzerSchema);
+module.exports = mongoose.model('Benutzer', BenutzerSchema);
