@@ -11,7 +11,7 @@ mongoose.connect('mongodb://localhost/Schule');
 
 require('./models/Benutzer');
 
-var routes = require('./routes/index');
+var routes = require('./routes');
 var user = require('./routes/user');
 
 var app = express();
@@ -29,8 +29,8 @@ app.set('view engine', 'ejs');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', routes);
-app.get('/users', user);
+app.get('/', routes.index);
+app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
