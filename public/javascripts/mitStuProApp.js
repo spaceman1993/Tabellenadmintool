@@ -1,5 +1,87 @@
 var app = angular.module('mitStuPro', ['ui.router', 'ui.bootstrap', 'colorpicker.module', 'ngAnimate', 'angular-spinkit']);
 
+app.directive('stickyNote', function(socket) {
+	var linker = function(scope, element, attrs) {
+		element.draggable({
+			stop: function(event, ui) {
+				socket.emit('moveNote', {
+					id: scope.league.id,
+					x: ui.position.left,
+					y: ui.position.top
+				});
+				$( event.toElement ).one('click', function(e){
+					e.stopImmediatePropagation();
+				});
+			},
+			containment: 'parent'
+		});
+
+		socket.on('onNoteMoved', function(data) {
+			// Update if the same note
+			if(data.id == scope.league.id) {
+				element.animate({
+					left: data.x,
+					top: data.y
+				});
+			}
+		});
+
+		// Some DOM initiation to make it nice
+		element.css('left', '0px');
+		element.css('top', '0px');
+		element.hide().fadeIn();
+	};
+
+	var controller = function($scope) {
+		// Incoming
+		socket.on('onNoteUpdated', function(data) {
+			// Update if the same note
+			if(data.id == $scope.league.id) {
+				$scope.note.title = data.title;
+				$scope.note.body = data.body;
+			}				
+		});
+
+		// Outgoing
+		$scope.updateNote = function(league) {
+			socket.emit('updateNote', league);
+		};
+	};
+
+	return {
+		restrict: 'A',
+		link: linker,
+		controller: controller,
+		scope: {
+			league: '=',
+			ondelete: '&'
+		}
+	};
+});
+
+app.factory('socket', function($rootScope) {
+	var socket = io.connect();
+	return {
+		on: function(eventName, callback) {
+			socket.on(eventName, function() {
+				var args = arguments;
+				$rootScope.$apply(function() {
+					callback.apply(socket, args);
+				});
+			});
+		},
+		emit: function(eventName, data, callback) {
+			socket.emit(eventName, data, function() {
+				var args = arguments;
+				$rootScope.$apply(function() {
+					if(callback) {
+						callback.apply(socket, args);
+					}
+				});
+			});
+		}
+	};
+});
 
 app.service('dataService', function() {
 	  // private variable
@@ -64,7 +146,7 @@ app.controller('MainCtrl', ['$scope', '$filter', 'teams', function($scope, $filt
 	};
 }]);
 
-app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 'teams', function($scope, $http, $filter, dataService, teams) {
+app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 'teams', 'socket', function($scope, $http, $filter, dataService, teams, socket) {
     
 	$scope.benutzer = dataService.benutzer;
 	$scope.activeLeagues = $filter('filter')(dataService.leagues, {isActiv: 'true'});

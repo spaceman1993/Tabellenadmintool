@@ -217,4 +217,63 @@ span.glyphicon-circle-arrow-left {
 	width: 150px;
 	height: 30px;
 }
+
+.sticky-note-background {
+	background: url(/images/bg_corkboard.jpg) top left repeat fixed;
+	height: 100%;
+}
+
+.sticky-note {
+	position: absolute;
+	background: url(/images/sticky-note2.png);
+	padding: 30px 10px 10px 10px;
+	width: 150px;
+	height: 153px;
+	cursor: pointer
+}
+
+.sticky-note .img {
+	background: transparent;
+	border: none;
+	display: block;
+	font-size: 10px;
+	font-weight: bold;
+}
+
+.sticky-note .title {
+	background: transparent;
+	border: none;
+	display: block;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.sticky-note .body {
+	background: transparent;
+	border: none;
+	display: block;
+	font-size: 14px;
+}
+
+.rotate {
+
+	/* Safari */
+	-webkit-transform: rotate(-5deg);
 	
+	/* Firefox */
+	-moz-transform: rotate(-5deg);
+	
+	/* IE */
+	-ms-transform: rotate(-5deg);
+	
+	/* Opera */
+	-o-transform: rotate(-5deg);
+	
+}
+
+.nopadding {
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+.glyphicon { cursor:pointer }
