@@ -8,6 +8,3 @@ var router = express.Router();
 exports.list = function(req, res){
   res.send("respond with a resource");
 };
-
-
-module.exports = router;

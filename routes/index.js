@@ -42,5 +42,3 @@ router.param('benutzer', function(req, res, next, id) {
 	    return next();
 	  });
 	});
-
-module.exports = router;
