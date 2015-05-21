@@ -38,9 +38,6 @@ var server = http.createServer(app);
 var io = io.listen(server);
 
 io.sockets.on('connection', function(socket) {
-	socket.on('createNote', function(data) {
-		socket.broadcast.emit('onNoteCreated', data);
-	});
 
 	socket.on('updateNote', function(data) {
 		socket.broadcast.emit('onNoteUpdated', data);
@@ -48,10 +45,6 @@ io.sockets.on('connection', function(socket) {
 
 	socket.on('moveNote', function(data){
 		socket.broadcast.emit('onNoteMoved', data);
-	});
-
-	socket.on('deleteNote', function(data){
-		socket.broadcast.emit('onNoteDeleted', data);
 	});
 });
 
