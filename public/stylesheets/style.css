@@ -304,7 +304,8 @@ span.glyphicon-circle-arrow-left {
 	padding: 30px 10px 10px 10px;
 	width: 150px;
 	height: 153px;
-	cursor: pointer
+	cursor: pointer;
+	z-index: 0;
 }
 
 .sticky-note .img {

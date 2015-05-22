@@ -1,8 +1,12 @@
 var app = angular.module('mitStuPro', ['ui.router', 'ui.bootstrap', 'colorpicker.module', 'ngAnimate', 'angular-spinkit']);
-
+var zIndexCount = 0;
 app.directive('stickyNote', function(socket) {
 	var linker = function(scope, element, attrs) {
 		element.draggable({
+			start: function(even, ui) {
+				element.css("z-index", zIndexCount++); 
+				console.log(zIndexCount);
+			},
 			stop: function(event, ui) {
 				socket.emit('moveNote', {
 					id: scope.league.id,
@@ -12,6 +16,8 @@ app.directive('stickyNote', function(socket) {
 				$( event.toElement ).one('click', function(e){
 					e.stopImmediatePropagation();
 				});
+				scope.league.notePosLeft = ui.position.left;
+				scope.league.notePosTop = ui.position.top;
 			},
 			containment: 'parent'
 		});
@@ -25,36 +31,15 @@ app.directive('stickyNote', function(socket) {
 				});
 			}
 		});
-
-		// Some DOM initiation to make it nice
-		element.css('left', '0px');
-		element.css('top', '0px');
-		element.hide().fadeIn();
-	};
-
-	var controller = function($scope) {
-		// Incoming
-		socket.on('onNoteUpdated', function(data) {
-			// Update if the same note
-			if(data.id == $scope.league.id) {
-				$scope.note.title = data.title;
-				$scope.note.body = data.body;
-			}				
-		});
-
-		// Outgoing
-		$scope.updateNote = function(league) {
-			socket.emit('updateNote', league);
-		};
+		element.css('left', scope.league.notePosLeft);
+		element.css('top', scope.league.notePosTop);
 	};
 
 	return {
 		restrict: 'A',
 		link: linker,
-		controller: controller,
 		scope: {
-			league: '=',
-			ondelete: '&'
+			league: '='
 		}
 	};
 });
@@ -228,7 +213,10 @@ app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 
 		$scope.mannschaften = null;
 		$scope.nextGames = null;
 		$scope.loading = true;
-		
+		console.log(league.notePosLeft);
+		console.log(league.notePosTop);
+		console.log(league.name);
+		console.log(league.id);
 		$scope.leagueName = league.jugend + ' (' + league.name + ')';
 		var adresse = league.linkage;
 		
@@ -471,6 +459,8 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', 'ac
 			        league.specialName = "";
 			        league.linkage = "https://bremerhv-handball.liga.nu" + leagueData.href;
 			        league.isActiv = false;
+			        league.notePosLeft = 10;
+			        league.notePosTop = 10;
 			       
 			        leagues.push(league);
 		    	}
