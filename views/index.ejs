@@ -161,8 +161,10 @@
 						<!-- Menü für zweites Design -->
 						<div class="sidebar-Design nopadding sticky-note-background">
 							<div sticky-note ng-repeat="league in activeLeagues" league="league" class="sticky-note" ng-click="getTableForLeague(league)">
-								<span class="title rotate">{{league.name}}</span>
-								<span class="body rotate">{{league.jugend}}</span>
+								<div class="rotate">
+									<span class="title">{{league.name}}</span>
+									<span class="body">{{league.jugend}}</span>
+								</div>
 							</div>
 						</div>
 						<!-- ENDE Menü für zweites Design -->

@@ -300,10 +300,10 @@ span.glyphicon-circle-arrow-left {
 
 .sticky-note {
 	position: absolute;
-	background: url(/images/sticky-note2.png);
+	background: url(/images/sticky-note3.png);
 	padding: 30px 10px 10px 10px;
-	width: 150px;
-	height: 153px;
+	width: 120px;
+	height: 90px;
 	cursor: pointer;
 	z-index: 0;
 }
@@ -320,30 +320,30 @@ span.glyphicon-circle-arrow-left {
 	background: transparent;
 	border: none;
 	display: block;
-	font-size: 18px;
-	font-weight: bold;
+	font-size: 15px;
+	#font-weight: bold;
 }
 
 .sticky-note .body {
 	background: transparent;
 	border: none;
 	display: block;
-	font-size: 14px;
+	font-size: 12px;
 }
 
 .rotate {
 
 	/* Safari */
-	-webkit-transform: rotate(-5deg);
+	-webkit-transform: rotate(-7deg);
 	
 	/* Firefox */
-	-moz-transform: rotate(-5deg);
+	-moz-transform: rotate(-7deg);
 	
 	/* IE */
-	-ms-transform: rotate(-5deg);
+	-ms-transform: rotate(-7deg);
 	
 	/* Opera */
-	-o-transform: rotate(-5deg);
+	-o-transform: rotate(-7deg);
 	
 }
 
