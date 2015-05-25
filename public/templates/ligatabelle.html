@@ -1,0 +1,30 @@
+<table class="table table-condensed" ng-class="{'table-bordered' : tabledesign.tableBordered}">
+	<caption ng-style="{'color':tabledesign.captionColor}">Tabelle</caption>						
+	<thead>		
+		<tr ng-style="{'color':tabledesign.textColorHeader, 'background-color':tabledesign.backgroundColorHeader}">									
+			<th>Rang</th>						
+			<th>Mannschaft</th>					
+			<th>Spiele</th>						
+			<th>S</th>							
+			<th>U</th>							
+			<th>N</th>							
+			<th>Tore</th>						
+			<th>+/-</th>						
+			<th>Punkte</th>						
+		</tr>									
+	</thead>									
+	<tbody>										
+		<tr ng-repeat="mannschaft in mannschaften | orderObjectBy:'rang':false" ng-style="{'color':tabledesign.textColor, 'background-color': isHighlight(mannschaft) == true && tabledesign.highlightColor || $index%2==0 && tabledesign.tableStriped && tabledesign.stripedColor  || tabledesign.backgroundColor }">
+			<td>{{mannschaft.rang}}</td>		
+			<td>{{mannschaft.mannschaft}}</td>	
+			<td>{{mannschaft.begegnungen}}</td>	
+			<td ng-if="isNumber(mannschaft.siege)">{{mannschaft.siege}}</td>
+			<td ng-if="!isNumber(mannschaft.siege)" colspan="100%">{{mannschaft.siege}}</td>
+			<td ng-if="isNumber(mannschaft.siege)">{{mannschaft.unentschieden}}</td>
+			<td ng-if="isNumber(mannschaft.siege)">{{mannschaft.niederlagen}}</td>
+			<td ng-if="isNumber(mannschaft.siege)">{{mannschaft.tore}}</td>
+			<td ng-if="isNumber(mannschaft.siege)">{{mannschaft.verhaeltnis}}</td>
+			<td ng-if="isNumber(mannschaft.siege)">{{mannschaft.punkte}}</td>
+		</tr>									
+	</tbody>									
+</table>		

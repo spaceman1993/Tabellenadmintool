@@ -1,3 +1,3 @@
 echo off
 REM MongoDB Pfad anpassen!
-D:\MongoDB\bin\mongod.exe --dbpath .\data\db
+C:\mongodb\bin\mongod.exe --dbpath .\data\db

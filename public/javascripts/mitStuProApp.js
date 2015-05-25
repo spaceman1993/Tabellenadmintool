@@ -73,10 +73,12 @@ app.service('dataService', function() {
   var _leagues = new Array();
   var _activeLeagues = new Array();
   var _jugenden = new Array();
+  var _tableDesign = new Object();
   
   this.leagues = _leagues;
   this.activeLeagues = _activeLeagues;
   this.jugenden = _jugenden;
+  this.tableDesign = _tableDesign;
 });
 
 app.factory("userFactory", function () {
@@ -108,16 +110,10 @@ app.service("activUser", function() {
   this.user = _user;
 });
 
-app.controller('MainCtrl', [function(){
-	
-}]);
 
 app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 'userFactory', 'activUser', function($scope, $http, $filter, dataService, userFactory, activUser) {
     
-	$scope.modalShown = false;
-	  $scope.toggleModal = function() {
-	    $scope.modalShown = !$scope.modalShown;
-	  };
+	$scope.tableDesign = dataService.tableDesign;
 	
 	var isEmpty = function (obj) {
 	    for(var key in obj) {
@@ -213,10 +209,7 @@ app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 
 		$scope.mannschaften = null;
 		$scope.nextGames = null;
 		$scope.loading = true;
-		console.log(league.notePosLeft);
-		console.log(league.notePosTop);
-		console.log(league.name);
-		console.log(league.id);
+		
 		$scope.leagueName = league.jugend + ' (' + league.name + ')';
 		var adresse = league.linkage;
 		
@@ -304,27 +297,23 @@ app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 
 		$scope.getTableForLeague($scope.favoritLeague);
 	}
     
-	$scope.getHallenadresseForHalle = function (hallenlink){
-		
-		hallenlink = "https://bremerhv-handball.liga.nu" + hallenlink;
-		
-		var adresse = hallenlink.replace(/\//g,'%2F').replace(/\?/g,'%3F').replace(/\=/g,'%3D').replace(/\+/g,'%2B').replace(/\&/g,'%26').replace(/\+/g,'%2B').replace(/\:/g, '%3A');
-
-	    var jsonFeed ="https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22"+adresse+"%22%20and%20xpath%3D%22%2F%2Fbody%2F%2Fdiv%2F%2Fdiv%2F%2Fdiv%2F%2Fdiv%2F%2Fp%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
-	     
-	    
-	    $http.get(jsonFeed).success(function (data) {
-	      
-	      var hallenaddress = data.query.results.p.content;
-
-	      $scope.hallenaddress = hallenaddress;
-	    });   
-	    
-	};
+	
 	
 }]);
 
 app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', 'activUser', function($scope, $http, $filter, dataService, activUser){
+	
+	$scope.beispielTabelle = [
+	                          { rang: 1, mannschaft: "THW Kiel", begegnungen: 33, siege: 29, unentschieden: 1, niederlagen: 3, tore: "1010:776", verhaeltnis: 234, punkte: "59:7" },
+	                          { rang: 2, mannschaft: "Rhein-Neckar Löwen", begegnungen: 31, siege: 26, unentschieden: 1, niederlagen: 4, tore: "927:757", verhaeltnis: 170, punkte: "53:9" },
+	                          { rang: 3, mannschaft: "SG Flensburg-Handewit", begegnungen: 33, siege: 21, unentschieden: 6, niederlagen: 6, tore: "942:817", verhaeltnis: 125, punkte: "48:18" },
+	                          { rang: 4, mannschaft: "SC Magdeburg", begegnungen: 32, siege: 22, unentschieden: 2, niederlagen: 8, tore: "957:870", verhaeltnis: 87, punkte: "46:18" },
+	                          { rang: 5, mannschaft: "FRISCH AUF! Göppingen", begegnungen: 34, siege: 18, unentschieden: 4, niederlagen: 12, tore: "925:915", verhaeltnis: 10, punkte: "40:28" },
+	                          { rang: 6, mannschaft: "Füchse Berlin", begegnungen: 32, siege: 17, unentschieden: 3, niederlagen: 12, tore: "884:884", verhaeltnis: 0, punkte: "37:27" },
+	                          { rang: 7, mannschaft: "MT Melsungen", begegnungen: 33, siege: 16, unentschieden: 4, niederlagen: 13, tore: "979:915", verhaeltnis: 64, punkte: "36:30" },
+	                          { rang: 8, mannschaft: "HSG Wetzlar", begegnungen: 34, siege: 13, unentschieden: 6, niederlagen: 15, tore: "908:901", verhaeltnis: 7, punkte: "32:36" },
+	                          { rang: 9, mannschaft: "HSV Handball", begegnungen: 34, siege: 15, unentschieden: 2, niederlagen: 17, tore: "934:930", verhaeltnis: 4, punkte: "32:36" }
+	                        ];
 	
 	var isEmpty = function (obj) {
 	    for(var key in obj) {
@@ -334,9 +323,43 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', 'ac
 	    return true;
 	};
 	
+	$scope.initTableDesigns = function(){
+		$scope.tableDesign1 = new Object();
+		$scope.tableDesign1.backgroundColorHeader = "#030094";
+		$scope.tableDesign1.textColorHeader = "#ffffff";
+		$scope.tableDesign1.backgroundColor = "#ffffff";
+		$scope.tableDesign1.textColor = "#000000";
+		$scope.tableDesign1.tableStriped = true;
+		$scope.tableDesign1.stripedColor = "#cccccc";
+		$scope.tableDesign1.captionColor ="#000000";
+		$scope.tableDesign1.highlightColor = "#9ca0ff"
+		$scope.tableDesign1.highlightColor = "#9ca0ff"
+		$scope.tableDesign1.tableBordered = false;
+	};
+	
+	$scope.changeTableDesign = function(design){
+		$scope.tableDesign.backgroundColorHeader = design.backgroundColorHeader;
+		$scope.tableDesign.textColorHeader = design.textColorHeader;
+		$scope.tableDesign.backgroundColor = design.backgroundColor;
+		$scope.tableDesign.textColor = design.textColor;
+		$scope.tableDesign.tableStriped = design.tableStriped;
+		$scope.tableDesign.stripedColor = design.stripedColor;
+		$scope.tableDesign.captionColor = design.captionColor;
+		$scope.tableDesign.highlightColor = design.highlightColor;
+		$scope.tableDesign.tableBordered = design.tableBordered;
+	};
+	
 	$scope.initSettingsControllerVars = function() {
 		$scope.benutzer = activUser.user;
+		$scope.tableDesign = dataService.tableDesign;
+		
+		$scope.initTableDesigns();
+		
+		if(isEmpty($scope.tableDesign)){
+			$scope.changeTableDesign($scope.tableDesign1);
+		}
 	};
+	
 	
 	$scope.changeDesignauswahl = function(designauswahl){
 		if(designauswahl.first){
@@ -473,9 +496,6 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', 'ac
 		});
 	};
 	
-	$scope.setStripedColor = function(){
-		return 	"table-striped>tbody>tr:nth-child(odd)>td>background-color: " + tableDesign.stripedColor;
-	};
 	
 	$scope.changeFavorit = function(league){
 		$scope.benutzer.favoritLeague = league;
@@ -556,7 +576,7 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', 'ac
 	      
 	      if( $scope.progressbaraktuellprozent === 100){
 	    	  $scope.searchStart = false;
-	    	  $scope.progressbaraktuel = 0;
+	    	  $scope.progressbaraktuell = 0;
 	    	  $scope.progressbaraktuellprozent = 0;
 	      }
 	    });
@@ -714,6 +734,80 @@ app.filter('orderObjectBy', function() {
 });
 
 
+app.directive('ligatabelle', function () {
+    // return the directive definition object 
+    return {
+    	restrict: 'E',
+        scope: {
+        	mannschaften: '=',
+            benutzer: '=',
+            tabledesign: '='
+        },
+        controller: function ($scope) {
+       
+        	$scope.isHighlight = function (mannschaft) {
+            	if(String($scope.benutzer.favoritVerein).length > 3 && String(mannschaft.mannschaft).match($scope.benutzer.favoritVerein)){
+            		return true;
+            	}
+            	else{
+            		return false;
+            	}
+            };
+            
+            $scope.isNumber = function (value) {
+                return !isNaN(value);
+            };
+        	
+        },
+        replace: true,
+        templateUrl: "templates/ligatabelle.html"
+		
+    };
+});
+
+
+app.directive('spielplantabelle', function () {
+    // return the directive definition object 
+    return {
+    	restrict: 'E',
+        scope: {
+        	nextgames: '=',
+        	tabledesign: '='
+        },
+        controller: function ($scope) {
+            
+        	$scope.modalShown = false;
+        	
+      	  	$scope.toggleModal = function() {
+      	  		$scope.modalShown = !$scope.modalShown;
+      	  	};
+        	
+        	$scope.getHallenadresseForHalle = function (hallenlink){
+        		
+        		hallenlink = "https://bremerhv-handball.liga.nu" + hallenlink;
+        		
+        		var adresse = hallenlink.replace(/\//g,'%2F').replace(/\?/g,'%3F').replace(/\=/g,'%3D').replace(/\+/g,'%2B').replace(/\&/g,'%26').replace(/\+/g,'%2B').replace(/\:/g, '%3A');
+
+        	    var jsonFeed ="https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22"+adresse+"%22%20and%20xpath%3D%22%2F%2Fbody%2F%2Fdiv%2F%2Fdiv%2F%2Fdiv%2F%2Fdiv%2F%2Fp%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
+        	     
+        	    
+        	    $http.get(jsonFeed).success(function (data) {
+        	      
+        	      var hallenaddress = data.query.results.p.content;
+
+        	      $scope.hallenaddress = hallenaddress;
+        	    });   
+       
+        	};
+        	
+        },
+        replace: true,
+        templateUrl: 	"templates/spielplantabelle.html"
+		
+    };
+});
+
+
 app.directive('modalDialog', function() {
 	  return {
 	    restrict: 'E',
@@ -737,116 +831,13 @@ app.directive('modalDialog', function() {
 });
 
 
-app.directive('ligatabelle', function () {
-    // return the directive definition object 
-    return {
-    	restrict: 'E',
-        scope: {
-        	mannschaften: '=',
-            benutzer: '='
-        },
-        controller: function ($scope) {
-            
-        	$scope.isHighlight = function (mannschaft) {
-            	if(String($scope.benutzer.favoritVerein).length > 3 && String(mannschaft.mannschaft).match($scope.benutzer.favoritVerein)){
-            		return 'success';
-            	}
-            };
-            
-            $scope.isNumber = function (value) {
-                return !isNaN(value);
-            };
-        	
-        },
-        replace: true,
-        template: 	"<table class='table table-striped table-condensed'>" +
-					"	<caption>Tabelle</caption>						" +
-					"		<thead>										" +
-					"			<tr>									" +
-					"				<th>Rang</th>						" +
-					"				<th>Mannschaft</th>					" +
-					"				<th>Spiele</th>						" +
-					"				<th>S</th>							" +
-					"				<th>U</th>							" +
-					"				<th>N</th>							" +
-					"				<th>Tore</th>						" +
-					"				<th>+/-</th>						" +
-					"				<th>Punkte</th>						" +
-					"			</tr>									" +
-					"		</thead>									" +
-					"		<tbody>										" +
-					"			<tr ng-repeat=\"mannschaft in mannschaften | orderObjectBy:'rang':false\" data-ng-class='isHighlight(mannschaft)'>" +
-					"				<td>{{mannschaft.rang}}</td>		" +
-					"				<td>{{mannschaft.mannschaft}}</td>	" +
-					"				<td>{{mannschaft.begegnungen}}</td>	" +
-					"				<td ng-if='isNumber(mannschaft.siege)'>{{mannschaft.siege}}</td>" +
-					"				<td ng-if='!isNumber(mannschaft.siege)' colspan='100%'>{{mannschaft.siege}}</td>" +
-					"				<td ng-if='isNumber(mannschaft.siege)'>{{mannschaft.unentschieden}}</td>" +
-					"				<td ng-if='isNumber(mannschaft.siege)'>{{mannschaft.niederlagen}}</td>" +
-					"				<td ng-if='isNumber(mannschaft.siege)'>{{mannschaft.tore}}</td>" +
-					"				<td ng-if='isNumber(mannschaft.siege)'>{{mannschaft.verhaeltnis}}</td>" +
-					"				<td ng-if='isNumber(mannschaft.siege)'>{{mannschaft.punkte}}</td>" +
-					"			</tr>									" +
-					"		</tbody>									" +
-					"</table>											"
-		
-    };
-});
-
-
-app.directive('spielplantabelle', function () {
-    // return the directive definition object 
-    return {
-    	restrict: 'E',
-        scope: {
-        	nextGames: '='
-        },
-        controller: function ($scope) {
-            
-        	
-        	
-        },
-        replace: true,
-        template: 	'<table class="table table-striped table-condensed">' +
-					'	<caption>Spielplan</caption>					' +
-					'	<thead>											' +
-					'		<tr>										' +
-					'			<th>Tag</th>							' +
-					'			<th>Datum</th>							' +
-					'			<th>Zeit</th>							' +
-					'			<th>Halle</th>							' +
-					'			<th>Nr</th>								' +
-					'			<th>Heimmannschaft</th>					' +
-					'			<th>Gastmannschaft</th>					' +
-					'			<th>Tore</th>							' +
-					'		</tr>										' +
-					'	</thead>										' +
-					'	<tbody>											' +
-					'		<tr ng-repeat="nextGame in nextGames">		' +
-					'			<td>{{nextGame.tag}}</td>				' +
-					'			<td>{{nextGame.datum}}</td>				' +
-					'			<td>{{nextGame.zeit}}</td>				' +
-					'			<td>{{nextGame.nr}}</td>				' +
-					'			<td>{{nextGame.nr}}</td>				' +
-					'			<td>{{nextGame.heimmannschaft}}</td>	' +
-					'			<td>{{nextGame.gastmannschaft}}</td>	' +
-					'			<td>{{nextGame.tore}}</td>				' +
-					'		</tr>										' +
-					'	</tbody>										' +
-					'</table>											'
-		
-    };
-});
-
-
-
 app.config(['$stateProvider','$urlRouterProvider',function($stateProvider, $urlRouterProvider) {
 
 	$stateProvider
     .state('table', {
       url: '/table',
       templateUrl: '/table.html',
-      controller: 'MainCtrl'
+      controller: 'TableController'
     });
 	
 	$stateProvider

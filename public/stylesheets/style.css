@@ -54,7 +54,7 @@ body {
 
 .center-div {
   	position: absolute;
-  	top: 40%;
+  	top: 20%;
   	left: 50%;
   	transform: translateY(-50%);
   	transform: translateX(-50%);
@@ -79,8 +79,18 @@ body {
   	overflow-y: auto;
 }
 
+.modifyInputText input[type="text"] {
+   height: 5px;
+   font-size: 5px;
+   line-height: 5px;
+}
+
 .red {
     color: red;
+}
+
+.green {
+    color: green;
 }
 
 .default-cursor {
@@ -124,6 +134,11 @@ a {
 	padding-top: 0px;
 	font-size: 30px;
 	color: #333333;
+}
+
+.borderless > tbody > tr > td {
+    border-top-style: none;
+    border-bottom-style: none;
 }
 
 .input-group-addon.success {
