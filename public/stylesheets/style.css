@@ -1,6 +1,7 @@
 body {
 	height: 100%;
 	min-width: 800px;
+	min-height: 500px;
 	padding:20px;
   	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
@@ -17,9 +18,9 @@ body {
 }
 
 .panel {
-	 	height : 99%;
-        margin-bottom:0;
-        position: relative;
+	position: relative;
+	height : 99%;
+	margin-bottom:0;
 }
 
 .panel .panel-footer {
@@ -27,7 +28,6 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-
 }
 
 .panel-default > .panel-heading-nostyle {
@@ -54,7 +54,7 @@ body {
 
 .center-div {
   	position: absolute;
-  	top: 20%;
+  	bottom: 30%;
   	left: 50%;
   	transform: translateY(-50%);
   	transform: translateX(-50%);

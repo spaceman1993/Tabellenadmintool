@@ -188,6 +188,14 @@ app.controller("TableController", ['$scope', '$http', '$filter', 'dataService', 
     	
     };
     
+    $scope.getNameForLeague = function(league){
+    	if(isEmpty(league.specialName)){
+    		return league.jugend;
+    	}else{
+    		return league.specialName;
+    	}
+    };
+    
     $scope.chooseColor = function (input) {
     	
     	if(input === 'Herren' || input === 'Männlich'){
@@ -360,6 +368,10 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', 'ac
 		}
 	};
 	
+	$scope.showDeleteModal = function(league){
+		$scope.deleteLeague = league;
+		$scope.showDelete = true;
+	}
 	
 	$scope.changeDesignauswahl = function(designauswahl){
 		if(designauswahl.first){
@@ -427,11 +439,21 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', 'ac
 		
 	};
 	
+	$scope.checkJugenden = function(data){
+		if(isEmpty(data)){
+			$scope.getAllLeagues($scope.ligenplanLink);
+		}
+		else{
+			$scope.showUpdate = true;
+		}
+	}
+	
 	
 	$scope.ligenplanLink = "https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/leaguePage?championship=Bremer+HV+14/15";
 	
 	$scope.getAllLeagues = function(ligenplanLink) {
 
+		$scope.quelle = false;
 		$scope.leagues = null;
 		$scope.jugenden = null;
 		$scope.loading = true;
@@ -619,7 +641,8 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', 'ac
 		  league.specialName = specialName;
 	  };
 	  
-	  
+	  $scope.focusinControl = {
+	  };
 	  
 }]);
 
@@ -812,21 +835,28 @@ app.directive('modalDialog', function() {
 	  return {
 	    restrict: 'E',
 	    scope: {
-	      show: '='
+	    	control: '=',
+	    	show: '='
 	    },
 	    replace: true, // Replace with the template below
 	    transclude: true, // we want to insert custom content inside the directive
 	    link: function(scope, element, attrs) {
-	      scope.dialogStyle = {};
-	      if (attrs.width)
-	        scope.dialogStyle.width = attrs.width;
-	      if (attrs.height)
-	        scope.dialogStyle.height = attrs.height;
-	      scope.hideModal = function() {
-	        scope.show = false;
-	      };
+	    	scope.internalControl = scope.control || {};
+	    	scope.dialogStyle = {};
+	      
+	    	if (attrs.width){
+	    		scope.dialogStyle.width = attrs.width;
+	    	}
+	      
+	    	if (attrs.height){
+	    		scope.dialogStyle.height = attrs.height;
+	    	}
+	      
+	    	scope.internalControl.hideModal = function() {
+	    		scope.show = false;
+	    	};
 	    },
-	    template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='hideModal()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-close' ng-click='hideModal()'>X</div><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
+	    template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='internalControl.hideModal()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-close' ng-click='internalControl.hideModal()'>X</div><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
 	  };
 });
 
