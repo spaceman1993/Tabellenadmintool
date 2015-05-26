@@ -4,7 +4,7 @@ app.directive('stickyNote', function(socket) {
 	var linker = function(scope, element, attrs) {
 		element.draggable({
 			start: function(even, ui) {
-				element.css("z-index", zIndexCount++); 
+				element.css("z-index", ++zIndexCount); // erst erhöhen, dann setzen, weil es logischer ist und der Index sonst mit 1 starten müsste
 				console.log(zIndexCount);
 			},
 			stop: function(event, ui) {
@@ -482,8 +482,8 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', 'ac
 			        league.specialName = "";
 			        league.linkage = "https://bremerhv-handball.liga.nu" + leagueData.href;
 			        league.isActiv = false;
-			        league.notePosLeft = 10;
-			        league.notePosTop = 10;
+			        league.notePosLeft = (league.id % 4) * 25; // Initialwert
+			        league.notePosTop = league.id * 5; // Initialwert (25 eig schöner, aber die ID der allerletzten Liga ist sehr groß)
 			       
 			        leagues.push(league);
 		    	}
