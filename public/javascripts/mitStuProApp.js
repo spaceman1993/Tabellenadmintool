@@ -1,7 +1,7 @@
 var app = angular.module('mitStuPro', ['ui.router', 'ui.bootstrap', 'colorpicker.module', 'ngAnimate', 'angular-spinkit']);
 
 var zIndexCount = 0;
-app.directive('stickyNote', function(socket) {
+app.directive('stickyNote', function() {
 	var linker = function(scope, element, attrs) {
 		element.draggable({
 			start: function(even, ui) {
@@ -27,30 +27,6 @@ app.directive('stickyNote', function(socket) {
 		link: linker,
 		scope: {
 			league: '='
-		}
-	};
-});
-
-app.factory('socket', function($rootScope) {
-	var socket = io.connect();
-	return {
-		on: function(eventName, callback) {
-			socket.on(eventName, function() {
-				var args = arguments;
-				$rootScope.$apply(function() {
-					callback.apply(socket, args);
-				});
-			});
-		},
-		emit: function(eventName, data, callback) {
-			socket.emit(eventName, data, function() {
-				var args = arguments;
-				$rootScope.$apply(function() {
-					if(callback) {
-						callback.apply(socket, args);
-					}
-				});
-			});
 		}
 	};
 });
@@ -694,14 +670,6 @@ app.directive('addressBasedGoogleMap', function () {
     };
 });
 
-app.filter('findObjectBy', function() {
-	return function(objects, property, value) {
-		return objects.filter(function (value) {
-            return val[property] !== value;
-           });
-	};
-});
-
 
 app.filter('listGroupBy', function() {
 	return function(list, attribute) {
@@ -726,21 +694,6 @@ app.filter('listGroupBy', function() {
         
         return groups;
 	};
-});
-
-
-app.filter('orderObjectBy', function() {
-  return function(items, field, reverse) {
-    var filtered = [];
-    angular.forEach(items, function(item) {
-      filtered.push(item);
-    });
-    filtered.sort(function (a, b) {
-      return (a[field] > b[field] ? 1 : -1);
-    });
-    if(reverse) {filtered.reverse();}
-    return filtered;
-  };
 });
 
 

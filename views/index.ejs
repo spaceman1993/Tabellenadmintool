@@ -17,7 +17,6 @@
 		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-animate.js"></script>
 		<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>	
 		<script src="/javascripts/angular-spinkit.min.js"></script>
-		<script src="/socket.io/socket.io.js"></script>
 		<style> .input { cursor:default } </style>
 	</head>
 	<body ng-app="mitStuPro">
@@ -88,7 +87,7 @@
 										</button>
 										<ul class="dropdown-menu" role="menu">
 			      								<li ng-repeat="league in activeLeagues | filter: { gender: 'Weiblich' }:true">
-												<a ng-click="getTableForLeague(league)">{{league.jugend}} ({{league.name}})</a>
+												<a ng-click="getTableForLeague(league)">{{getNameForLeague(league)}} ({{league.name}})</a>
 											</li>
 			    						</ul>
 									</div>
