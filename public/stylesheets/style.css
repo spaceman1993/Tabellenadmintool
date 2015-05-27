@@ -316,7 +316,7 @@ span.glyphicon-circle-arrow-left {
 .sticky-note {
 	position: absolute;
 	background: url(/images/sticky-note3.png);
-	padding: 30px 10px 10px 10px;
+	padding: 22px 10px 10px 15px;
 	width: 120px;
 	height: 90px;
 	cursor: pointer;

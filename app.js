@@ -6,7 +6,6 @@ var express = require('express');
 var path = require('path');
 var http = require('http');
 var mongoose = require('mongoose');
-var io = require('socket.io');
 
 mongoose.connect('mongodb://localhost/Schule');
 
@@ -34,14 +33,6 @@ app.get('/', routes.index);
 app.get('/users', user.list);
 
 var server = http.createServer(app);
-
-var io = io.listen(server);
-
-io.sockets.on('connection', function(socket) {
-	socket.on('moveNote', function(data){
-		socket.broadcast.emit('onNoteMoved', data);
-	});
-});
 
 server.listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));

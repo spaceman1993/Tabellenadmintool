@@ -1,38 +1,25 @@
 var app = angular.module('mitStuPro', ['ui.router', 'ui.bootstrap', 'colorpicker.module', 'ngAnimate', 'angular-spinkit']);
+
 var zIndexCount = 0;
 app.directive('stickyNote', function(socket) {
 	var linker = function(scope, element, attrs) {
 		element.draggable({
 			start: function(even, ui) {
 				element.css("z-index", ++zIndexCount); // erst erhöhen, dann setzen, weil es logischer ist und der Index sonst mit 1 starten müsste
-				console.log(zIndexCount);
 			},
 			stop: function(event, ui) {
-				socket.emit('moveNote', {
-					id: scope.league.id,
-					x: ui.position.left,
-					y: ui.position.top
+				$(event.toElement).one('click', function(e){
+					e.stopImmediatePropagation();		// beim Drop wird kein Click ausgelöst
 				});
-				$( event.toElement ).one('click', function(e){
-					e.stopImmediatePropagation();
-				});
-				scope.league.notePosLeft = ui.position.left;
-				scope.league.notePosTop = ui.position.top;
+				scope.league.notePosLeft = ui.position.left / element.parent().width() * 100 + '%';
+				scope.league.notePosTop = ui.position.top / element.parent().height() * 100 + '%';
+				element.css('left', scope.league.notePosLeft);
+				element.css('top', scope.league.notePosTop);
 			},
 			containment: 'parent'
 		});
-
-		socket.on('onNoteMoved', function(data) {
-			// Update if the same note
-			if(data.id == scope.league.id) {
-				element.animate({
-					left: data.x,
-					top: data.y
-				});
-			}
-		});
-		element.css('left', scope.league.notePosLeft);
-		element.css('top', scope.league.notePosTop);
+		element.css('left', scope.league.notePosLeft); // Initialwert
+		element.css('top', scope.league.notePosTop); // Initialwert
 	};
 
 	return {
@@ -504,9 +491,9 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', 'ac
 			        league.specialName = "";
 			        league.linkage = "https://bremerhv-handball.liga.nu" + leagueData.href;
 			        league.isActiv = false;
-			        league.notePosLeft = (league.id % 4) * 25; // Initialwert
-			        league.notePosTop = league.id * 5; // Initialwert (25 eig schöner, aber die ID der allerletzten Liga ist sehr groß)
-			       
+			        league.notePosLeft = (league.id % 3) * 20 + '%'; // Initialwert
+			        league.notePosTop = league.id / daten.length * 80 + '%'; // Initialwert (25 eig schöner, aber die ID der allerletzten Liga ist sehr groß)
+			        			       
 			        leagues.push(league);
 		    	}
 
