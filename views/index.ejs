@@ -176,22 +176,22 @@
 		<!-- settings.html -->
 		<script type="text/ng-template" id="/settings.html">
 
-			<div class="panel panel-default" ng-init="initSettingsControllerVars()">
+			<div class="panel panel-default" ng-init="initSettingsController()">
 
-
+				<!-- Kopflastige Navigationsleiste zur Auswahl des Managers -->
 				<div class="panel-heading">
 					<div class="btn-group" style="width:100%">
-						<button style="width:33.3%" class="btn btn-lg btn btn-primary" ng-click="show = 'anzeigeManager'; initAnzeigenManagerVars()"> Anzeigen-Manager </button>
+						<button style="width:33.3%" class="btn btn-lg btn btn-primary" ng-click="show = 'anzeigenManager'"> Anzeigen-Manager </button>
 						<button style="width:33.3%" class="btn btn-lg btn btn-success" ng-click="show = 'tables'"> Design-Manager </button>
-						<button style="width:33.3%" class="btn btn-lg btn btn-danger" ng-click="show = 'ligaManager'; settings = false; initLigaManagerVars()"> Liga-Manager </button>
+						<button style="width:33.3%" class="btn btn-lg btn btn-danger" ng-click="show = 'ligaManager'; settings = false"> Liga-Manager </button>
 					</div>
 				</div>
-
+				<!-- ENDE Kopflastige Navigationsleiste zur Auswahl des Managers -->
 			
 				<div class="panel-body" style="top: 77px;">
 
 					<!--Anzeige Anzeigen-Manager -->
-					<div ng-show="show == 'anzeigeManager'">
+					<div ng-show="show == 'anzeigenManager'">
 						
 						<div style="margin-bottom:1em;">
 							<h2> Anzeigen-Manager </h2>
@@ -310,7 +310,7 @@
      									</span>
      									<input type="text" class="form-control" ng-model="ligenplanLink" placeholder="Link zur Übersicht der Ligen">
      									<span class="input-group-btn">
-       										<button class="btn btn btn-success btn-lg" type="submit" ng-click="checkJugenden(jugenden)"><span class="glyphicon glyphicon-ok"></span></button>
+       										<button class="btn btn btn-success btn-lg" type="submit" ng-click="checkLigaData(jugenden)"><span class="glyphicon glyphicon-ok"></span></button>
      									</span>
    									</div><!-- /input-group -->
  								</div>
