@@ -496,13 +496,14 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', 'ac
 	 * Ein PopUp-Fenster wird aktiviert mit dem Hinweis zum Löschen der Liga
 	 */
 	$scope.showDeleteModal = function(league){
-		$scope.deleteLeague = league;
 		$scope.showDelete = true;
+		$scope.deleteLeague = league;
 	}
 
 	
 	$scope.getAllLeagues = function(ligenplanLink) {
 
+		$scope.benutzer.favoritLeague = null;
 		$scope.quelle = false;
 		$scope.leagues = null;
 		$scope.jugenden = null;
@@ -644,7 +645,7 @@ app.controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', 'ac
 		      while(j < mannschaften.length && !found){
 				if(mannschaften[j].indexOf(verein) > -1){
 					league.isActiv = true;
-					$scope.addActivLeague(league);
+					addActivLeague(league);
 					$scope.anzahlSearch = $scope.anzahlSearch + 1;
 					found = true;
 				}
@@ -737,53 +738,6 @@ app.directive('ngEnter', function () {
     };
 });
 
-app.directive('addressBasedGoogleMap', function () {
-    return {
-        restrict: "A",
-        template: "<div id='addressMap'></div>",
-        scope: {
-            address: "=",
-            zoom: "="
-        },
-        controller: function ($scope) {
-            var geocoder;
-            var latlng;
-            var map;
-            var marker;
-            var initialize = function () {
-                geocoder = new google.maps.Geocoder();
-                latlng = new google.maps.LatLng(-34.397, 150.644);
-                var mapOptions = {
-                    zoom: $scope.zoom,
-                    center: latlng,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                };
-                map = new google.maps.Map
-                (document.getElementById('addressMap'), mapOptions);
-            };
-            markAdressToMap = function () {
-                geocoder.geocode({ 'address': $scope.address }, 
-                function (results, status) 
-                  {
-                    if (status === google.maps.GeocoderStatus.OK) {
-                        map.setCenter(results[0].geometry.location);
-                        marker = new google.maps.Marker({
-                            map: map,
-                            position: results[0].geometry.location
-                        });
-                    }
-                });
-            };
-            $scope.$watch("address", function () {
-                if ($scope.address !== undefined) {
-                    markAdressToMap();
-                }
-            });
-            initialize();
-        },
-    };
-});
-
 
 app.filter('listGroupBy', function() {
 	return function(list, attribute) {
@@ -858,7 +812,7 @@ app.directive('ligatabelle', function () {
 });
 
 
-app.directive('spielplantabelle', function () {
+app.directive("spielplantabelle", [function () {
     // return the directive definition object 
     return {
     	restrict: 'E',
@@ -897,10 +851,10 @@ app.directive('spielplantabelle', function () {
         templateUrl: 	"templates/spielplantabelle.html"
 		
     };
-});
+}]);
 
 
-app.directive('modalDialog', function() {
+app.directive("modalDialog", [function() {
 	  return {
 	    restrict: 'E',
 	    scope: {
@@ -927,7 +881,56 @@ app.directive('modalDialog', function() {
 	    },
 	    template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='internalControl.hideModal()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-close' ng-click='internalControl.hideModal()'>X</div><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
 	  };
+}]);
+
+
+app.directive('addressBasedGoogleMap', function () {
+    return {
+        restrict: "A",
+        template: "<div id='addressMap'></div>",
+        scope: {
+            address: "=",
+            zoom: "="
+        },
+        controller: function ($scope) {
+            var geocoder;
+            var latlng;
+            var map;
+            var marker;
+            var initialize = function () {
+                geocoder = new google.maps.Geocoder();
+                latlng = new google.maps.LatLng(-34.397, 150.644);
+                var mapOptions = {
+                    zoom: $scope.zoom,
+                    center: latlng,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                map = new google.maps.Map
+                (document.getElementById('addressMap'), mapOptions);
+            };
+            markAdressToMap = function () {
+                geocoder.geocode({ 'address': $scope.address }, 
+                function (results, status) 
+                  {
+                    if (status === google.maps.GeocoderStatus.OK) {
+                        map.setCenter(results[0].geometry.location);
+                        marker = new google.maps.Marker({
+                            map: map,
+                            position: results[0].geometry.location
+                        });
+                    }
+                });
+            };
+            $scope.$watch("address", function () {
+                if ($scope.address !== undefined) {
+                    markAdressToMap();
+                }
+            });
+            initialize();
+        },
+    };
 });
+
 
 
 app.config(['$stateProvider','$urlRouterProvider',function($stateProvider, $urlRouterProvider) {

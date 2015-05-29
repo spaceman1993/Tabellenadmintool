@@ -4,6 +4,7 @@ body {
 	min-height: 500px;
 	padding:20px;
   	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  	background-color: #CB8C1D;
 }
 
 #areaMap, #addressMap
@@ -17,27 +18,23 @@ body {
 	margin:0px;
 }
 
+
+/* PANEL GROESSEN- UND POSITINSEINSTELLUNGEN */
 .panel {
 	position: relative;
 	height : 99%;
 	margin-bottom:0;
-}
-
-.panel .panel-footer {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
-
-.panel-default > .panel-heading-nostyle {
-	background: none; 
-	margin: 10px;
-	margin-bottom: 0px;
+	border-color: #4C3327;
 }
 
 .panel-default > .panel-heading {
 	margin-bottom: 0px;
+}
+
+.panel-default > .panel-heading-nostyle {
+	background: none; 
+	padding: 10px;
+	padding-bottom: 0px;
 }
 
 .panel-body {
@@ -48,9 +45,37 @@ body {
   	overflow-y: auto;
 }
 
-.panel-body > div {
-
+.panel .panel-footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
+
+/* PANEL FARBEINSTELLUNGEN */
+.panel-default > .panel-heading {
+  	background-color: #4C3327;
+  	border-color: #4C3327;
+  	color: #BD3632;
+}
+
+.panel-default > .panel-heading-nostyle {
+  	background-color: #F2EFE4;
+  	border-color: #4C3327;
+}
+
+.panel-body {
+  	background-color: #F2EFE4;
+  	border-color: #4C3327;
+}
+
+.panel .panel-footer {
+  	background-color: #4C3327;
+  	border-color: #4C3327;
+  	color: white;
+}
+
+
 
 .center-div {
   	position: absolute;
@@ -233,41 +258,10 @@ span.glyphicon-circle-arrow-left {
 .left-addon input  { padding-left:  30px; }
 .right-addon input { padding-right: 30px; }
 
-
-
-
-.animate.ng-enter, 
-.animate.ng-leave
-{ 
-	-webkit-transition: 500ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
-	-moz-transition: 500ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
-	-ms-transition: 500ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
-	-o-transition: 500ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
-	transition: 500ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
-	position: relative;
-	display: block;
-	overflow: hidden;
-	text-overflow: clip;
-	white-space:nowrap;
-} 
-
-.animate.ng-leave.animate.ng-leave-active,
-.animate.ng-enter {
-	opacity: 0;
-	width: 0px;
-	height: 0px;
-}
-
-.animate.ng-enter.ng-enter-active, 
-.animate.ng-leave {
-	opacity: 1;
-	width: 150px;
-	height: 30px;
-}
 	
 .ng-modal-overlay {
   /* A dark translucent div that covers the whole screen */
-  position:absolute;
+  position:fixed;
   z-index:9999;
   top:0;
   left:0;
@@ -279,7 +273,7 @@ span.glyphicon-circle-arrow-left {
 .ng-modal-dialog {
   /* A centered div above the overlay with a box shadow. */
   z-index:10000;
-  position: absolute;
+  position: fixed;
   width: 50%; /* Default */
 
   /* Center the dialog */

@@ -111,11 +111,6 @@
 									<ligatabelle mannschaften = "mannschaften" benutzer = "benutzer" tabledesign="tableDesign"></ligatabelle>	
 
 									<spielplantabelle nextgames = "nextGames" tabledesign = "tableDesign"></spielplantabelle>
-
-									<modal-dialog show="modalShown" width="90%" height="90%">
-										<h2>Überblick Hallenort</h2>
-		      							<div ng-show="hallenaddress" address-based-google-map address="hallenaddress" zoom="16"> </div>	
-		    						</modal-dialog>
 		
 		        				</div>
 								<!-- ENDE Tabelle für erstes Design -->
@@ -231,7 +226,7 @@
 							
 							<form role="form">
 								<label for="vereinsname">Vereinsname:</label>
-  								<input ng-blur="changeFavorisierterVerein(benutzer.favoritVerein)" ng-model="benutzer.favoritVerein" type="text" class="form-control" id="vereinsname" placeholder="Genauen Vereinsnamen angeben">
+  								<input style="width:500px;" ng-blur="changeFavorisierterVerein(benutzer.favoritVerein)" ng-model="benutzer.favoritVerein" type="text" class="form-control" id="vereinsname" placeholder="Genauen Vereinsnamen angeben">
   							</form>  								
 							</div>
 							<div class="col-md-6">
@@ -325,8 +320,8 @@
 							
 							<modal-dialog control="focusinControl" show="showDelete" width="400px" height="150px">
 								<center>
-									<h5>Wollen Sie die Liga {{deleteLeague.name}} wirklich löschen?</h5>
-									<button type="button" class="btn btn-success" ng-click="deleteActivLeague(deleteLeague); focusinControl.hideModal()" style="display: inline-block; width: 40%;"> JA </button>
+									<h5>Wollen Sie die {{deleteLeague.name}} wirklich löschen?</h5>
+									<button type="button" class="btn btn-success" ng-click="changeActiv(deleteLeague); focusinControl.hideModal()" style="display: inline-block; width: 40%;"> JA </button>
 									<button type="button" class="btn btn-danger" ng-click="focusinControl.hideModal()" style="display: inline-block; width: 40%;"> NEIN </button>
 								</center>
 		    				</modal-dialog>
@@ -357,7 +352,7 @@
 													<span ng-click="changeFavorit(data)" style="cursor:pointer;">{{data.name}}</span> 
 													<span ng-show="data.specialName"> ({{data.specialName}}) </span>
 
-													<a ng-click="showDeleteModal(data);">
+													<a ng-click="showDeleteModal(data)">
 	         											<span class="pull-right glyphicon glyphicon-trash space"></span>
 	        										</a>
 	
