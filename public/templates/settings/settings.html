@@ -1,0 +1,385 @@
+			<div class="panel panel-default" ng-init="initSettingsController()">
+
+				<!-- Kopflastige Navigationsleiste zur Auswahl des Managers -->
+				<div class="panel-heading">
+					<div class="btn-group" style="width:100%">
+						<button style="width:33.3%" class="btn btn-lg btn btn-primary" ng-click="show = 'anzeigenManager'"> Anzeigen-Manager </button>
+						<button style="width:33.3%" class="btn btn-lg btn btn-success" ng-click="show = 'tables'"> Design-Manager </button>
+						<button style="width:33.3%" class="btn btn-lg btn btn-danger" ng-click="show = 'ligaManager'; settings = false"> Liga-Manager </button>
+					</div>
+				</div>
+				<!-- ENDE Kopflastige Navigationsleiste zur Auswahl des Managers -->
+			
+				<div class="panel-body" style="top: 77px;">
+
+					<!--Anzeige Anzeigen-Manager -->
+					<div ng-show="show == 'anzeigenManager'">
+						
+						<div style="margin-bottom:1em;">
+							<h2> Anzeigen-Manager </h2>
+						</div>
+
+						<div class="row" style="margin-bottom:1em">
+							<div class="col-md-6">
+								<h4>Designauswahl</h4>
+	  							<p>Wählen Sie die Designsansichten, die Sie zur Verfügung stellen möchten:</p>
+	  							<form role="form" ng-click="changeDesignauswahl(benutzer.designauswahl)">
+	    							<label class="checkbox-inline" ng-click="changeFirstDesign()">
+	     								<input type="checkbox" value="first" ng-model="benutzer.first">1.Design
+	    							</label>
+	    							<label class="checkbox-inline" ng-click="changeSecondDesign()">
+	      								<input type="checkbox" value="second" ng-model="benutzer.second">2.Design
+	    							</label>
+	  							</form>
+							</div>
+							<div class="col-md-6">
+								<h4>Standard Design</h4>
+	  							<p>Wählen Sie das Design, das als Standard angezeigt werden soll:</p>
+	  							<form role="form" ng-click="changeStandardDesign(benutzer.standardDesign)">
+	    							<label ng-show="benutzer.first" class="radio-inline">
+	      								<input type="radio" name="standard" value="1" ng-model="benutzer.standardDesign">1.Design
+	    							</label>
+	    							<label ng-show="benutzer.second" class="radio-inline">
+	      								<input type="radio" name="standard" value="2" ng-model="benutzer.standardDesign">2.Design
+	    							</label>
+	  							</form>
+							</div>
+						</div>
+						
+						<div class="row" style="margin-bottom:1em">
+							<div class="col-md-6">
+							<h4>Favorisierter Verein</h4>
+  							<p>Tragen Sie (wenn gewünscht) Ihren favorisierten Verein in das dafür vorgesehene Feld ein.<br/> Ihr Verein wird hervorgehoben angezeigt.</p>
+							
+							<form role="form">
+								<label for="vereinsname">Vereinsname:</label>
+  								<input style="width:500px;" ng-blur="changeFavorisierterVerein(benutzer.favoritVerein)" ng-model="benutzer.favoritVerein" type="text" class="form-control" id="vereinsname" placeholder="Genauen Vereinsnamen angeben">
+  							</form>  								
+							</div>
+							<div class="col-md-6">
+							<h4>Spielplan</h4>
+  							<p>Entscheiden Sie, ob Sie die Spielpläne angezeigt bekommen wollen:</p>
+  							<form role="form" ng-click="changeSpielplan(benutzer.spielplan)">
+    							<label class="radio-inline">
+      								<input type="radio" name="spielplan" value="ja" ng-model="benutzer.spielplan">JA
+    							</label>
+    							<label class="radio-inline">
+      								<input type="radio" name="spielplan" value="nein" ng-model="benutzer.spielplan">NEIN
+    							</label>
+  							</form>
+							</div>
+						</div>
+
+						<div class="row" style="margin-bottom:1em">
+							<div class="col-md-6">
+							<h4>Individuelle Verwaltung</h4>
+  							<p>Wollen Sie, dass sich Benutzer registrieren können und eigenständig ihre eigenen Einstellungen verwalten können?</p>
+  							<form role="form" ng-click="changeLogin(benutzer.verwaltung)">
+    							<label class="radio-inline">
+      								<input type="radio" name="verwaltung" value="ja" ng-model="benutzer.verwaltung">JA
+    							</label>
+    							<label class="radio-inline">
+      								<input type="radio" name="verwaltung" value="nein" ng-model="benutzer.verwaltung">NEIN
+    							</label>
+  							</form>
+							</div>
+						</div>
+
+					</div>
+					<!--ENDE Anzeige Anzeigen-Manager -->
+
+					<!--Anzeige Ligamanager -->
+					<div ng-show="show == 'ligaManager'">
+	
+						<!-- Menu Ligamanager-Anzeige -->
+						<div class="clearfix" style="margin-bottom:1em;">
+							<a ng-show="settings" ng-click="settings = false; initLigaManagerVars()" style="margin-right:1em;">
+								<span class="glyphicon glyphicon-circle-arrow-left bigSizeGlyph"></span>
+							</a>
+
+  							<h2> Liga-Manager </h2>
+
+							<a ng-show="!settings" ng-click="settings = true">
+          						<span class="glyphicon glyphicon-wrench space bigSizeGlyph"></span>
+        					</a>
+
+							<div ng-show="settings" class="pull-right">
+								<a ng-click="checkSearchVerein()">
+          							<span class="glyphicon glyphicon-search bigSizeGlyph space vcenter"></span>
+        						</a>
+
+								<a ng-click="quelle = !quelle">
+          							<span class="glyphicon glyphicon-refresh bigSizeGlyph space vcenter"></span>
+        						</a>
+							</div>
+
+							<div ng-show="settings" class="pull-right">
+								<span ng-show="!search && !searchStart" class="pull-left"><meldungText>{{activeLeagues.length}} Ligen gewählt</meldungText></span>
+								<input ng-show="search && leagues.length > 0" ng-model="searchVerein" ng-enter="checkSearchVerein()" class="input-sm pull-left" type="text" placeholder="Verein suchen">
+								<span ng-show="search && leagues.length == 0"><alertText>Keine Daten vorhanden</alertText></span>
+								
+								<progressbar style="margin:0px; margin-bottom:2px;" ng-show="searchStart" max="100" value="progressbaraktuellprozent" class="progress-striped active" type="success"><b>{{progressbaraktuellprozent | number:1}}%</b></progressbar>
+								<span ng-show="searchStart"><meldungText style="margin-left:20px; margin-right:20px;">{{anzahlSearch}} Ligen gefunden</meldungText></span>
+							</div>
+
+
+
+							<div ng-show="settings" class="row bottom-buffer" >
+  								<div ng-show="quelle" class="col-md-12">
+   									<div class="input-group input-group-sm">
+										<span class="input-group-addon success">
+       										Ligenplan:
+     									</span>
+     									<input type="text" class="form-control" ng-model="ligenplanLink" placeholder="Link zur Übersicht der Ligen">
+     									<span class="input-group-btn">
+       										<button class="btn btn btn-success btn-lg" type="submit" ng-click="checkLigaData(jugenden)"><span class="glyphicon glyphicon-ok"></span></button>
+     									</span>
+   									</div><!-- /input-group -->
+ 								</div>
+							</div><!-- /.row -->
+						</div>
+						<!-- ENDE Menu Ligamanager-Anzeige -->
+
+						
+
+						<!-- Normale Ligamanager-Anzeige -->
+	  					<div class="row" ng-hide="settings">
+							
+							<modal-dialog control="focusinControl" show="showDelete" width="400px" height="150px">
+								<center>
+									<h5>Wollen Sie die {{deleteLeague.name}} wirklich löschen?</h5>
+ 									<button type="button" class="btn btn-success" ng-click="changeActiv(deleteLeague); focusinControl.hideModal()" style="display: inline-block; width: 40%;"> JA </button>
+ 									<button type="button" class="btn btn-danger" ng-click="focusinControl.hideModal()" style="display: inline-block; width: 40%;"> NEIN </button>
+								</center>
+		    				</modal-dialog>
+
+							<!-- Anzeige, wenn keine Daten vorhanden sind -->
+	    					<div ng-hide="activJugenden.length > 0">
+								<div class="col-md-12">
+    									<strong>Hinweis!</strong></br>
+										Sie haben noch keine Ligen gewählt, die Sie verwalten können!</br>
+										Um dies zu Ändern, begeben Sie sich bitte in den <a href="" ng-click="settings = true">Einstellungsmanager</a> des Liga-Managers.
+								</div>
+							</div>
+							<!-- ENDE Anzeige, wenn keine Daten vorhanden sind -->
+	
+							<!-- Anzeige, wenn Daten vorhanden sind -->
+	    					<div ng-show="activJugenden.length > 0">
+								<div class="col-md-12">
+
+									<!-- Listen gruppiert nach Jugenden -->
+									<div ng-repeat="jugend in activJugenden">
+	
+										<!-- Listeneinträge -->
+										<div class="list-group">
+	        								<ul class="list-group-item active">
+												<strong class="default-cursor">{{ jugend.label }}</strong>
+											</ul>
+											<ul class="list-group-item clearfix" ng-repeat="data in jugend.list">
+													<span ng-click="changeFavorit(data)" style="cursor:pointer;">{{data.name}}</span> 
+													<span ng-show="data.specialName"> ({{data.specialName}}) </span>
+
+													<a ng-click="showDeleteModal(data)">
+	         											<span class="pull-right glyphicon glyphicon-trash space"></span>
+	        										</a>
+	
+													<a ng-hide="edit" ng-click="edit = true">
+	          											<span class="pull-right glyphicon glyphicon-pencil space"></span>
+	        										</a>
+
+													<a ng-show="edit" ng-click="changeSpecialName(data, specialName); edit = false">
+	          											<span class="pull-right glyphicon glyphicon-ok space green"></span>
+	        										</a>
+
+													<span class="pull-right space" ng-show="edit">
+														<input type="text" ng-model="specialName" ng-enter="changeSpecialName(data, specialName); edit = false" autofocus>
+													</span>
+
+													<span ng-show="benutzer.favoritLeague == data">
+	          											<span class="pull-right glyphicon glyphicon-heart red"></span>
+	        										</span>
+											</ul>
+										</div>
+										<!-- ENDE Listeneinträge -->
+	
+	    							</div>
+									<!-- ENDE Listen gruppiert nach Jugenden -->
+								</div>
+							</div>
+							<!-- ENDE Anzeige, wenn Daten vorhanden sind -->
+						</div>
+						<!-- ENDE Normale Ligamanager-Anzeige -->
+	  				
+	
+						<!-- Settings der Ligamanager-Anzeige -->
+						<div ng-show="settings">
+
+							<modal-dialog control="focusinControl" show="showUpdate" width="400px" height="250px">
+								<center>
+									<h3>Achtung!</h3>
+									<h5>Wollen Sie die Datenquelle wirklich ändern?</h5>
+									<h6 class="red">Sämtliche Einstellungen des Liga-Managers werden zurückgesetzt!</h6>
+									<button type="button" class="btn btn-success" ng-click="getAllLeagues(ligenplanLink); focusinControl.hideModal()" style="display: inline-block; width: 40%;"> JA </button>
+									<button type="button" class="btn btn-danger" ng-click="focusinControl.hideModal()" style="display: inline-block; width: 40%;"> NEIN </button>
+								</center>
+		    				</modal-dialog>
+
+							<!-- Anzeige, wenn keine Daten vorhanden sind -->
+	    					<div ng-hide="jugenden.length > 0 || quelle || loading">
+    							<strong>Hinweis!</strong></br>
+								Sie haben noch keine Daten-Quelle ausgewählt!</br>
+								Um dies zu Ändern, wählen Sie bitte das Aktualisieren-Symbol am oberen rechten Seitenrand aus und geben Sie Ihre Quelle an.
+							</div>
+							<!-- ENDE Anzeige, wenn keine Daten vorhanden sind -->
+
+							<!-- Listen gruppiert nach Jugenden -->
+							<div ng-repeat="jugend in jugenden">
+								<div class="list-group">
+	        						<ul class="list-group-item active hand-cursor" ng-click="isShow = !isShow">
+										<strong>{{ jugend.label }}</strong>
+										<span ng-show="!isShow" class="pull-right glyphicon glyphicon-chevron-down"></span>
+										<span ng-show="isShow" class="pull-right glyphicon glyphicon-chevron-up"></span>	
+									</ul>
+							
+									<div ng-show="isShow">
+										<ul class="list-group-item hand-cursor" ng-repeat="data in jugend.list" ng-click="changeActiv(data)" ng-class="{selected: data.isActiv}">
+											{{data.name}}
+										</ul>
+									</div>
+								</div>
+	    					</div>
+						</div>
+						<!-- ENDE Settings der Ligamanager-Anzeige -->
+
+						<!-- Ladebildschirm -->
+						<div class="center-div" ng-show="loading">
+							<img src="images/loading-animation.gif"/ height="200px" width="200px">
+						</div>
+						<!-- ENDE Ladebildschirm -->
+
+					</div>
+					<!-- ENDE Liga-Manager Anzeige -->
+				
+					<!--Anzeige Tabellenmanager -->
+					<div ng-show="show == 'tables'">
+
+						<div style="margin-bottom:1em;">
+							<h2> Design-Manager </h2>
+						</div>
+
+						<table class="table borderless">
+							<thead>
+								<tr>
+									<th>Tabellen-Überschrift</th>
+									<th>Tabelle-Körper</th>
+									<th colspan="2">Specials</th>
+									<th>Allgemeines</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<div class="form-group">
+											<label>Hintergrundfarbe</label>
+											<input colorpicker ng-model="tableDesign.backgroundColorHeader" type="text" class="form-control" placeholder="{{tableDesign.backgroundColorHeader}}" ng-style="{'background-color': tableDesign.backgroundColorHeader}" style="cursor: pointer;">
+										</div>
+									</td>
+									<td>
+										<div class="form-group">
+											<label>Hintergrundfarbe</label>
+											<input colorpicker ng-model="tableDesign.backgroundColor" type="text" class="form-control" placeholder="{{tableDesign.backgroundColor}}" ng-style="{'background-color': tableDesign.backgroundColor}" style="cursor: pointer;">
+										</div>
+									</td>
+									<td>
+										<div class="checkbox">
+											<label>
+												<input ng-model="tableDesign.tableStriped" type="checkbox">Gestreift
+											</label>
+										</div>
+									</td>
+									<td>
+										<div class="checkbox">
+											<label class="space">
+												<input ng-model="tableDesign.tableBordered" type="checkbox">Rahmen
+											</label>
+										</div>
+									</td>
+									<td>
+										<div class="form-group">
+											<label>Bennennungsfarbe</label>
+											<input colorpicker ng-model="tableDesign.captionColor" type="text" class="form-control" placeholder="{{tableDesign.captionColor}}" ng-style="{'background-color': tableDesign.captionColor}" style="cursor: pointer;">
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="form-group">
+											<label>Schriftfarbe</label>
+											<input colorpicker ng-model="tableDesign.textColorHeader" type="text" class="form-control" placeholder="{{tableDesign.textColorHeader}}" ng-style="{'background-color': tableDesign.textColorHeader}" style="cursor: pointer;">
+										</div>
+									</td>
+									<td>
+										<div class="form-group">
+											<label>Schriftfarbe</label>
+											<input colorpicker ng-model="tableDesign.textColor" type="text" class="form-control" placeholder="{{tableDesign.textColor}}" ng-style="{'background-color': tableDesign.textColor}" style="cursor: pointer;">
+										</div>
+									</td>
+									<td colspan="2">
+										<div class="form-group" ng-show="tableDesign.tableStriped">
+											<label>Zweitfarbe</label>
+											<input colorpicker ng-model="tableDesign.stripedColor" type="text" class="form-control" id="tableText" placeholder="{{tableDesign.stripedColor}}" ng-style="{'background-color': tableDesign.stripedColor}" style="cursor: pointer;">
+										</div>
+									</td>
+									<td>
+										<div class="form-group">
+											<label>Highlight-Farbe</label>
+											<input colorpicker ng-model="tableDesign.highlightColor" type="text" class="form-control" id="tableText" placeholder="{{tableDesign.highlightColor}}" ng-style="{'background-color': tableDesign.highlightColor}" style="cursor: pointer;">
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+							<table class="table table-condensed" ng-class="{'table-bordered' : tableDesign.tableBordered}">
+								<caption ng-style="{'color':tableDesign.captionColor}">Tabelle</caption>	
+           	 					<thead>
+              						<tr ng-style="{'color':tableDesign.textColorHeader, 'background-color':tableDesign.backgroundColorHeader}">
+      									<th>Rang</th>
+      									<th>Mannschaft</th>
+      									<th>Spiele</th>
+      									<th>S</th>
+      									<th>U</th>
+      									<th>N</th>
+      									<th>Tore</th>
+      									<th>+/-</th>
+                						<th>Punkte</th>
+      								</tr>
+            					</thead>
+           						<tbody>
+              						<tr ng-repeat="mannschaft in beispielTabelle"  ng-style="{'color':tableDesign.textColor, 'background-color':tableDesign.backgroundColor, 'background-color': mannschaft.rang==7 && tableDesign.highlightColor || $index%2==0 && tableDesign.tableStriped && tableDesign.stripedColor || tableDesign.backgroundColor }"> 
+										<td>{{mannschaft.rang}}</td>		
+										<td>{{mannschaft.mannschaft}}</td>	
+										<td>{{mannschaft.begegnungen}}</td>	
+										<td>{{mannschaft.siege}}</td>
+										<td>{{mannschaft.unentschieden}}</td>
+										<td>{{mannschaft.niederlagen}}</td>
+										<td>{{mannschaft.tore}}</td>
+										<td>{{mannschaft.verhaeltnis}}</td>
+										<td>{{mannschaft.punkte}}</td>
+									</tr>	
+           				 		</tbody>
+          					</table>	
+						
+					</div>
+					<!-- Ende Anzeige Tabellenmanager -->
+				</div>
+
+				<div class="panel-footer clearfix">	
+						© Copyright by Jan Günther, Michael Weber & René Röse
+
+						<a href="#/table" class="pull-right">
+							<span class="glyphicon glyphicon-list"></span> Zu den Tabellen
+						</a>
+				</div>
+
+			</div>
