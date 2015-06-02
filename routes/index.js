@@ -20,26 +20,17 @@ exports.index = function(req, res){
 var mongoose = require('mongoose');
 var Benutzer = mongoose.model('Benutzer');
 
-router.get('/benutzer', function(req, res, next) {
-	Benutzer.find(function(err, benutzer){
-	    if(err){ return next(err); }
 
-	    res.json(benutzer);
-	  });
-	});
+router.get('/benutzer', function(req, res, next){
+	Benutzer.find({name: req.body.name})
+		.exec(function(err, result){
+			if(err) return next(err);
+			res.json(result);
+		});
+});
 
-router.post('/benutzer', function(req, res, next) {
-	  var newBenutzer = new Benutzer(req.body);
-
-	  Benutzer.save(function(err, benutzer){
-	    if(err){ return next(err); }
-
-	    res.json(benutzer);
-	  });
-	});
-
-router.param('benutzer', function(req, res, next, id) {
-	  var query = Benutzer.findById(id);
+router.get('/benutzer/ID/:id', function(req, res, next) {
+	  var query = Benutzer.findById(req.params.id);
 
 	  query.exec(function (err, benutzer){
 	    if (err) { return next(err); }
@@ -49,5 +40,25 @@ router.param('benutzer', function(req, res, next, id) {
 	    return next();
 	  });
 	});
+
+router.post('/benutzer', function(req, res, next) {
+	  var newBenutzer = new Benutzer(req.body.name, req.body.pass, req.body.ein, req.body.crypt);
+
+	  Benutzer.save(function(err, benutzer){
+	    if(err){ return next(err); }
+	    
+	    res.json(benutzer);
+	  });
+	});
+
+//router.delete(modelRequestPath + '/:id', function(req, res, next) {
+//	Benutzer.findByIdAndRemove(req.params.id, function (err)
+//    {
+//        if (err)
+//        {
+//            console.log(err);
+//        }
+//    });
+//});
 
 module.exports = router;
