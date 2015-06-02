@@ -34,8 +34,8 @@ angular.module('tableModule', [])
 })
 
 
-.controller("TableCtrl", ['$scope', '$http', '$filter', 'dataService', 'userFactory', 'activUser', function($scope, $http, $filter, dataService, userFactory, activUser) {
-    
+.controller("TableCtrl", ['$scope', '$http', '$filter', 'dataService', 'userFactory', 'activUser', 'benutzerFactory', function($scope, $http, $filter, dataService, userFactory, activUser, benutzerFactory) {
+   
 	$scope.tableDesign = dataService.tableDesign;
 	
 	var isEmpty = function (obj) {
@@ -223,6 +223,15 @@ angular.module('tableModule', [])
 		$scope.getTableForLeague($scope.favoritLeague);
 	}
     
-	
+    $scope.getAlleBenutzer = function() {
+
+
+        benutzerFactory.getAllUser({
+
+        });
+
+    };
+
+    $scope.user = benutzerFactory.user;
 	
 }]);
