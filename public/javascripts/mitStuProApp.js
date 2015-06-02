@@ -27,7 +27,7 @@ app.config(['$stateProvider','$urlRouterProvider',function($stateProvider, $urlR
       controller: 'SettingsCtrl'
     });
 	
-	$urlRouterProvider.otherwise('/table');
+	$urlRouterProvider.otherwise('table');
 }]);
 
 app.service('dataService', function() {
@@ -165,7 +165,7 @@ app.directive('ligatabelle', function () {
         	
         },
         replace: true,
-        templateUrl: "templates/ligatabelle.html"
+        templateUrl: "templates/table/ligatabelle.html"
 		
     };
 });
@@ -207,7 +207,7 @@ app.directive("spielplantabelle", [function () {
         	
         },
         replace: true,
-        templateUrl: 	"templates/spielplantabelle.html"
+        templateUrl: 	"templates/table/spielplantabelle.html"
 		
     };
 }]);
