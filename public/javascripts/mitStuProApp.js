@@ -71,6 +71,18 @@ var o = {
 	user: {}
 };
 
+o.getAllUser = function(callback){
+	$http.get('/alleBenutzer')
+	.success(function(data){
+		o.user = data;
+		callback(o.user);
+	})
+	.error(function(error){
+		o.user = null;
+		callback(null);
+	});
+};
+
 o.getUser = function(callback){
 	$http.get('/benutzer')
 	.success(function(data){
