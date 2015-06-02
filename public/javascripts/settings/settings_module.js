@@ -1,18 +1,22 @@
+/**
+ * Enthält Controller, Services, Direktiven etc. für die Manager/Einstellungen des Tabellenadministrationstools
+ */
+
 angular.module('settingsModule', [])
 
 .controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', 'activUser', 'ASCIIConverterService', function($scope, $http, $filter, dataService, activUser, ASCIIConverterService){
 	
 	$scope.beispielTabelle = [
-	                          { rang: 1, mannschaft: "THW Kiel", begegnungen: 33, siege: 29, unentschieden: 1, niederlagen: 3, tore: "1010:776", verhaeltnis: 234, punkte: "59:7" },
-	                          { rang: 2, mannschaft: "Rhein-Neckar Löwen", begegnungen: 31, siege: 26, unentschieden: 1, niederlagen: 4, tore: "927:757", verhaeltnis: 170, punkte: "53:9" },
-	                          { rang: 3, mannschaft: "SG Flensburg-Handewit", begegnungen: 33, siege: 21, unentschieden: 6, niederlagen: 6, tore: "942:817", verhaeltnis: 125, punkte: "48:18" },
-	                          { rang: 4, mannschaft: "SC Magdeburg", begegnungen: 32, siege: 22, unentschieden: 2, niederlagen: 8, tore: "957:870", verhaeltnis: 87, punkte: "46:18" },
-	                          { rang: 5, mannschaft: "FRISCH AUF! Göppingen", begegnungen: 34, siege: 18, unentschieden: 4, niederlagen: 12, tore: "925:915", verhaeltnis: 10, punkte: "40:28" },
-	                          { rang: 6, mannschaft: "Füchse Berlin", begegnungen: 32, siege: 17, unentschieden: 3, niederlagen: 12, tore: "884:884", verhaeltnis: 0, punkte: "37:27" },
-	                          { rang: 7, mannschaft: "MT Melsungen", begegnungen: 33, siege: 16, unentschieden: 4, niederlagen: 13, tore: "979:915", verhaeltnis: 64, punkte: "36:30" },
-	                          { rang: 8, mannschaft: "HSG Wetzlar", begegnungen: 34, siege: 13, unentschieden: 6, niederlagen: 15, tore: "908:901", verhaeltnis: 7, punkte: "32:36" },
-	                          { rang: 9, mannschaft: "HSV Handball", begegnungen: 34, siege: 15, unentschieden: 2, niederlagen: 17, tore: "934:930", verhaeltnis: 4, punkte: "32:36" }
-	                        ];
+      { rang: 1, mannschaft: "THW Kiel", begegnungen: 33, siege: 29, unentschieden: 1, niederlagen: 3, tore: "1010:776", verhaeltnis: 234, punkte: "59:7" },
+      { rang: 2, mannschaft: "Rhein-Neckar Löwen", begegnungen: 31, siege: 26, unentschieden: 1, niederlagen: 4, tore: "927:757", verhaeltnis: 170, punkte: "53:9" },
+      { rang: 3, mannschaft: "SG Flensburg-Handewit", begegnungen: 33, siege: 21, unentschieden: 6, niederlagen: 6, tore: "942:817", verhaeltnis: 125, punkte: "48:18" },
+      { rang: 4, mannschaft: "SC Magdeburg", begegnungen: 32, siege: 22, unentschieden: 2, niederlagen: 8, tore: "957:870", verhaeltnis: 87, punkte: "46:18" },
+      { rang: 5, mannschaft: "FRISCH AUF! Göppingen", begegnungen: 34, siege: 18, unentschieden: 4, niederlagen: 12, tore: "925:915", verhaeltnis: 10, punkte: "40:28" },
+      { rang: 6, mannschaft: "Füchse Berlin", begegnungen: 32, siege: 17, unentschieden: 3, niederlagen: 12, tore: "884:884", verhaeltnis: 0, punkte: "37:27" },
+      { rang: 7, mannschaft: "MT Melsungen", begegnungen: 33, siege: 16, unentschieden: 4, niederlagen: 13, tore: "979:915", verhaeltnis: 64, punkte: "36:30" },
+      { rang: 8, mannschaft: "HSG Wetzlar", begegnungen: 34, siege: 13, unentschieden: 6, niederlagen: 15, tore: "908:901", verhaeltnis: 7, punkte: "32:36" },
+      { rang: 9, mannschaft: "HSV Handball", begegnungen: 34, siege: 15, unentschieden: 2, niederlagen: 17, tore: "934:930", verhaeltnis: 4, punkte: "32:36" }
+    ];
 	
 	$scope.ligenplanLink = "https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/leaguePage?championship=Bremer+HV+14/15";
 	
@@ -65,9 +69,7 @@ angular.module('settingsModule', [])
 	 * Ändert das Standarddesign vom Benutzer
 	 */
 	$scope.changeStandardDesign = function(standardDesign){
-		
 		$scope.benutzer.standardDesign = standardDesign;
-		
 	};
 	
 	
@@ -138,7 +140,7 @@ angular.module('settingsModule', [])
 		//Übernahme des Designs vom Benutzer
 		$scope.tableDesign = dataService.tableDesign;
 		
-		//Sollte kein Design vorhanden sein wird das erste Design als Standard-Design eingerichtet
+		//Sollte kein Design vorhanden sein, wird das erste Design als Standard-Design eingerichtet
 		if(isEmpty($scope.tableDesign)){
 			$scope.changeTableDesign($scope.tableDesign1);
 		}
@@ -213,7 +215,7 @@ angular.module('settingsModule', [])
 	
 	
 	/**
-	 * Überprüft ob Liga-Daten schon vorliegen und aktiviert bei Fund das PopUp-Fenster für den Update-Hinweis
+	 * Überprüft, ob Liga-Daten schon vorliegen und aktiviert bei Fund das PopUp-Fenster für den Update-Hinweis
 	 */
 	$scope.checkLigaData = function(data){
 		if(isEmpty(data)){
@@ -401,7 +403,7 @@ angular.module('settingsModule', [])
 	
 	  
 	  /**
-	   * Ändert den Status der Liga ins Gegenteil von dem was ist vorher gewesen ist
+	   * Ändert den Status der Liga ins Gegenteil von dem, was es vorher gewesen ist
 	   */
 	  $scope.changeActiv = function(league) {
 		  if(league.isActiv){
@@ -446,4 +448,18 @@ angular.module('settingsModule', [])
 	  $scope.focusinControl = {
 	  };
 	  
-}]);
+}])
+
+
+
+/**
+ * Wandelt ASCII-Zeichen in entsprechende URL-Codes um
+ */
+.service('ASCIIConverterService', function(){
+    
+    this.convert = function(text) {
+    	var text = text.replace('/','%2F').replace('?','%3F').replace('=','%3D').replace('+','%2B').replace('&','%26').replace('+','%2B');
+    	return text; 
+    };
+
+});

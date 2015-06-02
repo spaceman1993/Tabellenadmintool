@@ -1,13 +1,18 @@
 #!/usr/bin/env node
 
 /**
+ * Server-Initialisierung
+ */
+
+
+/**
  * Module dependencies.
  */
 
 var app = require('../app');
 var debug = require('debug');
 var http = require('http');
-var configuration = require('../config'); // enthaelt Port, MongodbURL etc.
+var configuration = require('../config');
 
 
 /**
@@ -30,7 +35,7 @@ var server = http.createServer(app);
  */
 
 server.listen(port, function(){
-	console.log('Express server listening on port ' + port); // Callback-Funktion als Bestaetigung
+	console.log('Express server listening on port ' + port);
 });
 
 server.on('error', onError);

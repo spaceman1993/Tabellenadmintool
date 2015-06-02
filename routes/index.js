@@ -1,6 +1,18 @@
+/**
+ * Definiert, wohin der Server leiten soll, wenn die Seite aufgerufen wird
+ * 
+ * Erklärung: Die Raute (#) in der URL gibt an, dass alle Seiten technisch gesehen auf der Index liegen (s. HTML-Anker, vgl. Wikipedia).
+ * Das heißt, der Client fragt den Server nur ein einziges Mal, wo die Index liegt.
+ * Alles weitere wird auf der Index durch AngularJS (ui.route) geregelt.
+ * Also muss der Server den Client nur auf die Index führen, wenn er statt einer Seite nur einen Slash (/) angibt.
+ */
+
 var express = require('express');
 var router = express.Router();
 
+/*
+ * GET home page.
+ */
 
 router.get('/', function(req, res, next) {
 	res.render('index', {
@@ -9,9 +21,8 @@ router.get('/', function(req, res, next) {
 });
 
 
-/*
- * GET home page.
- */
+
+// Zeug für die Datenbank, das ausgelagert werden sollte
 
 exports.index = function(req, res){
   res.render('index', { title: 'Express' });
@@ -20,19 +31,18 @@ exports.index = function(req, res){
 var mongoose = require('mongoose');
 var Benutzer = mongoose.model('Benutzer');
 
-
 router.get('/alleBenutzer',function(req, res, next)
-		{
-		    benutzer.find().exec(function(err, result)
-		    {
-		        if(err)
-		        {
-		            return next(err);
-		        }
+{
+    benutzer.find().exec(function(err, result)
+    {
+        if(err)
+        {
+            return next(err);
+        }
 
-		        res.json(result);
-		    });        
-		});
+        res.json(result);
+    });        
+});
 
 router.get('/benutzer', function(req, res, next){
 	Benutzer.find({name: req.body.name})
@@ -74,4 +84,7 @@ router.post('/benutzer', function(req, res, next) {
 //    });
 //});
 
+
+
+// bleibt bestehen, nicht auslagern
 module.exports = router;

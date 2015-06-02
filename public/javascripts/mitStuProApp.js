@@ -1,10 +1,13 @@
-/*
- * Haupt-Funktionsdatei
+/**
+ * Haupt-Funktionsdatei mit Routing und Services etc., die bereichsübergreifend genutzt werden
+ * Bindet weitere Module für verschiedene Bereiche ein (table, settings)
  */
 
 var app = angular.module('mitStuPro', ['ui.router', 'ui.bootstrap', 'colorpicker.module', 'ngAnimate', 'angular-spinkit', 'tableModule', 'settingsModule']);
 
-// Definiert Routen
+/**
+ * Definiert Routen zum Befüllen von ui-view des ui.routers in views/index.ejs
+ */
 app.config(['$stateProvider','$urlRouterProvider',function($stateProvider, $urlRouterProvider) {
 
 	$stateProvider
@@ -30,8 +33,12 @@ app.config(['$stateProvider','$urlRouterProvider',function($stateProvider, $urlR
 	$urlRouterProvider.otherwise('table');
 }]);
 
+
+/**
+ * Speichert Daten zwischen den Controllern/Bereichen
+ */
 app.service('dataService', function() {
-	  // private variable
+  // private variable
   var _leagues = new Array();
   var _activeLeagues = new Array();
   var _jugenden = new Array();
@@ -43,34 +50,11 @@ app.service('dataService', function() {
   this.tableDesign = _tableDesign;
 });
 
-app.factory("userFactory", function () {
-    var benutzerListe = [];
-    
-    var findByName = function (name) {
-  	  for (var i = 0; i < benutzerListe.length; i++) {
-  	    if (benutzerListe[i].name === name) {
-  	      return benutzerListe[i];
-  	    }
-  	  }
-  	  	return null;
-    };
-    
-    return {
-      getBenutzer: function (name) {
-        return findByName(name);
-      },
-      addBenutzer: function (name, passwort, first, second, standardDesign, favoritVerein, spielplan, verwaltung, favoritLeague) {
-        benutzerListe.push({name:name, passwort:passwort, first:first, second:second, standardDesign:standardDesign, favoritVerein:favoritVerein, spielplan:spielplan, verwaltung:verwaltung, favoritLeague:favoritLeague});
-      }
-    };
-    
-});
 
 app.factory("benutzerFactory",[ '$http', function ($http) {
 var o = {
 	user: {}
 };
-
 o.getAllUser = function(callback){
 	$http.get('/alleBenutzer')
 	.success(function(data){
@@ -82,7 +66,7 @@ o.getAllUser = function(callback){
 		callback(null);
 	});
 };
-
+	
 o.getUser = function(callback){
 	$http.get('/benutzer')
 	.success(function(data){
@@ -126,22 +110,21 @@ o.update = function(user, callback){
 return o;
     
 }]);
-	
+
+
+/**
+ * Speichert den aktiven Benutzer
+ */
 app.service("activUser", function() {
   var _user = new Object();
   
   this.user = _user;
 });
 
-app.service('ASCIIConverterService', function(){
-    
-    this.convert = function(text) {
-    	var text = text.replace('/','%2F').replace('?','%3F').replace('=','%3D').replace('+','%2B').replace('&','%26').replace('+','%2B');
-    	return text; 
-    };
 
-});
-
+/**
+ * Direktive zum Abfangen und Ausführen der Enter-Taste
+ */
 app.directive('ngEnter', function () {
     return function (scope, element, attrs) {
         element.bind("keydown keypress", function (event) {
@@ -156,6 +139,11 @@ app.directive('ngEnter', function () {
     };
 });
 
+
+/**
+ * Filter 
+ * TODO
+ */
 app.filter('listGroupBy', function() {
 	return function(list, attribute) {
 		var groups = [];
@@ -182,6 +170,10 @@ app.filter('listGroupBy', function() {
 });
 
 
+/**
+ * Filter
+ * TODO
+ */
 app.filter('orderObjectBy', function() {
   return function(items, field, reverse) {
     var filtered = [];
@@ -197,6 +189,10 @@ app.filter('orderObjectBy', function() {
 });
 
 
+/**
+ * Direktive für die Ligatabelle
+ * TODO
+ */
 app.directive('ligatabelle', function () {
     // return the directive definition object 
     return {
@@ -229,6 +225,10 @@ app.directive('ligatabelle', function () {
 });
 
 
+/**
+ * Direktive für die Spielplantabelle
+ * TODO
+ */
 app.directive("spielplantabelle", [function () {
     // return the directive definition object 
     return {
@@ -265,12 +265,16 @@ app.directive("spielplantabelle", [function () {
         	
         },
         replace: true,
-        templateUrl: 	"templates/table/spielplantabelle.html"
+        templateUrl: "templates/table/spielplantabelle.html"
 		
     };
 }]);
 
 
+/**
+ * Direktive
+ * TODO
+ */
 app.directive('modalDialog', [function() {
 	  return {
 	    restrict: 'E',
@@ -300,6 +304,11 @@ app.directive('modalDialog', [function() {
 	  };
 }]);
 
+
+/**
+ * Direktive
+ * TODO
+ */
 app.directive('addressBasedGoogleMap', function () {
     return {
         restrict: "A",
