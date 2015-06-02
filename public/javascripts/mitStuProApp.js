@@ -65,15 +65,61 @@ app.factory("userFactory", function () {
     };
     
 });
+
+app.factory("benutzerFactory",[ '$http', function ($http) {
+var o = {
+	user: {}
+};
+
+o.getUser = function(callback){
+	$http.get('/benutzer')
+	.success(function(data){
+		o.user = data;
+		callback(o.user);
+	})
+	.error(function(error){
+		o.user = null;
+		callback(null);
+	});
+};
+
+o.create = function(user, callback){
+  $http.post('/benutzer', user)
+  .success(function(data){
+  	o.user = data;
+  	callback(data);
+  })
+	.error(function(error){
+
+	});
+};
+
+o.update = function(user, callback){
+  return $http.put('/benutzer' + user._id, user)
+  .success(function(data){
+      o.user = data;
+      callback(o.user);
+  })
+	.error(function(error){
+		callback(null);
+  });
+};
+
+	o.getSingleUser = function(userId){
+		return $http.get('/benutzer/ID/' + userId).success(function(data){
+			return data;
+		});
+	};
+
+return o;
+    
+}]);
 	
 app.service("activUser", function() {
   var _user = new Object();
   
   this.user = _user;
 });
-
-
-
 
 app.service('ASCIIConverterService', function(){
     
