@@ -21,6 +21,19 @@ var mongoose = require('mongoose');
 var Benutzer = mongoose.model('Benutzer');
 
 
+router.get('/alleBenutzer',function(req, res, next)
+		{
+		    benutzer.find().exec(function(err, result)
+		    {
+		        if(err)
+		        {
+		            return next(err);
+		        }
+
+		        res.json(result);
+		    });        
+		});
+
 router.get('/benutzer', function(req, res, next){
 	Benutzer.find({name: req.body.name})
 		.exec(function(err, result){
