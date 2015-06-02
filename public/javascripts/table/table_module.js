@@ -46,9 +46,7 @@ angular.module('tableModule', [])
 /**
  * Controller für Tabellen (beide Designs)
  */
-.controller("TableCtrl", ['$scope', '$http', '$filter', 'dataService', 'userFactory', 'activUser', 'benutzerFactory', function($scope, $http, $filter, dataService, userFactory, activUser, benutzerFactory) {
-   
-	$scope.tableDesign = dataService.tableDesign;
+.controller("TableCtrl", ['$scope', '$http', '$filter', 'dataService', 'userFactory', 'activUser', function($scope, $http, $filter, dataService, userFactory, activUser) {
 	
 	var isEmpty = function (obj) {
 	    for(var key in obj) {
@@ -58,38 +56,71 @@ angular.module('tableModule', [])
 	    return true;
 	};
 	
-	
-	/**
-	 * Initialisierung eines eingeloggten Admins und Standardwerte für die Anzeige
-	 */
 	$scope.initTableControllerVars = function() {
 		
+		$scope.mannschaften = "";
+		
 		if(userFactory.getBenutzer("admin") === null){
-			userFactory.addBenutzer("admin", "passwort", true, true, '1', '', 'ja', 'ja', '');
+			var settings = new Object();
+			
+			settings.anzeige = new Object();
+			settings.anzeige.designauswahl = new Object();
+			settings.anzeige.designauswahl.firstdesign = true;
+			settings.anzeige.designauswahl.seconddesign = true;
+			settings.anzeige.standardDesign = "1";
+			settings.anzeige.favoritVerein = "";
+			settings.anzeige.spielplan = "ja";
+			settings.anzeige.verwaltung = "ja";
+			
+			settings.design = new Object();
+			settings.design.tableDesign = new Object();
+			settings.design.tableDesign.backgroundColorHeader = "#030094";
+			settings.design.tableDesign.textColorHeader = "#ffffff";
+			settings.design.tableDesign.backgroundColor = "#ffffff";
+			settings.design.tableDesign.textColor = "#000000";
+			settings.design.tableDesign.tableStriped = true;
+			settings.design.tableDesign.stripedColor = "#cccccc";
+			settings.design.tableDesign.captionColor = "#000000";
+			settings.design.tableDesign.highlightColor = "#9ca0ff";
+			settings.design.tableDesign.tableBordered = false;
+			
+			settings.liga = new Object();
+			settings.liga.leagues = new Array();
+			settings.liga.favoritLeague = new Object();
+			
+			userFactory.addBenutzer("admin", "passwort", settings);
 		}
+		
 		
 		if(!isEmpty(activUser.user)){
-			$scope.benutzer = activUser.user;
 			$scope.isLogin = true;
+			$scope.benutzer = activUser.user;
 		}
 		else{
-			$scope.benutzer = userFactory.getBenutzer("admin");
-			activUser.user = $scope.benutzer;
+			activUser.user = userFactory.getBenutzer("admin");
+			$scope.benutzer = activUser.user;
 		}
 		
+		if(!isEmpty($scope.benutzer)){
+			$scope.nickname = $scope.benutzer.name;
+			
+			$scope.firstDesign = $scope.benutzer.settings.anzeige.designauswahl.firstdesign;
+			$scope.secondDesign = $scope.benutzer.settings.anzeige.designauswahl.seconddesign;
+			$scope.favoritVerein = $scope.benutzer.settings.anzeige.favoritVerein;
+			$scope.spielplan = $scope.benutzer.settings.anzeige.spielplan;
+			$scope.verwaltung = $scope.benutzer.settings.anzeige.verwaltung;
+			
+			$scope.design = $scope.benutzer.settings.anzeige.standardDesign;
+			$scope.tableDesign = $scope.benutzer.settings.design.tableDesign;
+			$scope.activeLeagues = $filter('filter')($scope.benutzer.settings.liga.leagues, {isActiv: 'true'});
+			$scope.favoritLeague = $scope.benutzer.settings.liga.favoritLeague;
+		}
 		
-		$scope.design = $scope.benutzer.standardDesign;
-		$scope.activeLeagues = $filter('filter')(dataService.leagues, {isActiv: 'true'});
-		
-		if(!isEmpty($scope.benutzer.favoritLeague)){
-			$scope.getTableForLeague($scope.benutzer.favoritLeague);
+		if(!isEmpty($scope.favoritLeague)){
+			$scope.getTableForLeague($scope.favoritLeague);
 		}
 	};
 	
-	
-	/**
-	 * Login eines Benutzers
-	 */
 	$scope.loginBenutzer = function(name, passwort) {
 		
 		if(userFactory.getBenutzer(name) === null){
@@ -98,60 +129,30 @@ angular.module('tableModule', [])
 			//$scope.error = "Benutzer mit angegebenem Kennwort unbekannt ";
 		}
 		else{
-			$scope.benutzer = userFactory.getBenutzer(name);
-			activUser.user = $scope.benutzer;
+			activUser.user = userFactory.getBenutzer(name);
+			$scope.benutzer = activUser.user;
 			$scope.isLogin = true;
 			$scope.initTableControllerVars();
 		}
 	};
 	
-	
-	/**
-	 * Logout eines Benutzers
-	 */
 	$scope.logoutBenutzer = function() {
-		$scope.benutzer = null;
 		activUser.user = null;
 		$scope.isLogin = false;
 		$scope.initTableControllerVars();
 	};
 	
-	
-	/**
-	 * Benutzer wird mit Standard-Designs des Admins erstellt
-	 */
 	$scope.addBenutzer = function(name, passwort) {
 		
-		var admin = userFactory.getBenutzer('admin');
+		var settings = angular.copy(userFactory.getBenutzer('admin').settings);
 		
-		userFactory.addBenutzer(name, passwort, admin.first, admin.second, admin.standardDesign, admin.favoritVerein, admin.spielplan, admin.verwaltung, admin.favoritLeague);
+		userFactory.addBenutzer(name, passwort, settings);
 	};
 	
-	
-	/**
-	 * Prüft, ob ein Wert eine Zahl ist
-	 */
     $scope.isNumber = function (value) {
         return !isNaN(value);
     };
     
-    
-    /**
-     * Prüft, ob eine Mannschaft der Favorit ist
-     */
-    $scope.isHighlight = function (mannschaft) {
-    	
-    	if(String($scope.benutzer.favoritVerein).length > 3 && String(mannschaft.mannschaft).match($scope.benutzer.favoritVerein)){
-    		return 'success';
-    	}
-    	
-    };
-    
-    
-    
-   /**
-    * Gibt den Namen einer Liga zurück
-    */
     $scope.getNameForLeague = function(league){
     	if(isEmpty(league.specialName)){
     		return league.jugend;
@@ -160,10 +161,6 @@ angular.module('tableModule', [])
     	}
     };
     
-    
-    /**
-     * Wählt nach Geschlecht eine Button-Farbe
-     */
     $scope.chooseColor = function (input) {
     	
     	if(input === 'Herren' || input === 'Männlich'){
@@ -174,107 +171,100 @@ angular.module('tableModule', [])
     	}
     	
     };
+  
+    checkAndGetData =  function (obj /*, level1, level2, ... levelN*/) {
+    	  var args = Array.prototype.slice.call(arguments, 1);
+
+    	  for (var i = 0; i < args.length; i++) {
+    	    if (!obj || !obj.hasOwnProperty(args[i])) {
+    	    	if(!isEmpty(obj)){
+    	    		if(typeof obj.content !== "undefined"){
+    	    			return obj.content;
+    	    		}
+    	    		else{
+    	    			return obj;
+    	    		}
+    	    	}
+    	    	else{
+    	    		return '';
+    	    	}
+    	    }
+    	    obj = obj[args[i]];
+    	  }
+    	  return obj;
+    };
     
-    
-    /**
-     * Holt externe Daten für eine Liga
-     */
 	$scope.getTableForLeague = function(league) {
 
 		$scope.mannschaften = null;
 		$scope.nextGames = null;
 		$scope.loading = true;
 		
-		$scope.leagueName = league.jugend + ' (' + league.name + ')';
+		$scope.leagueName = $scope.getNameForLeague(league) + ' (' + league.name + ')';
 		var adresse = league.linkage;
 		
-	    console.log(adresse);
-	    adresse = adresse.replace('/','%2F').replace('?','%3F').replace('=','%3D').replace('+','%2B').replace('&','%26').replace('+','%2B');
-	
-	    var jsonFeed ="https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22"+adresse+"%22%20and%20xpath%3D%22%2F%2Ftable%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
-	
-	
-	    // Actually fetch the data
-	    $http.get(jsonFeed).success(function (data) {
-	      // Define the unique market cities
+    console.log(adresse);
+    adresse = adresse.replace('/','%2F').replace('?','%3F').replace('=','%3D').replace('+','%2B').replace('&','%26').replace('+','%2B');
+
+    var jsonFeed ="https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22"+adresse+"%22%20and%20xpath%3D%22%2F%2Ftable%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
+
+
+    // Actually fetch the data
+    $http.get(jsonFeed).success(function (data) {
+      // Define the unique market cities
+      
+      var mannschaften = new Array();
+
+      var daten = data.query.results.table[0].tbody.tr;
+      for(var i = 1; i < daten.length; i++){
+        var mannschaftsdaten = daten[i].td;
+        
+        var mannschaft = new Object();
+        mannschaft.rang = parseInt(checkAndGetData(mannschaftsdaten[1], 'content'));
+        mannschaft.mannschaft = checkAndGetData(mannschaftsdaten[2], 'a', 'content');
+        mannschaft.begegnungen = checkAndGetData(mannschaftsdaten[3], 'content');
+        mannschaft.siege = checkAndGetData(mannschaftsdaten[4], 'content');
+        mannschaft.unentschieden = checkAndGetData(mannschaftsdaten[5], 'content');
+        mannschaft.niederlagen = checkAndGetData(mannschaftsdaten[6], 'content');
+        mannschaft.tore = checkAndGetData(mannschaftsdaten[7], 'content');
+        mannschaft.verhaeltnis = checkAndGetData(mannschaftsdaten[8], 'content');
+        mannschaft.punkte = checkAndGetData(mannschaftsdaten[9], 'content');
+
+        
+        mannschaften.push(mannschaft);
+      }
+
+      if($scope.spielplan === 'ja'){
+	      var nextGames = new Array();
 	      
-	      var mannschaften = new Array();
-	
-	      var daten = data.query.results.table[0].tbody.tr;
-	      for(var i = 1; i < daten.length; i++){
-	        var mannschaftsdaten = daten[i].td;
+	      daten = data.query.results.table[1].tbody.tr;
+	      for(i = 1; i< daten.length; i++){
+	        var spieldaten = daten[i].td;
 	        
-	        var mannschaft = new Object();
-	        mannschaft.rang = parseInt(mannschaftsdaten[1].content);
-	        if (typeof mannschaftsdaten[2].a !== "undefined"){
-	        	mannschaft.mannschaft = mannschaftsdaten[2].a.content;
-	        }else{
-	        	mannschaft.mannschaft = mannschaftsdaten[2].content;
-	        }
+	        var nextGame = new Object();
+	        nextGame.tag = checkAndGetData(spieldaten[0], 'content');
+	        nextGame.datum = checkAndGetData(spieldaten[1], 'content');
+	        nextGame.zeit = checkAndGetData(spieldaten[2], 'content').substr(35, 5);
+	        nextGame.halle = checkAndGetData(spieldaten[3], 'span', 'a', 'content');
+	        nextGame.hallenname = checkAndGetData(spieldaten[3], 'span', 'title');
+	        nextGame.hallenlink = checkAndGetData(spieldaten[3], 'span', 'a', 'href');
+	        nextGame.nr = checkAndGetData(spieldaten[4]);
+	        nextGame.heimmannschaft = checkAndGetData(spieldaten[5], 'content'); 
+	        nextGame.gastmannschaft = checkAndGetData(spieldaten[6], 'content');
+	        nextGame.tore = checkAndGetData(spieldaten[7], 'span', 'content');
+
 	        
-	        mannschaft.begegnungen = mannschaftsdaten[3].content;
-	        mannschaft.siege = mannschaftsdaten[4].content;
-	        if (typeof mannschaftsdaten[5] !== "undefined"){
-	          mannschaft.unentschieden = mannschaftsdaten[5].content;
-	        }
-	        if (typeof mannschaftsdaten[6] !== "undefined"){
-	        mannschaft.niederlagen = mannschaftsdaten[6].content;
-	        }
-	        if (typeof mannschaftsdaten[7] !== "undefined"){
-	        mannschaft.tore = mannschaftsdaten[7].content;
-	        }
-	        if (typeof mannschaftsdaten[8] !== "undefined"){
-	        mannschaft.verhaeltnis = mannschaftsdaten[8].content;
-	        }
-	        if (typeof mannschaftsdaten[9] !== "undefined"){
-	        mannschaft.punkte = mannschaftsdaten[9].content;
-	        }
-	        
-	        mannschaften.push(mannschaft);
+	        nextGames.push(nextGame);
 	      }
+      }
+      
+      $scope.loading = false;
+      
+      $scope.mannschaften = mannschaften;
+      $scope.nextGames = nextGames;
+    });
+  };
 	
-	      if($scope.benutzer.spielplan === 'ja'){
-		      var nextGames = new Array();
-		      
-		      daten = data.query.results.table[1].tbody.tr;
-		      for(i = 1; i< daten.length; i++){
-		        var spieldaten = daten[i].td;
-		        
-		        var nextGame = new Object();
-		        nextGame.tag = spieldaten[0].content;
-		        nextGame.datum = spieldaten[1].content;
-		        nextGame.zeit = spieldaten[2].content.substr(35, 5);
-		        nextGame.halle = spieldaten[3].span.a.content;
-		        nextGame.hallenname = spieldaten[3].span.title;
-		        nextGame.hallenlink = spieldaten[3].span.a.href;
-		        nextGame.nr = spieldaten[4];
-		        nextGame.heimmannschaft = spieldaten[5].content;
-		        nextGame.gastmannschaft = spieldaten[6].content;
-		        if (typeof spieldaten[7].span.content !== "undefined"){
-		          nextGame.tore = spieldaten[7].span.content;
-		        }
-		        else if (typeof spieldaten[7].span !== "undefined"){
-		          nextGame.tore = spieldaten[7].span;
-		        }
-		        
-		        nextGames.push(nextGame);
-		      }
-	      }
-	      
-	      $scope.loading = false;
-	      
-	      $scope.mannschaften = mannschaften;
-	      $scope.nextGames = nextGames;
-	    });
-	};
-	
-	
-	/**
-	 * Holt externe Daten der favorisierten Liga als Standard
-	 */
-	if(!isEmpty($scope.favoritLeague)){
-		$scope.getTableForLeague($scope.favoritLeague);
-	}	
 }])
 
 
@@ -285,25 +275,21 @@ angular.module('tableModule', [])
 .factory("userFactory", function () {
     var benutzerListe = [];
     
-    
-    /**
-     * Gibt den ersten Benutzer aus der Liste zurück, der den gesuchten Namen trägt
-     */
     var findByName = function (name) {
   	  for (var i = 0; i < benutzerListe.length; i++) {
   	    if (benutzerListe[i].name === name) {
   	      return benutzerListe[i];
   	    }
   	  }
-  	  return null;
+  	  	return null;
     };
     
     return {
       getBenutzer: function (name) {
         return findByName(name);
       },
-      addBenutzer: function (name, passwort, first, second, standardDesign, favoritVerein, spielplan, verwaltung, favoritLeague) {
-        benutzerListe.push({name:name, passwort:passwort, first:first, second:second, standardDesign:standardDesign, favoritVerein:favoritVerein, spielplan:spielplan, verwaltung:verwaltung, favoritLeague:favoritLeague});
+      addBenutzer: function (name, passwort, settings) {
+        benutzerListe.push({name:name, passwort:passwort, settings:settings});
       }
     };
     

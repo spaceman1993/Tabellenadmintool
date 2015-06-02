@@ -7,16 +7,16 @@ angular.module('settingsModule', [])
 .controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', 'activUser', 'ASCIIConverterService', function($scope, $http, $filter, dataService, activUser, ASCIIConverterService){
 	
 	$scope.beispielTabelle = [
-      { rang: 1, mannschaft: "THW Kiel", begegnungen: 33, siege: 29, unentschieden: 1, niederlagen: 3, tore: "1010:776", verhaeltnis: 234, punkte: "59:7" },
-      { rang: 2, mannschaft: "Rhein-Neckar Löwen", begegnungen: 31, siege: 26, unentschieden: 1, niederlagen: 4, tore: "927:757", verhaeltnis: 170, punkte: "53:9" },
-      { rang: 3, mannschaft: "SG Flensburg-Handewit", begegnungen: 33, siege: 21, unentschieden: 6, niederlagen: 6, tore: "942:817", verhaeltnis: 125, punkte: "48:18" },
-      { rang: 4, mannschaft: "SC Magdeburg", begegnungen: 32, siege: 22, unentschieden: 2, niederlagen: 8, tore: "957:870", verhaeltnis: 87, punkte: "46:18" },
-      { rang: 5, mannschaft: "FRISCH AUF! Göppingen", begegnungen: 34, siege: 18, unentschieden: 4, niederlagen: 12, tore: "925:915", verhaeltnis: 10, punkte: "40:28" },
-      { rang: 6, mannschaft: "Füchse Berlin", begegnungen: 32, siege: 17, unentschieden: 3, niederlagen: 12, tore: "884:884", verhaeltnis: 0, punkte: "37:27" },
-      { rang: 7, mannschaft: "MT Melsungen", begegnungen: 33, siege: 16, unentschieden: 4, niederlagen: 13, tore: "979:915", verhaeltnis: 64, punkte: "36:30" },
-      { rang: 8, mannschaft: "HSG Wetzlar", begegnungen: 34, siege: 13, unentschieden: 6, niederlagen: 15, tore: "908:901", verhaeltnis: 7, punkte: "32:36" },
-      { rang: 9, mannschaft: "HSV Handball", begegnungen: 34, siege: 15, unentschieden: 2, niederlagen: 17, tore: "934:930", verhaeltnis: 4, punkte: "32:36" }
-    ];
+	                          { rang: 1, mannschaft: "THW Kiel", begegnungen: 33, siege: 29, unentschieden: 1, niederlagen: 3, tore: "1010:776", verhaeltnis: 234, punkte: "59:7" },
+	                          { rang: 2, mannschaft: "Rhein-Neckar Löwen", begegnungen: 31, siege: 26, unentschieden: 1, niederlagen: 4, tore: "927:757", verhaeltnis: 170, punkte: "53:9" },
+	                          { rang: 3, mannschaft: "SG Flensburg-Handewit", begegnungen: 33, siege: 21, unentschieden: 6, niederlagen: 6, tore: "942:817", verhaeltnis: 125, punkte: "48:18" },
+	                          { rang: 4, mannschaft: "SC Magdeburg", begegnungen: 32, siege: 22, unentschieden: 2, niederlagen: 8, tore: "957:870", verhaeltnis: 87, punkte: "46:18" },
+	                          { rang: 5, mannschaft: "FRISCH AUF! Göppingen", begegnungen: 34, siege: 18, unentschieden: 4, niederlagen: 12, tore: "925:915", verhaeltnis: 10, punkte: "40:28" },
+	                          { rang: 6, mannschaft: "Füchse Berlin", begegnungen: 32, siege: 17, unentschieden: 3, niederlagen: 12, tore: "884:884", verhaeltnis: 0, punkte: "37:27" },
+	                          { rang: 7, mannschaft: "MT Melsungen", begegnungen: 33, siege: 16, unentschieden: 4, niederlagen: 13, tore: "979:915", verhaeltnis: 64, punkte: "36:30" },
+	                          { rang: 8, mannschaft: "HSG Wetzlar", begegnungen: 34, siege: 13, unentschieden: 6, niederlagen: 15, tore: "908:901", verhaeltnis: 7, punkte: "32:36" },
+	                          { rang: 9, mannschaft: "HSV Handball", begegnungen: 34, siege: 15, unentschieden: 2, niederlagen: 17, tore: "934:930", verhaeltnis: 4, punkte: "32:36" }
+	                        ];
 	
 	$scope.ligenplanLink = "https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/leaguePage?championship=Bremer+HV+14/15";
 	
@@ -32,11 +32,13 @@ angular.module('settingsModule', [])
 	 * Initialisierung des Settings-Controllers
 	 */
 	$scope.initSettingsController = function() {
-		$scope.benutzer = activUser.user;
-		$scope.show = 'anzeigenManager';
+		//$scope.benutzer = activUser.user;
+		$scope.settings = activUser.user.settings;
 		
+		initAnzeigeManager();
 		initDesignManager();
 		initLigaManager();
+		$scope.show = 'anzeigenManager';
 	};
 	
 	
@@ -45,22 +47,26 @@ angular.module('settingsModule', [])
 	//-----FUNKTIONEN FÜR DEN ANZEIGEN-MANAGER--------------------------------------------------------------------------
 	//------------------------------------------------------------------------------------------------------------------
 	
+	var initAnzeigeManager = function(){
+		$scope.anzeige = $scope.settings.anzeige;
+	};
+	
 	/**
 	 * Ändert den Status der aktiven Designs vom Benutzer
 	 */
 	$scope.changeDesignauswahl = function(designauswahl){
-		if(designauswahl.first){
-			$scope.benutzer.firstdesign = true;
+		if(designauswahl.firstdesign){
+			$scope.anzeige.designauswahl.firstdesign = true;
 		}
 		else{
-			$scope.benutzer.firstdesign = false;
+			$scope.anzeige.designauswahl.firstdesign = false;
 		}
 		
-		if(designauswahl.second){
-			$scope.benutzer.seconddesign = true;
+		if(designauswahl.seconddesign){
+			$scope.anzeige.designauswahl.seconddesign = true;
 		}
 		else{
-			$scope.benutzer.seconddesign = false;
+			$scope.anzeige.designauswahl.seconddesign = false;
 		}
 	};
 	
@@ -69,7 +75,9 @@ angular.module('settingsModule', [])
 	 * Ändert das Standarddesign vom Benutzer
 	 */
 	$scope.changeStandardDesign = function(standardDesign){
-		$scope.benutzer.standardDesign = standardDesign;
+		
+		$scope.anzeige.standardDesign = standardDesign;
+		
 	};
 	
 	
@@ -77,10 +85,10 @@ angular.module('settingsModule', [])
 	 * Ändert ggf. das Standarddesign vom Benutzer bei Änderung der aktiven Designs
 	 */
 	$scope.changeFirstDesign = function() {
-		if($scope.benutzer.first){
-			$scope.benutzer.standardDesign = "1";
+		if($scope.anzeige.designauswahl.firstdesign){
+			$scope.anzeige.standardDesign = "1";
 		}else{
-			$scope.benutzer.standardDesign = "2";
+			$scope.anzeige.standardDesign = "2";
 		}
 	};
 
@@ -89,10 +97,10 @@ angular.module('settingsModule', [])
 	 * Ändert ggf. das Standarddesign vom Benutzer bei Änderung der aktiven Designs
 	 */
 	$scope.changeSecondDesign = function() {
-		if($scope.benutzer.second){
-			$scope.benutzer.standardDesign = "2";
+		if($scope.anzeige.designauswahl.seconddesign){
+			$scope.anzeige.standardDesign = "2";
 		}else{
-			$scope.benutzer.standardDesign = "1";
+			$scope.anzeige.standardDesign = "1";
 		}
 	};
     
@@ -101,7 +109,7 @@ angular.module('settingsModule', [])
 	 * Ändert den Status des favorisierten Vereins vom Benutzer
 	 */
 	$scope.changeFavorisierterVerein = function(vereinsname){
-		$scope.benutzer.favoritVerein = vereinsname;
+		$scope.anzeige.favoritVerein = vereinsname;
 	};
 	
 	
@@ -110,7 +118,7 @@ angular.module('settingsModule', [])
 	 */
 	$scope.changeSpielplan = function(spielplan){
 
-		$scope.benutzer.spielplan = spielplan;
+		$scope.anzeige.spielplan = spielplan;
 
 	};
 	
@@ -120,7 +128,7 @@ angular.module('settingsModule', [])
 	 */
 	$scope.changeLogin = function(verwaltung){
 
-		$scope.benutzer.verwaltung = verwaltung;
+		$scope.anzeige.verwaltung = verwaltung;
 			
 	};
 	
@@ -134,16 +142,15 @@ angular.module('settingsModule', [])
 	 * Initialisiert den Design-Manager
 	 */
 	var initDesignManager = function(){
+		
+		$scope.design = $scope.settings.design;
+		
 		//Vordefinierte Designs werden initialisiert
 		initTableDesigns();
 		
 		//Übernahme des Designs vom Benutzer
-		$scope.tableDesign = dataService.tableDesign;
+		$scope.tableDesign = $scope.design.tableDesign;
 		
-		//Sollte kein Design vorhanden sein, wird das erste Design als Standard-Design eingerichtet
-		if(isEmpty($scope.tableDesign)){
-			$scope.changeTableDesign($scope.tableDesign1);
-		}
 	};
 	
 	
@@ -152,8 +159,8 @@ angular.module('settingsModule', [])
 	 */
 	var initTableDesigns = function(){
 		$scope.tableDesign1 = createTableDesign("#030094", "#ffffff", "#ffffff", "#000000", true, "#cccccc", "#000000", "#9ca0ff", false);
-		$scope.tableDesign2 = createTableDesign("#030094", "#ffffff", "#ffffff", "#000000", true, "#cccccc", "#000000", "#9ca0ff", false);
-		$scope.tableDesign3 = createTableDesign("#030094", "#ffffff", "#ffffff", "#000000", true, "#cccccc", "#000000", "#9ca0ff", false);
+		$scope.tableDesign2 = createTableDesign("#238c4e", "#ffffff", "#ffffff", "#000000", true, "#cccccc", "#000000", "#9ca0ff", false);
+		$scope.tableDesign3 = createTableDesign("#a11515", "#ffffff", "#ffffff", "#000000", true, "#cccccc", "#000000", "#9ca0ff", false);
 	};
 	
 	
@@ -201,13 +208,12 @@ angular.module('settingsModule', [])
 	 * Initialisiert Variablen für den Liga-Manager
 	 */
 	var initLigaManager = function() {
-		$scope.leagues = dataService.leagues;
-		$scope.jugenden = $filter('listGroupBy')( $scope.leagues, 'jugend');
+		$scope.liga = $scope.settings.liga;
+		$scope.leagues = $scope.liga.leagues;
 		
+		$scope.jugenden = $filter('listGroupBy')( $scope.leagues, 'jugend');	
 		$scope.activeLeagues = $filter('filter')($scope.leagues, {isActiv: 'true'});
-		$scope.activJugenden =  $filter('listGroupBy')( $scope.activeLeagues, 'jugend');
-		
-		$scope.favorit = $scope.benutzer.favorit;
+		$scope.activJugenden = $filter('listGroupBy')( $scope.activeLeagues, 'jugend');
 		
 		$scope.progressbaraktuell = 0;
 		$scope.progressbaraktuellprozent = 0;
@@ -215,7 +221,7 @@ angular.module('settingsModule', [])
 	
 	
 	/**
-	 * Überprüft, ob Liga-Daten schon vorliegen und aktiviert bei Fund das PopUp-Fenster für den Update-Hinweis
+	 * Überprüft ob Liga-Daten schon vorliegen und aktiviert bei Fund das PopUp-Fenster für den Update-Hinweis
 	 */
 	$scope.checkLigaData = function(data){
 		if(isEmpty(data)){
@@ -234,72 +240,106 @@ angular.module('settingsModule', [])
 		$scope.showDelete = true;
 		$scope.deleteLeague = league;
 	}
-
+	
 	
 	$scope.getAllLeagues = function(ligenplanLink) {
 
-		$scope.benutzer.favoritLeague = null;
+		$scope.favoritLeague = null;
 		$scope.quelle = false;
 		$scope.leagues = null;
 		$scope.jugenden = null;
 		$scope.loading = true;
 		
+		first = ligenplanLink.indexOf("/");
+		second = ligenplanLink.indexOf("/", first + 1);
+		third = ligenplanLink.indexOf("/", second + 1);
+		hauptSeite = ligenplanLink.substring(0, third);
 		ligenplanLink = ASCIIConverterService.convert(ligenplanLink);
 		
-		var jsonFeed = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22" + ligenplanLink + "%22%20and%20xpath%3D%22%2F%2Ftable%2F%2Ftr%2F%2Ftd%2F%2Ful%2F%2Fli%2F%2Fspan%2F%2Fa%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
+		var jsonFeed = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22" + ligenplanLink + "%22%20and%20xpath%3D%22%2F%2Ftable%2F%2Ftr%2F%2Ftd%22&format=xml&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
+		
 
 		$http.get(jsonFeed).success(function (data) {
 			
 			var leagues = new Array();
 
-			var daten = data.query.results.a;
-		    	for(var i = 0; i < daten.length; i++){
-		    		
-		    		var leagueData = daten[i];
-		    		var league = new Object();
-		    		var namensnennung = leagueData.content;
-		        
-		    		league.id = i;
-		        
-			        if(namensnennung.indexOf("MJ") !== -1){
-			        	league.gender = "Männlich";
-			        	league.jugend = "Männliche " + namensnennung.substr(namensnennung.indexOf("MJ")+2, 1) + "-Jugend";
-			        	namensnennung = namensnennung.replace(" MJ"+namensnennung.substr(namensnennung.indexOf("MJ")+2, 1), "");
-			        }
-			        else if(leagueData.content.indexOf("WJ") !== -1){
-			        	league.gender = "Weiblich";
-			        	league.jugend = "Weibliche " + namensnennung.substr(namensnennung.indexOf("WJ")+2, 1) + "-Jugend";
-			        	namensnennung = namensnennung.replace(" WJ"+namensnennung.substr(namensnennung.indexOf("WJ")+2, 1), "");
-			        }
-			        else if(namensnennung.indexOf(" M") !== -1){
-			        	league.gender = "Männlich";
-			        	league.jugend = "Herren";
-			        	namensnennung = namensnennung.replace(" M", "");
-			        }
-			        else if(namensnennung.indexOf(" F") !== -1){
-			        	league.gender = "Weiblich";
-			        	league.jugend = "Damen";
-			        	namensnennung = namensnennung.replace(" F", "");
-			        }
-			        else{
-			        	league.gender = "undefined";
-			        	league.jugend = "undefined";
-			        }
-			        
-			        league.name = namensnennung;
-			        league.specialName = "";
-			        league.linkage = "https://bremerhv-handball.liga.nu" + leagueData.href;
-			        league.isActiv = false;
-			        league.notePosLeft = Math.random()*40 + '%'; // Initialwert
-			        league.notePosTop = Math.random()*80 + '%'; // Initialwert
-			        			       
-			        leagues.push(league);
-		    	}
+			var gruppen = new Array();
+			
+			var res = String.fromCharCode(13);
+			
+//			enter = '\u23CE';
+//			enter2 = '\u21b5';
+//			
+//			console.log("test" + enter + "test");
+//			console.log("test" + enter2 + "test");
+			
+			var res = data.split("  ");
+			
+			for(var i = 0; i < res.length; i++){
+				if(res[i] == ''){
+					res.splice(i, 1);
+					i--;
+				}
+			}
+			
+			
+			var jugend;
+			var gender;
+			for(var i=0; i < res.length; i++){
+				//Suche nach Jugendgruppe
+				if(res[i].indexOf("<h2>") != -1){
+					
+					//JUGENDGRUPPE-FILTERN
+					help = res[i].substr(res[i].indexOf(">")+1);
+					jugend = help.substr(0, help.indexOf("<"));
+					
+					//GENDER-SUCHEN
+					if(jugend.indexOf("Männer") != -1){
+						gender = "Männlich";
+					}
+					else if(jugend.indexOf("männl") != -1){
+						gender = "Männlich";
+					}
+					else if(jugend.indexOf("Frauen") != -1){
+						gender = "Weiblich";
+					}
+					else if(jugend.indexOf("weib") != -1){
+						gender = "Weiblich";
+					}
+					else{
+						gender = "Undefined";
+					}
+				
+				}
+				
+				//Suche nach Liga
+				else if(res[i].indexOf("<a href=") != -1){
+					help = res[i].substr(res[i].indexOf("/"));
+					link = help.substr(0, help.indexOf(">")-1);
+					link = link.replace("amp;", "");
+					
+					help = help.substr(help.indexOf(">")+1);
+					benennung = help.substr(0, help.indexOf("<"));
 
-		    	$scope.loading = false;
-		    	
-		    	dataService.leagues = leagues;
-		    	initLigaManager();
+					league = new Object();
+					league.id = leagues.length+1;
+					league.gender = gender;
+					league.jugend = jugend;
+					league.name = benennung;
+					league.linkage = hauptSeite + link;
+					league.specialName = "";
+			        league.isActiv = false;
+			        league.notePosLeft = (league.id % 3) * 20 + '%'; // Initialwert
+			        league.notePosTop = 1 * 80 + '%'; // Initialwert (25 eig schöner, aber die ID der allerletzten Liga ist sehr groß)
+				        			       
+					leagues.push(league);
+				}
+			}
+
+	    	$scope.loading = false;
+	    	
+	    	$scope.settings.liga.leagues = leagues;
+	    	initLigaManager();	
 		    	
 		});
 	};
@@ -309,7 +349,7 @@ angular.module('settingsModule', [])
 	 * Ändert den Status der favorisierten Liga vom Benutzer
 	 */
 	$scope.changeFavorit = function(league){
-		$scope.benutzer.favoritLeague = league;
+		$scope.settings.liga.favoritLeague = league;
 	};
 	
 	
@@ -326,6 +366,7 @@ angular.module('settingsModule', [])
 			$scope.search = false;
 			$scope.searchStart = true;
 			findAllLeaguesOfVerein($scope.searchVerein);
+			$scope.changeFavorisierterVerein($scope.searchVerein);
 		}
 		//Deaktivierung des Suchfelds
 		else{
@@ -378,8 +419,8 @@ angular.module('settingsModule', [])
 		      var found = false;
 		      var j=0;
 		      while(j < mannschaften.length && !found){
-				if(mannschaften[j].indexOf(verein) > -1){
-					$scope.addActivLeague(league);
+				if(mannschaften[j].toLowerCase().indexOf(verein.toLowerCase()) > -1){
+					league.isActiv = true;
 					addActivLeague(league);
 					$scope.anzahlSearch = $scope.anzahlSearch + 1;
 					found = true;
@@ -403,7 +444,7 @@ angular.module('settingsModule', [])
 	
 	  
 	  /**
-	   * Ändert den Status der Liga ins Gegenteil von dem, was es vorher gewesen ist
+	   * Ändert den Status der Liga ins Gegenteil von dem was ist vorher gewesen ist
 	   */
 	  $scope.changeActiv = function(league) {
 		  if(league.isActiv){
@@ -419,11 +460,11 @@ angular.module('settingsModule', [])
 		  $scope.activeLeagues = $filter('filter')($scope.leagues, {isActiv: 'true'});
 		  $scope.activJugenden =  $filter('listGroupBy')( $scope.activeLeagues, 'jugend');
 		  
-		  if(isEmpty($scope.benutzer.favoritLeague)){
+		  if(isEmpty($scope.liga.favoritLeague)){
 			  $scope.changeFavorit($scope.activeLeagues[0]);
 		  }
 		  
-		  dataService.leagues = $scope.leagues;
+		  activUser.user.settings.liga.leagues = $scope.leagues;
 	  };
 	  
 	  var deleteActivLeague = function(league) {
@@ -431,11 +472,11 @@ angular.module('settingsModule', [])
 		  $scope.activeLeagues = $filter('filter')($scope.leagues, {isActiv: 'true'});
 		  $scope.activJugenden =  $filter('listGroupBy')( $scope.activeLeagues, 'jugend');
 		  
-		  if($scope.benutzer.favoritLeague === league){
+		  if($scope.liga.favoritLeague === league){
 			  $scope.changeFavorit($scope.activeLeagues[0]);
 		  }
 		  
-		  dataService.leagues = $scope.leagues;
+		  activUser.user.settings.liga.leagues = $scope.leagues;
 	  };
 	  
 	  $scope.changeSpecialName = function(league, specialName) {
@@ -446,6 +487,8 @@ angular.module('settingsModule', [])
 	   * Dient zum Kontrollieren des Controllers innerhalb einer Directive
 	   */
 	  $scope.focusinControl = {
+	  };
+	  $scope.focusinControl2 = {
 	  };
 	  
 }])

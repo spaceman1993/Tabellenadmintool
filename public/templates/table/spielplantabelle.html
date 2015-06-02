@@ -1,4 +1,4 @@
-<div>
+<div ng-show="nextgames">
 <table class="table table-condensed" ng-class="{'table-bordered' : tabledesign.tableBordered}">
 	<caption ng-style="{'color':tabledesign.captionColor}">Spielplan</caption>
 	<thead>
@@ -18,7 +18,7 @@
 		<td>{{nextGame.tag}}</td>
 			<td>{{nextGame.datum}}</td>
 			<td>{{nextGame.zeit}}</td>
-			<td><a ng-click="getHallenadresseForHalle(nextGame.hallenlink); toggleModal()" href="#" ng-attr-title="{{nextGame.hallenname}}" data-toggle="tooltip">{{nextGame.halle}}</a></td>
+			<td><a ng-click="getHallenadresseForHalle(nextGame.hallenlink)" href="#" ng-attr-title="{{nextGame.hallenname}}" data-toggle="tooltip">{{nextGame.halle}}</a></td>
 			<td>{{nextGame.nr}}</td>
 			<td>{{nextGame.heimmannschaft}}</td>
 			<td>{{nextGame.gastmannschaft}}</td>
@@ -29,8 +29,13 @@
 
 <modal-dialog show="modalShown" width="90%" height="90%">
   	<h2>Überblick Hallenort</h2>
-	<div ng-show="hallenaddress" address-based-google-map address="hallenaddress" zoom="16"> </div>	
+	<div ng-show="hallenaddress" address-based-google-map address="hallenaddress" zoom="15"> </div>	
+	<!-- Ladebildschirm -->
+	<div ng-hide="hallenaddress" class="center-div">
+		<img src="images/loading-animation.gif"/ height="200" width="200">
+	</div>
+	<!-- ENDE Ladebildschirm -->
 </modal-dialog>
 
 </div>							
-							
+				

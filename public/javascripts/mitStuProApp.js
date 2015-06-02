@@ -3,7 +3,7 @@
  * Bindet weitere Module für verschiedene Bereiche ein (table, settings)
  */
 
-var app = angular.module('mitStuPro', ['ui.router', 'ui.bootstrap', 'colorpicker.module', 'ngAnimate', 'angular-spinkit', 'tableModule', 'settingsModule']);
+var app = angular.module('mitStuPro', ['ui.router', 'ui.bootstrap', 'colorpicker.module', 'ngAnimate', 'angular-spinkit', 'autofocus', 'tableModule', 'settingsModule']);
 
 /**
  * Definiert Routen zum Befüllen von ui-view des ui.routers in views/index.ejs
@@ -38,16 +38,16 @@ app.config(['$stateProvider','$urlRouterProvider',function($stateProvider, $urlR
  * Speichert Daten zwischen den Controllern/Bereichen
  */
 app.service('dataService', function() {
-  // private variable
-  var _leagues = new Array();
-  var _activeLeagues = new Array();
-  var _jugenden = new Array();
-  var _tableDesign = new Object();
-  
-  this.leagues = _leagues;
-  this.activeLeagues = _activeLeagues;
-  this.jugenden = _jugenden;
-  this.tableDesign = _tableDesign;
+	  // private variable
+var _leagues = new Array();
+var _activeLeagues = new Array();
+var _jugenden = new Array();
+var _tableDesign = new Object();
+
+this.leagues = _leagues;
+this.activeLeagues = _activeLeagues;
+this.jugenden = _jugenden;
+this.tableDesign = _tableDesign;
 });
 
 
@@ -175,18 +175,18 @@ app.filter('listGroupBy', function() {
  * TODO
  */
 app.filter('orderObjectBy', function() {
-  return function(items, field, reverse) {
-    var filtered = [];
-    angular.forEach(items, function(item) {
-      filtered.push(item);
-    });
-    filtered.sort(function (a, b) {
-      return (a[field] > b[field] ? 1 : -1);
-    });
-    if(reverse) {filtered.reverse();}
-    return filtered;
-  };
-});
+	  return function(items, field, reverse) {
+	    var filtered = [];
+	    angular.forEach(items, function(item) {
+	      filtered.push(item);
+	    });
+	    filtered.sort(function (a, b) {
+	      return (a[field] > b[field] ? 1 : -1);
+	    });
+	    if(reverse) {filtered.reverse();}
+	    return filtered;
+	  };
+	});
 
 
 /**
@@ -199,13 +199,13 @@ app.directive('ligatabelle', function () {
     	restrict: 'E',
         scope: {
         	mannschaften: '=',
-            benutzer: '=',
+            favoritverein: '=',
             tabledesign: '='
         },
         controller: function ($scope) {
        
         	$scope.isHighlight = function (mannschaft) {
-            	if(String($scope.benutzer.favoritVerein).length > 3 && String(mannschaft.mannschaft).match($scope.benutzer.favoritVerein)){
+            	if(String($scope.favoritverein).length > 3 && String(mannschaft.mannschaft).toLowerCase().match($scope.favoritverein.toLowerCase())){
             		return true;
             	}
             	else{
@@ -246,26 +246,24 @@ app.directive("spielplantabelle", [function () {
       	  	};
         	
         	$scope.getHallenadresseForHalle = function (hallenlink){
-        		
+        		$scope.hallenaddress = "";
         		hallenlink = "https://bremerhv-handball.liga.nu" + hallenlink;
         		
         		var adresse = hallenlink.replace(/\//g,'%2F').replace(/\?/g,'%3F').replace(/\=/g,'%3D').replace(/\+/g,'%2B').replace(/\&/g,'%26').replace(/\+/g,'%2B').replace(/\:/g, '%3A');
 
         	    var jsonFeed ="https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22"+adresse+"%22%20and%20xpath%3D%22%2F%2Fbody%2F%2Fdiv%2F%2Fdiv%2F%2Fdiv%2F%2Fdiv%2F%2Fp%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
         	     
+        	    $scope.toggleModal();
         	    
         	    $http.get(jsonFeed).success(function (data) {
-        	      
-        	      var hallenaddress = data.query.results.p.content;
-
-        	      $scope.hallenaddress = hallenaddress;
+        	    	$scope.hallenaddress = data.query.results.p.content;
         	    });   
        
         	};
         	
         },
         replace: true,
-        templateUrl: "templates/table/spielplantabelle.html"
+        templateUrl: 	"templates/table/spielplantabelle.html"
 		
     };
 }]);
@@ -275,7 +273,7 @@ app.directive("spielplantabelle", [function () {
  * Direktive
  * TODO
  */
-app.directive('modalDialog', [function() {
+app.directive("modalDialog", [function() {
 	  return {
 	    restrict: 'E',
 	    scope: {
@@ -322,35 +320,63 @@ app.directive('addressBasedGoogleMap', function () {
             var latlng;
             var map;
             var marker;
+            
+            var isEmpty = function (obj) {
+        	    for(var key in obj) {
+        	        if(obj.hasOwnProperty(key))
+        	            return false;
+        	    }
+        	    return true;
+        	};
+            
             var initialize = function () {
                 geocoder = new google.maps.Geocoder();
                 latlng = new google.maps.LatLng(-34.397, 150.644);
-                var mapOptions = {
-                    zoom: $scope.zoom,
-                    center: latlng,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                };
-                map = new google.maps.Map
-                (document.getElementById('addressMap'), mapOptions);
             };
-            markAdressToMap = function () {
+            
+            var markAdressToMap = function () {
                 geocoder.geocode({ 'address': $scope.address }, 
                 function (results, status) 
                   {
-                    if (status === google.maps.GeocoderStatus.OK) {
+                    if (status == google.maps.GeocoderStatus.OK) {
                         map.setCenter(results[0].geometry.location);
                         marker = new google.maps.Marker({
                             map: map,
-                            position: results[0].geometry.location
+                            position: results[0].geometry.location,
+                            animation:google.maps.Animation.BOUNCE
                         });
+                        
+                        infowindow = new google.maps.InfoWindow({
+                      	  content: $scope.address
+                      	  });
+
+                      	infowindow.open(map,marker);
                     }
                 });
             };
+            
             $scope.$watch("address", function () {
-                if ($scope.address !== undefined) {
-                    markAdressToMap();
-                }
+            	
+            	var mapOptions = {
+                        zoom: $scope.zoom,
+                        center: latlng,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    };
+                map = new google.maps.Map(document.getElementById('addressMap'), mapOptions);
+            	
+            	window.setTimeout(function(){ 
+            		google.maps.event.trigger(map, 'resize');
+            		
+            		if ($scope.address != undefined) {
+                    	if(!isEmpty(marker)){
+                    		marker.setMap(null);
+                    	}
+                        markAdressToMap();
+                    }
+            	},10);
+
             });
+            
             initialize();
         },
     };
