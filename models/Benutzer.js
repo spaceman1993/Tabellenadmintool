@@ -21,7 +21,7 @@ var BenutzerSchema = new Schema({
 		trim: true,
 	},
 	einstellung:{
-		type: Array,
+		type: String,
 	},
 	crypt: {
 		type: String
