@@ -14,15 +14,13 @@ var router = express.Router();
  * GET home page.
  */
 
+
+
 router.get('/', function(req, res, next) {
 	res.render('index', {
 
 	});
 });
-
-
-
-// Zeug für die Datenbank, das ausgelagert werden sollte
 
 exports.index = function(req, res){
   res.render('index', { title: 'Express' });
@@ -31,60 +29,58 @@ exports.index = function(req, res){
 var mongoose = require('mongoose');
 var Benutzer = mongoose.model('Benutzer');
 
-router.get('/alleBenutzer',function(req, res, next)
-{
-    Benutzer.find().exec(function(err, result)
-    {
-        if(err)
-        {
-            return next(err);
-        }
+//req.header("Content-Type", "application/x-www-form-urlencoded");
 
-        res.json(result);
-    });        
-});
+router.get('/benutzer/alle', function(req, res, next) {
+	Benutzer.find()
+		.exec(function (err, result) {
+			if (err){
+				return next(err);
+			}
 
-router.get('/benutzer', function(req, res, next){
-	Benutzer.find({name: req.body.name})
-		.exec(function(err, result){
-			if(err) return next(err);
 			res.json(result);
-		});
+	});
 });
 
-router.get('/benutzer/ID/:id', function(req, res, next) {
-	  var query = Benutzer.findById(req.params.id);
-
-	  query.exec(function (err, benutzer){
-	    if (err) { return next(err); }
-	    if (!benutzer) { return next(new Error("Kann den Benutzer nicht finden")); }
-
-	    req.post = benutzer;
-	    return next();
-	  });
+router.get('/benutzer/byName', function(req, res, next){
+	var query = Benutzer.findOne({name: req.body.name});
+	query.exec(function(err, result){
+		if(err){
+			return	next(err);
+		}
+		res.json({name : "jan"});
 	});
+});
 
-router.post('/benutzer', function(req, res, next) {
-	  var newBenutzer = new Benutzer(req.body.name, req.body.pass, req.body.ein, req.body.crypt);
-
-	  Benutzer.save(function(err, benutzer){
-	    if(err){ return next(err); }
-	    
-	    res.json(benutzer);
-	  });
+router.get('/benutzer/byID/:id', function(req, res, next) {
+	var query = Benutzer.findById(req.params.id);
+	query.exec(function (err, result){
+	if (err){
+	   	return next(err);
+	}
+	if (!result){
+	  	return next(new Error("Kann den Benutzer nicht finden ID= " + req.params.id ));
+	}
+	req.json(result);
+	return next();
 	});
+});
 
-//router.delete(modelRequestPath + '/:id', function(req, res, next) {
-//	Benutzer.findByIdAndRemove(req.params.id, function (err)
-//    {
-//        if (err)
-//        {
-//            console.log(err);
-//        }
-//    });
+router.post('/benutzer/save', function(req, res) {	
+	var newBenutzer = new Benutzer({
+		name : req.body.name,
+		passwort : req.body.passwort,
+		einstellung : req.body.einstellung,
+		crypt : req.body.crypt,
+		});
+		newBenutzer.save( function( err, result, count ){
+		res.json(result);
+	});
+});
+
+//router.delete('/benutzer/delete/byName', function(req, res, next) {
+
 //});
 
 
-
-// bleibt bestehen, nicht auslagern
 module.exports = router;
