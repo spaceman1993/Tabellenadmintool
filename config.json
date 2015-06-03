@@ -1,5 +1,4 @@
 {
   "globalPort": 3000,
   "mongodbURL": "mongodb://localhost/Schule"
-  
 }

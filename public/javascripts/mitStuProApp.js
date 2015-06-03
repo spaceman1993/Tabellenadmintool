@@ -35,6 +35,25 @@ app.config(['$stateProvider','$urlRouterProvider',function($stateProvider, $urlR
 
 
 /**
+ * Wird beim Start ausgeführt. Überprüft, ob der Nutzer der Seite eingeloggt ist.
+ */
+app.run(['$state', '$rootScope', '$location', 'activUser', function($state, $rootScope, $location, activUser) {
+    $rootScope.$on( '$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
+    	var goesToLogin = toState.name === "table" || toState.name === "home";
+        if(goesToLogin){
+           return; //Nutzer geht schon zum Login oder einer freien Seite.
+        }
+        
+        if (angular.isUndefined(activUser.user.name)) {
+            console.log('Kein Name gesetzt: Kein Login erfolgt. "isEmpty" existiert nicht global von Angular.');
+            $state.go('table');
+            e.preventDefault(); 
+        }
+    });
+}]);
+
+
+/**
  * Speichert Daten zwischen den Controllern/Bereichen
  */
 app.service('dataService', function() {
@@ -115,11 +134,12 @@ return o;
 /**
  * Speichert den aktiven Benutzer
  */
-app.service("activUser", function() {
+app.service("activUser", ['$location', function($location) {
   var _user = new Object();
   
   this.user = _user;
-});
+
+}]);
 
 
 /**
