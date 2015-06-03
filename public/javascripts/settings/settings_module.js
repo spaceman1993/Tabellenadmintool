@@ -329,8 +329,8 @@ angular.module('settingsModule', [])
 					league.linkage = hauptSeite + link;
 					league.specialName = "";
 			        league.isActiv = false;
-			        league.notePosLeft = (league.id % 3) * 20 + '%'; // Initialwert
-			        league.notePosTop = 1 * 80 + '%'; // Initialwert (25 eig schöner, aber die ID der allerletzten Liga ist sehr groß)
+			        league.notePosLeft = Math.random*45 + '%';
+			        league.notePosTop = Math.random*80 + '%';
 				        			       
 					leagues.push(league);
 				}
