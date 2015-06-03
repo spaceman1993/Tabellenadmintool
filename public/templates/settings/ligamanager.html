@@ -22,7 +22,7 @@
 
 	<div ng-show="ligaSettings" class="pull-right">
 		<span ng-show="!search && !searchStart" class="pull-left"><meldungText>{{activeLeagues.length}} Ligen gew&auml;hlt</meldungText></span>
-		<input ng-show="search && leagues.length > 0 && !error" ng-model="searchVerein" ng-enter="checkSearchVerein()" class="input-sm pull-left" type="text" placeholder="Verein suchen" autofocus="search">
+		<input ng-show="search && leagues.length > 0 && !error" ng-model="liga.searchVerein" ng-enter="checkSearchVerein()" class="input-sm pull-left" type="text" placeholder="Verein suchen" autofocus="search">
 		<span ng-show="search && (leagues.length == 0 || error)"><alertText>Keine Daten vorhanden</alertText></span>
 		
 		<progressbar style="margin:0px; margin-bottom:2px;" ng-show="searchStart" max="100" value="progressbaraktuellprozent" class="progress-striped active" type="success"><b>{{progressbaraktuellprozent | number:1}}%</b></progressbar>
@@ -36,7 +36,7 @@
 				<span class="input-group-addon success">
  					Ligenplan:
 				</span>
-				<input type="text" class="form-control" ng-model="ligenplanLink" placeholder="Link zur &Uuml;bersicht der Ligen">
+				<input type="text" class="form-control" ng-model="liga.ligenplanLink" placeholder="Link zur &Uuml;bersicht der Ligen">
 				<span class="input-group-btn">
  					<button class="btn btn btn-success btn-lg" type="submit" ng-click="checkLigaData(jugenden)"><span class="glyphicon glyphicon-ok"></span></button>
 				</span>
@@ -131,7 +131,7 @@
 <!-- Settings der Ligamanager-Anzeige -->
 <div ng-show="ligaSettings">
 
-	<modal-dialog control="focusinControl" show="showUpdate" width="400px" height="250px">
+	<modal-dialog control="focusinControl" show="liga.showUpdate" width="400px" height="250px">
 		<center>
 			<h3>Achtung!</h3>
 			<h5>Wollen Sie die Datenquelle wirklich &auml;ndern?</h5>

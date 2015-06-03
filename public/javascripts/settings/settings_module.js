@@ -42,8 +42,6 @@ angular.module('settingsModule', [])
 	                          { rang: 9, mannschaft: "HSV Handball", begegnungen: 34, siege: 15, unentschieden: 2, niederlagen: 17, tore: "934:930", verhaeltnis: 4, punkte: "32:36" }
 	                        ];
 	
-	$scope.ligenplanLink = "https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/leaguePage?championship=Bremer+HV+14/15";
-	
 	var isEmpty = function (obj) {
 	    for(var key in obj) {
 	        if(obj.hasOwnProperty(key))
@@ -239,6 +237,8 @@ angular.module('settingsModule', [])
 		$scope.activeLeagues = $filter('filter')($scope.leagues, {isActiv: 'true'});
 		$scope.activJugenden = $filter('listGroupBy')( $scope.activeLeagues, 'jugend');
 		
+		$scope.liga.ligenplanLink = "https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/leaguePage?championship=Bremer+HV+14/15";
+		
 		$scope.progressbaraktuell = 0;
 		$scope.progressbaraktuellprozent = 0;
 	};
@@ -259,16 +259,16 @@ angular.module('settingsModule', [])
 	 */
 	$scope.checkLigaData = function(data){
 		if(isEmpty(data)){
-			if($scope.ligenplanLink.indexOf("leaguePage") != -1){
+			if($scope.liga.ligenplanLink.indexOf("leaguePage") != -1){
 				$scope.error = null;
-				$scope.getAllLeagues($scope.ligenplanLink);
+				$scope.getAllLeagues($scope.liga.ligenplanLink);
 			}
 			else{
 				isLigaDataError();
 			}
 		}
 		else{
-			$scope.showUpdate = true;
+			$scope.liga.showUpdate = true;
 		}
 	}
 	
@@ -391,16 +391,17 @@ angular.module('settingsModule', [])
 	 * Überprüft wie sich der Suche-Button verhalten muss und aktiviert die dazugehörige Funktion
 	 */
 	$scope.checkSearchVerein = function(){
+		console.log("test");
 		//Aktiviert das Suchfeld für den Eintrag
 		if(!$scope.search && !$scope.searchStart){
 			$scope.search = true;
 		}
 		//Eintrag ins Suchfeld ist erfolgt und Suche wird gestartet
-		else if($scope.searchVerein  && !$scope.searchStart){
+		else if($scope.liga.searchVerein  && !$scope.searchStart){
 			$scope.search = false;
 			$scope.searchStart = true;
-			findAllLeaguesOfVerein($scope.searchVerein);
-			$scope.changeFavorisierterVerein($scope.searchVerein);
+			findAllLeaguesOfVerein($scope.liga.searchVerein);
+			$scope.changeFavorisierterVerein($scope.liga.searchVerein);
 		}
 		//Deaktivierung des Suchfelds
 		else{
