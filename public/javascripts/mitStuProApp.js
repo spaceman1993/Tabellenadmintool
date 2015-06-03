@@ -134,12 +134,11 @@ return o;
 /**
  * Speichert den aktiven Benutzer
  */
-app.service("activUser", ['$location', function($location) {
+app.service("activUser", function() {
   var _user = new Object();
   
   this.user = _user;
-
-}]);
+});
 
 
 /**
