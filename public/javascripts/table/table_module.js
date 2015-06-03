@@ -6,6 +6,7 @@ var zIndexCount = 0; // Für Notizzettel auf Pinnwand
 angular.module('tableModule', [])
 
 
+
 /**
  * Direktive für Notiztelle des zweiten Designs
  */

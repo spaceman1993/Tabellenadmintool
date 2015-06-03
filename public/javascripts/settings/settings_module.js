@@ -4,6 +4,30 @@
 
 angular.module('settingsModule', [])
 
+
+.config(['$stateProvider', function($stateProvider){
+	$stateProvider
+		.state('settings', {
+			url: '/settings',
+			views: {
+				'main' : {
+					templateUrl: './templates/settings/settings.html',
+					controller: 'SettingsCtrl'
+				},
+				'anzeigenmanager@settings' : {
+					templateUrl: 'templates/settings/anzeigenmanager.html'
+				},
+				'designmanager@settings' : {
+					templateUrl: 'templates/settings/designmanager.html'
+				},
+				'ligamanager@settings' : {
+					templateUrl: 'templates/settings/ligamanager.html'
+				}
+			}
+		});
+}])
+
+
 .controller('SettingsCtrl', ['$scope', '$http', '$filter', 'dataService', 'activUser', 'ASCIIConverterService', function($scope, $http, $filter, dataService, activUser, ASCIIConverterService){
 	
 	$scope.beispielTabelle = [

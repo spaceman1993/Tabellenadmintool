@@ -13,22 +13,31 @@ app.config(['$stateProvider','$urlRouterProvider',function($stateProvider, $urlR
 	$stateProvider
     .state('home', {
       url: '/home',
-      templateUrl: 'templates/home.html' // Zu Testzwecken
+      views: {
+    	  'main': {
+    		  templateUrl: 'templates/home.html' // Zu Testzwecken
+    	  }
+      }
     });
 	
 	$stateProvider
     .state('table', {
       url: '/table',
-      templateUrl: 'templates/table/table.html',
-    	  controller: 'TableCtrl'
+      views: {
+    	  'main': {
+    		   templateUrl: 'templates/table/table.html',
+    		   controller: 'TableCtrl'
+    	  }
+      }
+     
     });
 
-	$stateProvider
+	/*$stateProvider
     .state('settings', {
       url: '/settings',
       templateUrl: 'templates/settings/settings.html',
       controller: 'SettingsCtrl'
-    });
+    });*/
 	
 	$urlRouterProvider.otherwise('table');
 }]);

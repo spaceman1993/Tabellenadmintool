@@ -1,0 +1,165 @@
+<!-- Menu Ligamanager-Anzeige -->
+<div class="clearfix" style="margin-bottom:1em;">
+	<a ng-show="ligaSettings" ng-click="ligaSettings = false; initLigaManagerVars()" style="margin-right:1em;">
+		<span class="glyphicon glyphicon-circle-arrow-left bigSizeGlyph"></span>
+	</a>
+
+			<h2> Liga-Manager </h2>
+
+	<a ng-show="!ligaSettings" ng-click="ligaSettings = true">
+    						<span class="glyphicon glyphicon-wrench space bigSizeGlyph"></span>
+  					</a>
+
+	<div ng-show="ligaSettings" class="pull-right">
+		<a ng-click="checkSearchVerein()">
+    							<span class="glyphicon glyphicon-search bigSizeGlyph space vcenter"></span>
+  						</a>
+
+		<a ng-click="quelle = !quelle">
+    							<span class="glyphicon glyphicon-refresh bigSizeGlyph space vcenter"></span>
+  						</a>
+	</div>
+
+	<div ng-show="ligaSettings" class="pull-right">
+		<span ng-show="!search && !searchStart" class="pull-left"><meldungText>{{activeLeagues.length}} Ligen gew&auml;hlt</meldungText></span>
+		<input ng-show="search && leagues.length > 0" ng-model="searchVerein" ng-enter="checkSearchVerein()" class="input-sm pull-left" type="text" placeholder="Verein suchen" autofocus="search">
+		<span ng-show="search && leagues.length == 0"><alertText>Keine Daten vorhanden</alertText></span>
+		
+		<progressbar style="margin:0px; margin-bottom:2px;" ng-show="searchStart" max="100" value="progressbaraktuellprozent" class="progress-striped active" type="success"><b>{{progressbaraktuellprozent | number:1}}%</b></progressbar>
+		<span ng-show="searchStart"><meldungText style="margin-left:20px; margin-right:20px;">{{anzahlSearch}} Ligen gefunden</meldungText></span>
+	</div>
+
+
+
+	<div ng-show="ligaSettings" class="row bottom-buffer" >
+				<div ng-show="quelle" class="col-md-12">
+						<div class="input-group input-group-sm">
+				<span class="input-group-addon success">
+ 										Ligenplan:
+								</span>
+								<input type="text" class="form-control" ng-model="ligenplanLink" placeholder="Link zur &Uuml;bersicht der Ligen">
+								<span class="input-group-btn">
+ 										<button class="btn btn btn-success btn-lg" type="submit" ng-click="checkLigaData(jugenden)"><span class="glyphicon glyphicon-ok"></span></button>
+								</span>
+						</div><!-- /input-group -->
+			</div>
+	</div><!-- /.row -->
+</div>
+<!-- ENDE Menu Ligamanager-Anzeige -->
+
+
+
+<!-- Normale Ligamanager-Anzeige -->
+		<div class="row" ng-hide="ligaSettings">
+	
+	<modal-dialog control="focusinControl2" show="showDelete" width="400px" height="150px">
+		<center>
+			<h5>Wollen Sie die {{deleteLeague.name}} wirklich l&ouml;schen?</h5>
+			<button type="button" class="btn btn-success" ng-click="changeActiv(deleteLeague); focusinControl2.hideModal()" style="display: inline-block; width: 40%;"> JA </button>
+			<button type="button" class="btn btn-danger" ng-click="focusinControl2.hideModal()" style="display: inline-block; width: 40%;"> NEIN </button>
+		</center>
+				</modal-dialog>
+
+	<!-- Anzeige, wenn keine Daten vorhanden sind -->
+				<div ng-hide="activJugenden.length > 0">
+		<div class="col-md-12">
+							<strong>Hinweis!</strong></br>
+				Sie haben noch keine Ligen gew&auml;hlt, die Sie verwalten k&ouml;nnen!</br>
+				Um dies zu &Äuml;ndern, begeben Sie sich bitte in den <a href="" ng-click="ligaSettings = true">Einstellungsmanager</a> des Liga-Managers.
+		</div>
+	</div>
+	<!-- ENDE Anzeige, wenn keine Daten vorhanden sind -->
+
+	<!-- Anzeige, wenn Daten vorhanden sind -->
+				<div ng-show="activJugenden.length > 0">
+		<div class="col-md-12">
+
+			<!-- Listen gruppiert nach Jugenden -->
+			<div ng-repeat="jugend in activJugenden">
+
+				<!-- Listeneintr&auml;ge -->
+				<div class="list-group">
+   								<ul class="list-group-item active">
+						<strong class="default-cursor">{{ jugend.label }}</strong>
+					</ul>
+					<ul class="list-group-item clearfix" ng-repeat="data in jugend.list">
+							<span ng-click="changeFavorit(data)" style="cursor:pointer;">{{data.name}}</span> 
+							<span ng-show="data.specialName"> ({{data.specialName}}) </span>
+
+							<a ng-click="showDeleteModal(data)">
+    											<span class="pull-right glyphicon glyphicon-trash space"></span>
+   										</a>
+
+							<a ng-hide="edit" ng-click="edit = true">
+     											<span class="pull-right glyphicon glyphicon-pencil space"></span>
+   										</a>
+
+							<a ng-show="edit" ng-click="changeSpecialName(data, specialName); edit = false">
+     											<span class="pull-right glyphicon glyphicon-ok space green"></span>
+   										</a>
+
+							<span class="pull-right space" ng-show="edit">
+								<input type="text" ng-model="specialName" ng-enter="changeSpecialName(data, specialName); edit = false" autofocus="edit">
+							</span>
+
+							<span ng-show="settings.liga.favoritLeague == data">
+     											<span class="pull-right glyphicon glyphicon-heart red"></span>
+   										</span>
+					</ul>
+				</div>
+				<!-- ENDE Listeneintr&auml;ge -->
+
+						</div>
+			<!-- ENDE Listen gruppiert nach Jugenden -->
+		</div>
+	</div>
+	<!-- ENDE Anzeige, wenn Daten vorhanden sind -->
+</div>
+<!-- ENDE Normale Ligamanager-Anzeige -->
+	
+
+<!-- Settings der Ligamanager-Anzeige -->
+<div ng-show="ligaSettings">
+
+	<modal-dialog control="focusinControl" show="showUpdate" width="400px" height="250px">
+		<center>
+			<h3>Achtung!</h3>
+			<h5>Wollen Sie die Datenquelle wirklich &auml;ndern?</h5>
+			<h6 class="red">S&auml;mtliche Einstellungen des Liga-Managers werden zur&uuml;ckgesetzt!</h6>
+			<button type="button" class="btn btn-success" ng-click="getAllLeagues(ligenplanLink); focusinControl.hideModal()" style="display: inline-block; width: 40%;"> JA </button>
+			<button type="button" class="btn btn-danger" ng-click="focusinControl.hideModal()" style="display: inline-block; width: 40%;"> NEIN </button>
+		</center>
+				</modal-dialog>
+
+	<!-- Anzeige, wenn keine Daten vorhanden sind -->
+				<div ng-hide="jugenden.length > 0 || quelle || loading">
+					<strong>Hinweis!</strong></br>
+		Sie haben noch keine Daten-Quelle ausgew&auml;hlt!</br>
+		Um dies zu &auml;ndern, w&auml;hlen Sie bitte das Aktualisieren-Symbol am oberen rechten Seitenrand aus und geben Sie Ihre Quelle an.
+	</div>
+	<!-- ENDE Anzeige, wenn keine Daten vorhanden sind -->
+
+	<!-- Listen gruppiert nach Jugenden -->
+	<div ng-repeat="jugend in jugenden">
+		<div class="list-group">
+   						<ul class="list-group-item active hand-cursor" ng-click="isShow = !isShow">
+				<strong>{{ jugend.label }}</strong>
+				<span ng-show="!isShow" class="pull-right glyphicon glyphicon-chevron-down"></span>
+				<span ng-show="isShow" class="pull-right glyphicon glyphicon-chevron-up"></span>	
+			</ul>
+	
+			<div ng-show="isShow">
+				<ul class="list-group-item hand-cursor" ng-repeat="data in jugend.list" ng-click="changeActiv(data)" ng-class="{selected: data.isActiv}">
+					{{data.name}}
+				</ul>
+			</div>
+		</div>
+				</div>
+</div>
+<!-- ENDE Settings der Ligamanager-Anzeige -->
+
+<!-- Ladebildschirm -->
+<div class="center-div" ng-show="loading">
+	<img src="images/loading-animation.gif"/ height="200px" width="200px">
+</div>
+<!-- ENDE Ladebildschirm -->

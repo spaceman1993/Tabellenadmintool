@@ -1,0 +1,115 @@
+<div style="margin-bottom:1em;">
+	<h2> Design-Manager </h2>
+
+	<div class="pull-right">
+		<a ng-click="changeTableDesign(tableDesign1)" href="">1.Design <span class="glyphicon glyphicon-picture"></span></a>
+		<a ng-click="changeTableDesign(tableDesign2)" href="" class="space">2.Design <span class="glyphicon glyphicon-picture"></span></a>
+		<a ng-click="changeTableDesign(tableDesign3)" href="" class="space">3.Design <span class="glyphicon glyphicon-picture"></span></a>
+	</div>
+</div>	
+
+
+
+
+<table class="table borderless">
+	<thead>
+		<tr>
+			<th>Tabellen-&Uuml;berschrift</th>
+			<th>Tabelle-K&ouml;rper</th>
+			<th colspan="2">Specials</th>
+			<th>Allgemeines</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				<div class="form-group">
+					<label>Hintergrundfarbe</label>
+					<input colorpicker ng-model="tableDesign.backgroundColorHeader" type="text" class="form-control" placeholder="{{tableDesign.backgroundColorHeader}}" ng-style="{'background-color': tableDesign.backgroundColorHeader}" style="cursor: pointer;">
+			</div>
+		</td>
+		<td>
+			<div class="form-group">
+				<label>Hintergrundfarbe</label>
+				<input colorpicker ng-model="tableDesign.backgroundColor" type="text" class="form-control" placeholder="{{tableDesign.backgroundColor}}" ng-style="{'background-color': tableDesign.backgroundColor}" style="cursor: pointer;">
+			</div>
+		</td>
+		<td>
+			<div class="checkbox">
+				<label>
+					<input ng-model="tableDesign.tableStriped" type="checkbox">Gestreift
+				</label>
+			</div>
+		</td>
+		<td>
+			<div class="checkbox">
+				<label class="space">
+					<input ng-model="tableDesign.tableBordered" type="checkbox">Rahmen
+				</label>
+			</div>
+		</td>
+		<td>
+			<div class="form-group">
+				<label>Bennennungsfarbe</label>
+				<input colorpicker ng-model="tableDesign.captionColor" type="text" class="form-control" placeholder="{{tableDesign.captionColor}}" ng-style="{'background-color': tableDesign.captionColor}" style="cursor: pointer;">
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="form-group">
+				<label>Schriftfarbe</label>
+				<input colorpicker ng-model="tableDesign.textColorHeader" type="text" class="form-control" placeholder="{{tableDesign.textColorHeader}}" ng-style="{'background-color': tableDesign.textColorHeader}" style="cursor: pointer;">
+			</div>
+		</td>
+		<td>
+			<div class="form-group">
+				<label>Schriftfarbe</label>
+				<input colorpicker ng-model="tableDesign.textColor" type="text" class="form-control" placeholder="{{tableDesign.textColor}}" ng-style="{'background-color': tableDesign.textColor}" style="cursor: pointer;">
+			</div>
+		</td>
+		<td colspan="2">
+			<div class="form-group" ng-show="tableDesign.tableStriped">
+				<label>Zweitfarbe</label>
+				<input colorpicker ng-model="tableDesign.stripedColor" type="text" class="form-control" id="tableText" placeholder="{{tableDesign.stripedColor}}" ng-style="{'background-color': tableDesign.stripedColor}" style="cursor: pointer;">
+			</div>
+		</td>
+		<td>
+			<div class="form-group">
+				<label>Highlight-Farbe</label>
+				<input colorpicker ng-model="tableDesign.highlightColor" type="text" class="form-control" id="tableText" placeholder="{{tableDesign.highlightColor}}" ng-style="{'background-color': tableDesign.highlightColor}" style="cursor: pointer;">
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+	<table class="table table-condensed" ng-class="{'table-bordered' : tableDesign.tableBordered}">
+		<caption ng-style="{'color':tableDesign.captionColor}">Tabelle</caption>	
+     	 					<thead>
+        						<tr ng-style="{'color':tableDesign.textColorHeader, 'background-color':tableDesign.backgroundColorHeader}">
+									<th>Rang</th>
+									<th>Mannschaft</th>
+									<th>Spiele</th>
+									<th>S</th>
+									<th>U</th>
+									<th>N</th>
+									<th>Tore</th>
+									<th>+/-</th>
+          						<th>Punkte</th>
+								</tr>
+      					</thead>
+     						<tbody>
+        						<tr ng-repeat="mannschaft in beispielTabelle"  ng-style="{'color':tableDesign.textColor, 'background-color':tableDesign.backgroundColor, 'background-color': mannschaft.rang==7 && tableDesign.highlightColor || $index%2==0 && tableDesign.tableStriped && tableDesign.stripedColor || tableDesign.backgroundColor }"> 
+				<td>{{mannschaft.rang}}</td>		
+				<td>{{mannschaft.mannschaft}}</td>	
+				<td>{{mannschaft.begegnungen}}</td>	
+				<td>{{mannschaft.siege}}</td>
+				<td>{{mannschaft.unentschieden}}</td>
+				<td>{{mannschaft.niederlagen}}</td>
+				<td>{{mannschaft.tore}}</td>
+				<td>{{mannschaft.verhaeltnis}}</td>
+				<td>{{mannschaft.punkte}}</td>
+			</tr>	
+     				 		</tbody>
+    					</table>	
