@@ -4,8 +4,8 @@
 					
 					<div class="panel-heading clearfix">
 						<div>
-							<a ng-show="firstDesign && secondDesign" href="#" ng-click="design = 1"><span class="glyphicon glyphicon-list"></span> 1.Design</a>
-							<a ng-show="firstDesign && secondDesign" class="space" href="#" ng-click="design = 2"><span class="glyphicon glyphicon-th"></span> 2.Design</a>
+							<a ng-show="firstDesign && secondDesign" href="" ng-click="design = 1"><span class="glyphicon glyphicon-list"></span> 1.Design</a>
+							<a ng-show="firstDesign && secondDesign" class="space" href="" ng-click="design = 2"><span class="glyphicon glyphicon-th"></span> 2.Design</a>
 		
 
 							<div ng-show="showLogin" class="pull-right space" style="margin-top:-5px; margin-bottom:-5px;">
@@ -24,12 +24,12 @@
 								</div>
 							</div>
 
-							<a class="pull-right space" ng-show="isLogin" href="#" ng-click="logoutBenutzer()"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+							<a class="pull-right space" ng-show="isLogin" href="" ng-click="logoutBenutzer()"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
 							<span class="pull-right" ng-show="isLogin"> <b>{{nickname}}</b> </span>
 							<span class="pull-right" ng-show="error"> {{error}} </span>
 		
-							<a class="pull-right space" ng-hide="isLogin || showLogin" href="#" ng-click="showLogin = !showLogin"><span class="glyphicon glyphicon-log-in"></span> Login</a>
-							<a class="pull-right" ng-show="verwaltung == 'ja' && !isLogin" href="#"><span class="glyphicon glyphicon-edit"></span> Registrieren</a>
+							<a class="pull-right space" ng-hide="isLogin || showLogin" href="" ng-click="showLogin = !showLogin"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+							<a class="pull-right" ng-show="verwaltung == 'ja' && !isLogin" href=""><span class="glyphicon glyphicon-edit"></span> Registrieren</a>
 
 						</div>
 					</div>

@@ -329,8 +329,8 @@ angular.module('settingsModule', [])
 					league.linkage = hauptSeite + link;
 					league.specialName = "";
 			        league.isActiv = false;
-			        league.notePosLeft = Math.random*45 + '%';
-			        league.notePosTop = Math.random*80 + '%';
+			        league.notePosLeft = Math.random()*40 + '%';
+			        league.notePosTop = Math.random()*80 + '%';
 				        			       
 					leagues.push(league);
 				}
