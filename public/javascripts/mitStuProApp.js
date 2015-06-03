@@ -218,6 +218,11 @@ app.filter('orderObjectBy', function() {
 	  };
 	});
 
+app.filter('unsafe', function($sce) {
+    return function(val) {
+        return $sce.trustAsHtml(val);
+    };
+});
 
 /**
  * Direktive für die Ligatabelle

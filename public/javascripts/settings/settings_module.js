@@ -244,12 +244,28 @@ angular.module('settingsModule', [])
 	};
 	
 	
+	$scope.refresh = function(){
+		$scope.jugenden = new Array();
+	}
+	
+	var isLigaDataError = function(){
+		$scope.error = "<strong>Der von Ihnen angegebene Ligenplan-Link scheint ungültig zu sein. <br/> Achten Sie darauf, dass Sie den Link verwenden, der die Gesamtübersicht aller Ligen enthält. <br/><br/> Beispiel:</strong> <a href='https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/leaguePage?championship=Bremer+HV+15/16' target='_blank'> https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/leaguePage?championship=Bremer+HV+15/16</a>";
+		$scope.errorpicturecaption = "Ligenplan-Gesamtübersicht:"
+		$scope.errorpicture = "/images/Ligenplanlink.png";
+	}
+	
 	/**
 	 * Überprüft ob Liga-Daten schon vorliegen und aktiviert bei Fund das PopUp-Fenster für den Update-Hinweis
 	 */
 	$scope.checkLigaData = function(data){
 		if(isEmpty(data)){
-			$scope.getAllLeagues($scope.ligenplanLink);
+			if($scope.ligenplanLink.indexOf("leaguePage") != -1){
+				$scope.error = null;
+				$scope.getAllLeagues($scope.ligenplanLink);
+			}
+			else{
+				isLigaDataError();
+			}
 		}
 		else{
 			$scope.showUpdate = true;
@@ -268,7 +284,7 @@ angular.module('settingsModule', [])
 	
 	$scope.getAllLeagues = function(ligenplanLink) {
 
-		$scope.favoritLeague = null;
+		$scope.liga.favoritLeague = null;
 		$scope.quelle = false;
 		$scope.leagues = null;
 		$scope.jugenden = null;
@@ -290,22 +306,9 @@ angular.module('settingsModule', [])
 			var gruppen = new Array();
 			
 			var res = String.fromCharCode(13);
-			
-//			enter = '\u23CE';
-//			enter2 = '\u21b5';
-//			
-//			console.log("test" + enter + "test");
-//			console.log("test" + enter2 + "test");
-			
-			var res = data.split("  ");
-			
-			for(var i = 0; i < res.length; i++){
-				if(res[i] == ''){
-					res.splice(i, 1);
-					i--;
-				}
-			}
-			
+
+			var lineFeed = "\u000A";
+			var res = data.split(lineFeed);
 			
 			var jugend;
 			var gender;
@@ -348,8 +351,8 @@ angular.module('settingsModule', [])
 					league = new Object();
 					league.id = leagues.length+1;
 					league.gender = gender;
-					league.jugend = jugend;
-					league.name = benennung;
+					league.jugend = capitalizeFirstLetter(jugend);
+					league.name = capitalizeFirstLetter(benennung);
 					league.linkage = hauptSeite + link;
 					league.specialName = "";
 			        league.isActiv = false;
@@ -364,9 +367,16 @@ angular.module('settingsModule', [])
 	    	
 	    	$scope.settings.liga.leagues = leagues;
 	    	initLigaManager();	
-		    	
+	    	if(leagues.length == 0){
+	    		isLigaDataError();
+	    	}
 		});
 	};
+	
+	
+	var capitalizeFirstLetter = function (string) {
+	    return string.charAt(0).toUpperCase() + string.slice(1);
+	}
 	
 	
 	/**

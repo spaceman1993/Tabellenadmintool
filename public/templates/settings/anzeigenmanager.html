@@ -5,65 +5,66 @@
 <div class="row" style="margin-bottom:1em">
 	<div class="col-md-6">
 		<h4>Designauswahl</h4>
-				<p>W&auml;hlen Sie die Designsansichten, die Sie zur Verf&uuml;gung stellen m&ouml;chten:</p>
-				<form role="form" ng-click="changeDesignauswahl(anzeige.designauswahl)">
-						<label class="checkbox-inline" ng-click="changeFirstDesign()">
-								<input type="checkbox" value="firstdesign" ng-model="anzeige.designauswahl.firstdesign">1.Design
-						</label>
-						<label class="checkbox-inline" ng-click="changeSecondDesign()">
- 								<input type="checkbox" value="seconddesign" ng-model="anzeige.designauswahl.seconddesign">2.Design
-						</label>
-				</form>
+		<p>W&auml;hlen Sie die Designsansichten, die Sie zur Verf&uuml;gung stellen m&ouml;chten:</p>
+		<form role="form" ng-click="changeDesignauswahl(anzeige.designauswahl)">
+			<label class="checkbox-inline" ng-click="changeFirstDesign()">
+				<input type="checkbox" value="firstdesign" ng-model="anzeige.designauswahl.firstdesign">1.Design
+			</label>
+			<label class="checkbox-inline" ng-click="changeSecondDesign()">
+				<input type="checkbox" value="seconddesign" ng-model="anzeige.designauswahl.seconddesign">2.Design
+			</label>
+		</form>
 	</div>
 	<div class="col-md-6">
 		<h4>Standard Design</h4>
 		<p>W&auml;hlen Sie das Design, das als Standard angezeigt werden soll:</p>
 		<form role="form" ng-click="changeStandardDesign(anzeige.standardDesign)">
-				<label ng-show="anzeige.designauswahl.firstdesign" class="radio-inline">
-							<input type="radio" name="standard" value="1" ng-model="anzeige.standardDesign">1.Design
-				</label>
-				<label ng-show="anzeige.designauswahl.seconddesign" class="radio-inline">
-							<input type="radio" name="standard" value="2" ng-model="anzeige.standardDesign">2.Design
-				</label>
+			<label ng-show="anzeige.designauswahl.firstdesign" class="radio-inline">
+					<input type="radio" name="standard" value="1" ng-model="anzeige.standardDesign">1.Design
+			</label>
+			<label ng-show="anzeige.designauswahl.seconddesign" class="radio-inline">
+					<input type="radio" name="standard" value="2" ng-model="anzeige.standardDesign">2.Design
+			</label>
 		</form>
 	</div>
 </div>
 
 <div class="row" style="margin-bottom:1em">
 	<div class="col-md-6">
-	<h4>Favorisierter Verein</h4>
-			<p>Tragen Sie (wenn gew&uuml;nscht) Ihren favorisierten Verein in das daf&uuml;r vorgesehene Feld ein.<br/> Ihr Verein wird hervorgehoben angezeigt.</p>
+		<h4>Favorisierter Verein</h4>
+		<p>Tragen Sie (wenn gew&uuml;nscht) Ihren favorisierten Verein in das daf&uuml;r vorgesehene Feld ein.<br/> Ihr Verein wird hervorgehoben angezeigt.</p>
 	
-	<form role="form">
-		<label for="vereinsname">Vereinsname:</label>
+		<form role="form">
+			<label for="vereinsname">Vereinsname:</label>
 				<input style="width:500px;" ng-blur="changeFavorisierterVerein(favoritVerein)" ng-model="anzeige.favoritVerein" type="text" class="form-control" id="vereinsname" placeholder="Genauen Vereinsnamen angeben">
 			</form>  								
 	</div>
+	
 	<div class="col-md-6">
-	<h4>Spielplan</h4>
-			<p>Entscheiden Sie, ob Sie die Spielpl&auml;ne angezeigt bekommen wollen:</p>
-			<form role="form" ng-click="changeSpielplan(anzeige.spielplan)">
-					<label class="radio-inline">
-								<input type="radio" name="spielplan" value="ja" ng-model="anzeige.spielplan">JA
-					</label>
-					<label class="radio-inline">
-								<input type="radio" name="spielplan" value="nein" ng-model="anzeige.spielplan">NEIN
-					</label>
-			</form>
+		<h4>Spielplan</h4>
+		<p>Entscheiden Sie, ob Sie die Spielpl&auml;ne angezeigt bekommen wollen:</p>
+		<form role="form" ng-click="changeSpielplan(anzeige.spielplan)">
+			<label class="radio-inline">
+				<input type="radio" name="spielplan" value="ja" ng-model="anzeige.spielplan">JA
+			</label>
+			<label class="radio-inline">
+				<input type="radio" name="spielplan" value="nein" ng-model="anzeige.spielplan">NEIN
+			</label>
+		</form>
 	</div>
 </div>
 
 <div class="row" style="margin-bottom:1em">
 	<div class="col-md-6">
-	<h4>Individuelle Verwaltung</h4>
-			<p>Wollen Sie, dass sich Benutzer registrieren k&ouml;nnen und eigenst&auml;ndig ihre eigenen Einstellungen verwalten k&ouml;nnen?</p>
-			<form role="form" ng-click="changeLogin(anzeige.verwaltung)">
-					<label class="radio-inline">
-								<input type="radio" name="verwaltung" value="ja" ng-model="anzeige.verwaltung">JA
-					</label>
-					<label class="radio-inline">
-								<input type="radio" name="verwaltung" value="nein" ng-model="anzeige.verwaltung">NEIN
-					</label>
-			</form>
+		<h4>Individuelle Verwaltung</h4>
+		<p>Wollen Sie, dass sich Benutzer registrieren k&ouml;nnen und eigenst&auml;ndig ihre eigenen Einstellungen verwalten k&ouml;nnen?</p>
+		<form role="form" ng-click="changeLogin(anzeige.verwaltung)">
+			<label class="radio-inline">
+				<input type="radio" name="verwaltung" value="ja" ng-model="anzeige.verwaltung">JA
+			</label>
+			<label class="radio-inline">
+				<input type="radio" name="verwaltung" value="nein" ng-model="anzeige.verwaltung">NEIN
+			</label>
+		</form>
 	</div>
 </div>

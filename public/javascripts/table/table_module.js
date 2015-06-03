@@ -127,7 +127,7 @@ angular.module('tableModule', [])
 		if(userFactory.getBenutzer(name) === null){
 			$scope.addBenutzer(name, passwort);
 			$scope.loginBenutzer(name, passwort);
-			//$scope.error = "Benutzer mit angegebenem Kennwort unbekannt ";
+			//$scope.errorHeader = "Benutzer mit angegebenem Kennwort unbekannt ";
 		}
 		else{
 			activUser.user = userFactory.getBenutzer(name);
@@ -175,12 +175,12 @@ angular.module('tableModule', [])
     	
     };
   
-    checkAndGetData =  function (obj /*, level1, level2, ... levelN*/) {
+    checkAndGetData =  function (obj, returnObject /*, level1, level2, ... levelN*/) {
     	  var args = Array.prototype.slice.call(arguments, 1);
 
-    	  for (var i = 0; i < args.length; i++) {
+    	  for (var i = 1; i < args.length; i++) {
     	    if (!obj || !obj.hasOwnProperty(args[i])) {
-    	    	if(!isEmpty(obj)){
+    	    	if(!isEmpty(obj) && returnObject){
     	    		if(typeof obj.content !== "undefined"){
     	    			return obj.content;
     	    		}
@@ -202,6 +202,7 @@ angular.module('tableModule', [])
 		$scope.mannschaften = null;
 		$scope.nextGames = null;
 		$scope.loading = true;
+		$scope.error = null;
 		
 		$scope.leagueName = $scope.getNameForLeague(league) + ' (' + league.name + ')';
 		var adresse = league.linkage;
@@ -218,53 +219,62 @@ angular.module('tableModule', [])
       
       var mannschaften = new Array();
 
-      var daten = data.query.results.table[0].tbody.tr;
-      for(var i = 1; i < daten.length; i++){
-        var mannschaftsdaten = daten[i].td;
-        
-        var mannschaft = new Object();
-        mannschaft.rang = parseInt(checkAndGetData(mannschaftsdaten[1], 'content'));
-        mannschaft.mannschaft = checkAndGetData(mannschaftsdaten[2], 'a', 'content');
-        mannschaft.begegnungen = checkAndGetData(mannschaftsdaten[3], 'content');
-        mannschaft.siege = checkAndGetData(mannschaftsdaten[4], 'content');
-        mannschaft.unentschieden = checkAndGetData(mannschaftsdaten[5], 'content');
-        mannschaft.niederlagen = checkAndGetData(mannschaftsdaten[6], 'content');
-        mannschaft.tore = checkAndGetData(mannschaftsdaten[7], 'content');
-        mannschaft.verhaeltnis = checkAndGetData(mannschaftsdaten[8], 'content');
-        mannschaft.punkte = checkAndGetData(mannschaftsdaten[9], 'content');
-
-        
-        mannschaften.push(mannschaft);
-      }
-
-      if($scope.spielplan === 'ja'){
-	      var nextGames = new Array();
-	      
-	      daten = data.query.results.table[1].tbody.tr;
-	      for(i = 1; i< daten.length; i++){
-	        var spieldaten = daten[i].td;
+      //var daten = data.query.results.table[0].tbody.tr;
+      var daten = checkAndGetData(data, false, 'query', 'results', 'table', '0', 'tbody', 'tr');
+      if(daten != ""){
+	      for(var i = 1; i < daten.length; i++){
+	        var mannschaftsdaten = daten[i].td;
 	        
-	        var nextGame = new Object();
-	        nextGame.tag = checkAndGetData(spieldaten[0], 'content');
-	        nextGame.datum = checkAndGetData(spieldaten[1], 'content');
-	        nextGame.zeit = checkAndGetData(spieldaten[2], 'content').substr(35, 5);
-	        nextGame.halle = checkAndGetData(spieldaten[3], 'span', 'a', 'content');
-	        nextGame.hallenname = checkAndGetData(spieldaten[3], 'span', 'title');
-	        nextGame.hallenlink = checkAndGetData(spieldaten[3], 'span', 'a', 'href');
-	        nextGame.nr = checkAndGetData(spieldaten[4]);
-	        nextGame.heimmannschaft = checkAndGetData(spieldaten[5], 'content'); 
-	        nextGame.gastmannschaft = checkAndGetData(spieldaten[6], 'content');
-	        nextGame.tore = checkAndGetData(spieldaten[7], 'span', 'content');
-
+	        var mannschaft = new Object();
+	        mannschaft.rang = parseInt(checkAndGetData(mannschaftsdaten[1], true, 'content'));
+	        mannschaft.mannschaft = checkAndGetData(mannschaftsdaten[2], true, 'a', 'content');
+	        mannschaft.begegnungen = checkAndGetData(mannschaftsdaten[3], true, 'content');
+	        mannschaft.siege = checkAndGetData(mannschaftsdaten[4], true, 'content');
+	        mannschaft.unentschieden = checkAndGetData(mannschaftsdaten[5], true, 'content');
+	        mannschaft.niederlagen = checkAndGetData(mannschaftsdaten[6], true, 'content');
+	        mannschaft.tore = checkAndGetData(mannschaftsdaten[7], true, 'content');
+	        mannschaft.verhaeltnis = checkAndGetData(mannschaftsdaten[8], true, 'content');
+	        mannschaft.punkte = checkAndGetData(mannschaftsdaten[9], true, 'content');
+	
 	        
-	        nextGames.push(nextGame);
+	        mannschaften.push(mannschaft);
 	      }
+	
+	      if($scope.spielplan === 'ja'){
+		      var nextGames = new Array();
+		      
+		      daten = data.query.results.table[1].tbody.tr;
+		      for(i = 1; i< daten.length; i++){
+		        var spieldaten = daten[i].td;
+		        
+		        var nextGame = new Object();
+		        nextGame.tag = checkAndGetData(spieldaten[0], true, 'content');
+		        nextGame.datum = checkAndGetData(spieldaten[1], true, 'content');
+		        nextGame.zeit = checkAndGetData(spieldaten[2], true, 'content').substr(35, 5);
+		        nextGame.halle = checkAndGetData(spieldaten[3], true, 'span', 'a', 'content');
+		        nextGame.hallenname = checkAndGetData(spieldaten[3], true, 'span', 'title');
+		        nextGame.hallenlink = checkAndGetData(spieldaten[3], true, 'span', 'a', 'href');
+		        nextGame.nr = checkAndGetData(spieldaten[4], true);
+		        nextGame.heimmannschaft = checkAndGetData(spieldaten[5], true, 'content'); 
+		        nextGame.gastmannschaft = checkAndGetData(spieldaten[6], true, 'content');
+		        nextGame.tore = checkAndGetData(spieldaten[7], true, 'span', 'content');
+	
+		        
+		        nextGames.push(nextGame);
+		      }
+	      }
+	      
+	      $scope.loading = false;
+	      
+	      $scope.mannschaften = mannschaften;
+	      $scope.nextGames = nextGames;
+      }
+      else{
+    	  $scope.loading = false;
+    	  $scope.error = "Die Liga kann aufgrund von Auslesefehlern nicht korrekt dargestellt werden.";
       }
       
-      $scope.loading = false;
-      
-      $scope.mannschaften = mannschaften;
-      $scope.nextGames = nextGames;
+     
     });
   };
 	
