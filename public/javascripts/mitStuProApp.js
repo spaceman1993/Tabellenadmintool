@@ -44,8 +44,8 @@ app.run(['$state', '$rootScope', '$location', 'activUser', function($state, $roo
            return; //Nutzer geht schon zum Login oder einer freien Seite.
         }
         
-        if (angular.isUndefined(activUser.user.name)) {
-            console.log('Kein Name gesetzt: Kein Login erfolgt. "isEmpty" existiert nicht global von Angular.');
+        if (activUser.isLogin === false) {
+            console.log('Nicht eingeloggt.');
             $state.go('table');
             e.preventDefault(); 
         }
@@ -136,8 +136,10 @@ return o;
  */
 app.service("activUser", function() {
   var _user = new Object();
+  var _isLogin = false;
   
   this.user = _user;
+  this.isLogin = _isLogin;
 });
 
 

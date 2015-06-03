@@ -92,8 +92,8 @@ angular.module('tableModule', [])
 		}
 		
 		
-		if(!isEmpty(activUser.user)){
-			$scope.isLogin = true;
+		if(!isEmpty(activUser.user)){ // oder if activUser.isLogin === true;
+			$scope.isLogin = activUser.isLogin;
 			$scope.benutzer = activUser.user;
 		}
 		else{
@@ -130,15 +130,17 @@ angular.module('tableModule', [])
 		}
 		else{
 			activUser.user = userFactory.getBenutzer(name);
+			activUser.isLogin = true;
 			$scope.benutzer = activUser.user;
-			$scope.isLogin = true;
+			$scope.isLogin = activUser.isLogin;
 			$scope.initTableControllerVars();
 		}
 	};
 	
 	$scope.logoutBenutzer = function() {
 		activUser.user = null;
-		$scope.isLogin = false;
+		activUser.isLogin = false;
+		$scope.isLogin = activUser.isLogin;
 		$scope.initTableControllerVars();
 	};
 	
