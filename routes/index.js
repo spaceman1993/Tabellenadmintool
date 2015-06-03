@@ -33,7 +33,7 @@ var Benutzer = mongoose.model('Benutzer');
 
 router.get('/alleBenutzer',function(req, res, next)
 {
-    benutzer.find().exec(function(err, result)
+    Benutzer.find().exec(function(err, result)
     {
         if(err)
         {
