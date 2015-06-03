@@ -80,11 +80,25 @@ this.tableDesign = _tableDesign;
 
 
 app.factory("benutzerFactory",[ '$http', function ($http) {
+	
+$http({
+	headers: {
+		'Content-Type': 'application/x-www-form-urlencoded'
+	}
+})
+.then(function(result) {
+	console.log(result);
+}, function(error) {
+console.log(error);
+});
+	
+//name=Admin2&passwort=123&einstellung=test&crypt=abc123
+	
 var o = {
 	user: {}
 };
 o.getAllUser = function(callback){
-	$http.get('/alleBenutzer')
+	$http.get('/benutzer/alle')
 	.success(function(data){
 		o.user = data;
 		callback(o.user);
@@ -95,8 +109,8 @@ o.getAllUser = function(callback){
 	});
 };
 	
-o.getUser = function(callback){
-	$http.get('/benutzer')
+o.getUserByName = function(user, callback){
+	$http.get('/benutzer/byName', user)
 	.success(function(data){
 		o.user = data;
 		callback(o.user);
@@ -107,8 +121,14 @@ o.getUser = function(callback){
 	});
 };
 
+o.getUserById = function(userId){
+	return $http.get('/benutzer/byID' + userId).success(function(data){
+		return data;
+	});
+};
+
 o.create = function(user, callback){
-  $http.post('/benutzer', user)
+  $http.post('/benutzer/save', user)
   .success(function(data){
   	o.user = data;
   	callback(data);
@@ -118,22 +138,16 @@ o.create = function(user, callback){
 	});
 };
 
-o.update = function(user, callback){
-  return $http.put('/benutzer' + user._id, user)
-  .success(function(data){
-      o.user = data;
-      callback(o.user);
-  })
-	.error(function(error){
-		callback(null);
-  });
-};
-
-	o.getSingleUser = function(userId){
-		return $http.get('/benutzer/ID/' + userId).success(function(data){
-			return data;
-		});
-	};
+//o.update = function(user, callback){
+//  return $http.put('/benutzer' + user._id, user)
+//  .success(function(data){
+//      o.user = data;
+//      callback(o.user);
+//  })
+//	.error(function(error){
+//		callback(null);
+//  });
+//};
 
 return o;
     
