@@ -37,13 +37,13 @@ app.use('/', mainRoutes);
 app.use('/', user);
 //app.use('/tableURL', tableRoutes);
 
-//catch 404 and forward to error handler
+/*//catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
-
+*/
 // error handlers
 
 // development error handler
@@ -57,6 +57,25 @@ if (app.get('env') === 'development') {
     });
   });
 }
+
+app.use(function(req, res, next){
+	  res.status(404);
+
+	  // respond with html page
+	  if (req.accepts('html')) {
+	    res.render('notfound', {/* hier könnte man weiterleiten: url: req.url */});
+	    return;
+	  }
+
+	  // respond with json
+	  if (req.accepts('json')) {
+	    res.send({ error: 'Seite nicht gefunden' });
+	    return;
+	  }
+
+	  // default to plain-text. send()
+	  res.type('txt').send('Seite nicht gefunden');
+});
 
 // production error handler
 // no stacktraces leaked to user
