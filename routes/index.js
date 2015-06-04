@@ -14,8 +14,6 @@ var router = express.Router();
  * GET home page.
  */
 
-
-
 router.get('/', function(req, res, next) {
 	res.render('index', {
 
@@ -25,62 +23,5 @@ router.get('/', function(req, res, next) {
 exports.index = function(req, res){
   res.render('index', { title: 'Express' });
 };
-
-var mongoose = require('mongoose');
-var Benutzer = mongoose.model('Benutzer');
-
-//req.header("Content-Type", "application/x-www-form-urlencoded");
-
-router.get('/benutzer/alle', function(req, res, next) {
-	Benutzer.find()
-		.exec(function (err, result) {
-			if (err){
-				return next(err);
-			}
-
-			res.json(result);
-	});
-});
-
-router.get('/benutzer/byName', function(req, res, next){
-	var query = Benutzer.findOne({name: req.body.name});
-	query.exec(function(err, result){
-		if(err){
-			return	next(err);
-		}
-		res.json({name : "jan"});
-	});
-});
-
-router.get('/benutzer/byID/:id', function(req, res, next) {
-	var query = Benutzer.findById(req.params.id);
-	query.exec(function (err, result){
-	if (err){
-	   	return next(err);
-	}
-	if (!result){
-	  	return next(new Error("Kann den Benutzer nicht finden ID= " + req.params.id ));
-	}
-	req.json(result);
-	return next();
-	});
-});
-
-router.post('/benutzer/save', function(req, res) {	
-	var newBenutzer = new Benutzer({
-		name : req.body.name,
-		passwort : req.body.passwort,
-		einstellung : req.body.einstellung,
-		crypt : req.body.crypt,
-		});
-		newBenutzer.save( function( err, result, count ){
-		res.json(result);
-	});
-});
-
-//router.delete('/benutzer/delete/byName', function(req, res, next) {
-
-//});
-
 
 module.exports = router;
