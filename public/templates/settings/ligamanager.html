@@ -12,11 +12,11 @@
 
 	<div ng-show="ligaSettings" class="pull-right">
 		<a ng-click="checkSearchVerein()">
-    		<span class="glyphicon glyphicon-search bigSizeGlyph space vcenter"></span>
+    		<span class="glyphicon glyphicon-search bigSizeGlyph space"></span>
   		</a>
 
 		<a ng-click="quelle = !quelle">
-    		<span class="glyphicon glyphicon-refresh bigSizeGlyph space vcenter"></span>
+    		<span class="glyphicon glyphicon-refresh bigSizeGlyph space"></span>
   		</a>
 	</div>
 
@@ -38,7 +38,7 @@
 				</span>
 				<input type="text" class="form-control" ng-model="liga.ligenplanLink" placeholder="Link zur &Uuml;bersicht der Ligen">
 				<span class="input-group-btn">
- 					<button class="btn btn btn-success btn-lg" type="submit" ng-click="checkLigaData(jugenden)"><span class="glyphicon glyphicon-ok"></span></button>
+ 					<button class="btn btn btn-success btn-lg" type="submit" ng-click="checkLigaData(jugenden); quelle = false"><span class="glyphicon glyphicon-ok"></span></button>
 				</span>
 			</div>
 		</div>

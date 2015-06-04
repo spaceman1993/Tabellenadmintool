@@ -26,10 +26,11 @@
 
 				<a class="pull-right space" ng-show="isLogin" href="" ng-click="logoutBenutzer()"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
 				<span class="pull-right" ng-show="isLogin"> <b>{{nickname}}</b> </span>
-				<span class="pull-right" ng-show="errorHeader"> {{errorHeader}} </span>
 
-				<a class="pull-right space" ng-hide="isLogin || showLogin" href="" ng-click="showLogin = !showLogin"><span class="glyphicon glyphicon-log-in"></span> Login</a>
-				<a class="pull-right" ng-show="verwaltung == 'ja' && !isLogin" href=""><span class="glyphicon glyphicon-edit"></span> Registrieren</a>
+				<a class="pull-right space" ng-hide="isLogin || showLogin" href="" ng-click="checkLogin()"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+				<a class="pull-right space" ng-show="verwaltung == 'ja' && !isLogin" href="" ng-click="showRegistration()"><span class="glyphicon glyphicon-edit"></span> Registrieren</a>
+
+				<span class="pull-right" ng-show="errorHeader"> {{errorHeader}} </span>
 
 			</div>
 		</div>
@@ -66,7 +67,7 @@
 		
 			<!-- Menü für zweites Design -->
 			<div ng-show="design == 2">
-				<div class="sidebar-Design nopadding sticky-note-background">
+				<div class="sidebar-Design sticky-note-background">
 					<div sticky-note ng-repeat="league in activeLeagues" league="league" class="sticky-note" ng-click="getTableForLeague(league)">
 						<div> <!-- class="rotate" -->
 							<span class="title">{{league.name}}</span>
@@ -123,5 +124,101 @@
 				</a>
 			</div>
 		</div>
+
+		<modal-dialog show="registrationShown" width="60%" height="460px">
+		  	<h2>Registrierung</h2>
+		  	<hr style="margin-top: 0px; margin-bot: 10px;">
+		  	
+		  	<div ng-show="registieren">
+				<form role="form">
+					<div class="form-group" ng-class="{'has-error': inVerwendung, 'has-success': !inVerwendung && registration.benutzername.length > 0 }">
+						<label for="benutzer" class="control-label">Benutzername:</label>
+						<input type="text" ng-enter="registiereBenutzer(registration)" ng-change="checkBenutzer(registration.benutzername)" ng-model="registration.benutzername" class="form-control" id="benutzer">
+						
+						<label ng-show="inVerwendung" class="control-label">Benutzername schon in Verwendung</label>
+						<br ng-hide="inVerwendung">
+					</div>
+					
+					<div class="form-group"  ng-class="{'has-error': isIncorrect, 'has-success': !isIncorrect && registration.passwort.length > 0 }">
+						<label for="pwd" class="control-label">Passwort:</label>
+						<input type="password" ng-enter="registiereBenutzer(registration)" ng-change="checkPasswort(registration.passwort); checkPasswortBst(registration.passwort, registration.passwortbst)" ng-model="registration.passwort" class="form-control" id="pwd">
+						
+						<label ng-show="isIncorrect" class="control-label">{{fehlerText}}</label>
+						<br ng-hide="isIncorrect">
+					</div>
+					
+					<div class="form-group" ng-class="{'has-error': !isGleich && registration.passwortbst.length > 0, 'has-success': isGleich && registration.passwortbst.length > 0}">
+						<label for="pwdbst" class="control-label">Passwort bestätigen:</label>
+						<input type="password" ng-enter="registiereBenutzer(registration)" ng-change="checkPasswortBst(registration.passwort, registration.passwortbst)" ng-model="registration.passwortbst" class="form-control" id="pwdbst">
+						
+						<label ng-show="!isGleich && registration.passwortbst.length > 0" class="control-label">Passwort stimmt nicht überein</label>
+						<br ng-hide="!isGleich && registration.passwortbst.length > 0">
+					</div>
+				
+					<button type="button" ng-click="registiereBenutzer(registration)" class="btn btn-default" ng-class="{'disabled': inVerwendung || !registration.benutzername || isIncorrect || !isGleich }">Submit</button>
+				</form>
+			</div>
+			
+			<div ng-hide="registieren">
+				<h3>Herzlichen Dank !</h3>
+				<br/>
+				<h4>Ihren Benutzerdaten lauten:</h4>
+				<br/>
+				<strong>Benutzername:</strong> {{registration.benutzername}} <br/>
+				<strong>Passwort:</strong>     *** <br/>
+				
+				<br/>
+				<br/>
+				<h5>Sie sind nun angemeldet!!!</h5>
+			</div>
+			
+		</modal-dialog>
+		
+		
+		<modal-dialog show="firstStart" width="90%" height="90%">
+			<h2>Tabellenadministrations-Tool</h2>
+			<hr style="margin-top: 0px; margin-bot: 10px;">
+			
+			<div ng-show="willkommen">
+				<p><strong>Herzlich willkommen, </strong></p>
+				<p>wir freuen uns, dass Sie sich für unser Tabellenadministations-Tool entschieden haben. <br/></p>
+				<p>Mit diesem Tool haben Sie die Möglichkeit Ihrem Verein ihren eigenen Ergebnisdienstleister zur Verfügnung zu stellen.
+				Mit dem kleinen Unterschied, dass die Bedienung und das einsehen der richtigen Daten kinderleicht ist.</p>
+				<p>Sie als Administrator legen fest welche Daten zur Verfügnung gestellt werden sollen. Desweiteren können Sie das Design der Tabellen
+				selbstständig festlegen und haben die Wahl zwischen zwei verschiedenen Anzeigemöglichkeiten. </p>
+				<p>Bevor Sie sich jetzt aber ins Gefecht stürzen, müssen Sie zuerst einmal ein Passwort für Ihren Administator-Account festlegen. </p>
+				<br/>
+				<div class="form-group"  ng-class="{'has-error': isIncorrect, 'has-success': !isIncorrect && registration.passwort.length > 0 }">
+					<label for="pwd" class="control-label">Passwort:</label>
+					<input type="password" ng-enter="registiereAdminAccount(registration.passwort)" ng-change="checkPasswort(registration.passwort); checkPasswortBst(registration.passwort, registration.passwortbst)" ng-model="registration.passwort" class="form-control" id="pwd">
+					
+					<label ng-show="isIncorrect" class="control-label">{{fehlerText}}</label>
+					<br ng-hide="isIncorrect">
+				</div>
+				
+				<div class="form-group" ng-class="{'has-error': !isGleich && registration.passwortbst.length > 0, 'has-success': isGleich}">
+					<label for="pwdbst" class="control-label">Passwort bestätigen:</label>
+					<input type="password" ng-enter="registiereAdminAccount(registration.passwort)" ng-change="checkPasswortBst(registration.passwort, registration.passwortbst)" ng-model="registration.passwortbst" class="form-control" id="pwdbst">
+					
+					<label ng-show="!isGleich && registration.passwortbst.length > 0" class="control-label">Passwort stimmt nicht überein</label>
+					<br ng-hide="!isGleich && registration.passwortbst.length > 0">
+				</div>
+				
+				<button type="button" ng-click="registiereAdminAccount(registration.passwort)" class="btn btn-default" ng-class="{'disabled': isIncorrect || !isGleich }">Festlegen</button>
+			</div>
+			
+			<div ng-hide="willkommen">
+				<h3>Herzlichen Dank !</h3>
+				<br/>
+				<h4>Ihren Benutzerdaten lauten:</h4>
+				<br/>
+				<strong>Benutzername:</strong> admin <br/>
+				<strong>Passwort:</strong>     *** <br/>
+				
+				<br/>
+				<br/>
+				<h5>Sie sind nun angemeldet!!!</h5>
+			</div>
+		</modal-dialog>
 
 </div>

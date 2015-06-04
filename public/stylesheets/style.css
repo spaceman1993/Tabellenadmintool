@@ -1,235 +1,258 @@
+/******************/
+/*ALLGEMEIN DESIGN*/
+/******************/
 body {
-	height: 100%;
-	min-width: 800px;
-	min-height: 500px;
-	padding:20px;
-  	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	height: 		100%;
+	min-width: 		800px;
+	min-height: 	500px;
+	padding: 		20px;
+  	font: 			14px "Lucida Grande", Helvetica, Arial, sans-serif;
   	background-color: #CB8C1D;
 }
 
-#areaMap, #addressMap
-  {
-    height: 85%;
-    width: 100%;
-  }
-
-.h2 {
-	padding:0px;
-	margin:0px;
-}
-
-
-/* PANEL GROESSEN- UND POSITINSEINSTELLUNGEN */
-.panel {
-	position: relative;
-	height : 99%;
-	margin-bottom:0;
-	border-color: #4C3327;
-}
-
-.panel-default > .panel-heading {
-	margin-bottom: 0px;
-}
-
-.panel-default > .panel-heading-nostyle {
-	background: none; 
-	padding: 10px;
-	padding-bottom: 0px;
-}
-
-.panel-body {
-	position: absolute;
-  	bottom: 38px;
-  	right: 0px;
-  	left: 0px;
-  	overflow-y: auto;
-}
-
-.panel .panel-footer {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
-
-/* PANEL FARBEINSTELLUNGEN */
-.panel-default > .panel-heading {
-  	background-color: #4C3327;
-  	border-color: #4C3327;
-  	color: #BD3632;
-}
-
-.panel-default > .panel-heading-nostyle {
-  	background-color: #F2EFE4;
-  	border-color: #4C3327;
-}
-
-.panel-body {
-  	background-color: #F2EFE4;
-  	border-color: #4C3327;
-}
-
-.panel .panel-footer {
-  	background-color: #4C3327;
-  	border-color: #4C3327;
-  	color: white;
-}
-
-
-
-.center-div {
-  	position: absolute;
-  	bottom: 30%;
-  	left: 50%;
-  	transform: translateY(-50%);
-  	transform: translateX(-50%);
-}
-
-.sidebar-Design {
-	position: absolute;
-	top: 0px;
-  	bottom: 0px;
-	left: 0px;
-  	width: 200px;
-}
-
-.data-Design {
-	position: absolute;
-	top: 0px;
-  	bottom: 0px;
-  	left: 200px;
-  	right: 0px;
-  	padding: 10px;
-  	padding-left: 20px;
-  	overflow-y: auto;
-}
-
-.modifyInputText input[type="text"] {
-   height: 5px;
-   font-size: 5px;
-   line-height: 5px;
-}
-
-.red {
-    color: red;
-}
-
-.green {
-    color: green;
-}
-
-.default-cursor {
-	cursor: default;
-}
-
-.hand-cursor {
-	cursor: pointer;
-}
-
-a {
-  color: #00B7FF;
-}
-
-.highlight {
-	background-color:green;
-}
-
-.selected {
-    background-color: lightblue;
-}
-
-.btn-group:hover>.dropdown-menu {
-  	display: block;
-  	margin-top: 0;
- 	cursor: pointer;
-}
-
-.dropdown-menu { width: 100%; }
-
-.dropdown-menu:target {
-	width:50%;
-}
-
-.btn-lg {
-	border-radius: 0px;
-}
-
-.table > caption {
-	margin-top: 0px;
-	padding-top: 0px;
-	font-size: 30px;
-	color: #333333;
-}
-
-.borderless > tbody > tr > td {
-    border-top-style: none;
-    border-bottom-style: none;
-}
-
-.input-group-addon.success {
-    color: rgb(255, 255, 255);
-    background-color: rgb(92, 184, 92);
-    border-color: rgb(76, 174, 76);
-}
-
 h2 {
-	display: inline-block;
-	margin: 0px;
-	margin-bottom: 10px;
-	color: #333333;
+	display: 		inline-block;
+	margin: 		0px;
+	margin-bottom: 	10px;
+	color: 			#333333;
 }
 
 alertText {
-	color: #FF0000;
-	font-size: 18px;
+	color: 			#FF0000;
+	font-size: 		18px;
 }
 
 meldungText {
-	color: #009900;
-	font-size: 18px;
+	color: 			#009900;
+	font-size: 		18px;
+}
+
+.center-div {
+  	position: 		absolute;
+  	bottom: 		30%;
+  	left: 			50%;
+  	transform: 		translateY(-50%);
+  	transform: 		translateX(-50%);
 }
 
 .space {  
 	margin-left: 10px;
 }
 
-.vcenter {
-    display: inline-block;
-    vertical-align: middle;
-    float: none;
+#areaMap, #addressMap {
+    height: 		85%;
+    width: 			100%;
 }
 
-.pull-center {
-     float: none;
-     margin-left: auto;
-     margin-right: auto;
+
+
+/*****************/
+/*TABELLEN DESIGN*/
+/*****************/
+.table > caption {
+	margin-top: 	0px;
+	padding-top: 	0px;
+	font-size: 		30px;
+	color: 			#333333;
+}
+
+.borderless > tbody > tr > td {
+    border-top-style: 		none;
+    border-bottom-style: 	none;
+}
+
+
+
+/**********************/
+/*CURSOR EINSTELLUNGEN*/
+/**********************/
+.default-cursor {
+	cursor: 		default;
+}
+
+.hand-cursor {
+	cursor: 		pointer;
+}
+
+.input { 
+	cursor: 		default;
+}
+
+
+
+/************/
+/*GLYPHICONS*/
+/************/
+.glyphicon { 
+	cursor: 		pointer; 
 }
 
 .bigSizeGlyph {
-	font-size: 1.7em;
+	font-size: 		1.7em;
 }
 
 span.glyphicon-circle-arrow-left {
-    font-size: 1.7em;
+    font-size: 		1.7em;
 }
 
+
+
+/******************************************/
+/*PANEL GRÖSSEN- UND POSITINSEINSTELLUNGEN*/
+/******************************************/
+.panel {
+	position: 		relative;
+	height : 		99%;
+	margin-bottom: 	0;
+	border-color: 	#4C3327;
+}
+
+.panel-default > .panel-heading {
+	margin-bottom: 	0px;
+}
+
+.panel-default > .panel-heading-nostyle {
+	background: 	none; 
+	padding: 		10px;
+	padding-bottom: 0px;
+}
+
+.panel-body {
+	position: 		absolute;
+  	bottom: 		38px;
+  	right: 			0px;
+  	left: 			0px;
+  	overflow-y: 	auto;
+}
+
+.panel .panel-footer {
+    position: 		absolute;
+    left: 			0;
+    right: 			0;
+    bottom: 		0;
+}
+
+
+
+/*************************/
+/*PANEL FARBEINSTELLUNGEN*/
+/*************************/
+.panel-default > .panel-heading {
+  	background-color: #4C3327;
+  	border-color: 	#4C3327;
+  	color: 			#BD3632;
+}
+
+.panel-default > .panel-heading-nostyle {
+  	background-color: #F2EFE4;
+  	border-color: 	#4C3327;
+}
+
+.panel-body {
+  	background-color: #F2EFE4;
+  	border-color: 	#4C3327;
+}
+
+.panel .panel-footer {
+  	background-color: #4C3327;
+  	border-color: 	#4C3327;
+  	color: 			white;
+}
+
+
+
+/****************************/
+/*DESIGN-BASIERTE ÄNDERUNGEN*/
+/****************************/
+.sidebar-Design {
+	position: 		absolute;
+	top: 			0px;
+  	bottom: 		0px;
+	left: 			0px;
+  	width: 			200px;
+}
+
+.data-Design {
+	position: 		absolute;
+	top: 			0px;
+  	bottom: 		0px;
+  	left: 			200px;
+  	right: 			0px;
+  	padding: 		10px;
+  	padding-left: 	20px;
+  	overflow-y: 	auto;
+}
+
+.modifyInputText input[type="text"] {
+   height: 			5px;
+   font-size: 		5px;
+   line-height: 	5px;
+}
+
+/*******************/
+/*FARBEINSTELLUNGEN*/
+/*******************/
+.red {
+    color: 			red;
+}
+
+.green {
+    color: 			green;
+}
+
+a {
+  	color: 			#00B7FF;
+}
+
+.selected {
+    background-color: lightblue;
+}
+
+
+
+/***************/
+/*1.DESIGN MENÜ*/
+/***************/
+.btn-group:hover>.dropdown-menu {
+  	display: 		block;
+  	margin-top: 	0;
+ 	cursor: 		pointer;
+}
+
+.dropdown-menu { 
+	width: 			100%;
+}
+
+.dropdown-menu:target {
+	widows: 		50%;
+}
+
+.btn-lg {
+	border-radius: 	0px;
+}
+
+
+
+/***********/
+/*SCROLLBAR*/
+/***********/
 ::-webkit-scrollbar-track
 {
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	background-color: #F5F5F5;
-	border-radius: 10px;
+	background-color: 	#F5F5F5;
+	border-radius: 		10px;
 }
 
 ::-webkit-scrollbar
 {
-	width: 10px;
-	background-color: #F5F5F5;
+	width: 				10px;
+	background-color: 	#F5F5F5;
 }
 
 ::-webkit-scrollbar-thumb
 {
-	border-radius: 10px;
-	background-image: -webkit-gradient(linear,
+	border-radius: 		10px;
+	background-image: 	-webkit-gradient(linear,
 									   left bottom,
 									   left top,
 									   color-stop(0.44, rgb(122,153,217)),
@@ -238,129 +261,128 @@ span.glyphicon-circle-arrow-left {
 }
 
 
-/* enable absolute positioning */
+
+/*********************/
+/*Input Text mit Icon*/
+/*********************/
 .inner-addon { 
-    position: relative; 
+    position: 		relative; 
 }
 
-/* style icon */
 .inner-addon .glyphicon {
-  position: absolute;
-  padding: 10px;
-  pointer-events: none;
+  position: 		absolute;
+  padding: 			10px;
+  pointer-events: 	none;
 }
 
-/* align icon */
-.left-addon .glyphicon  { left:  0px;}
-.right-addon .glyphicon { right: 0px;}
+.input-group-addon.success {
+    color: 			rgb(255, 255, 255);
+    background-color: rgb(92, 184, 92);
+    border-color: 	rgb(76, 174, 76);
+}
 
-/* add padding  */
-.left-addon input  { padding-left:  30px; }
-.right-addon input { padding-right: 30px; }
+.left-addon .glyphicon  { 
+	left:  			0px;
+}
 
-	
+.right-addon .glyphicon { 
+	right: 			0px;
+}
+
+.left-addon input  {
+	padding-left:  	30px; 
+}
+
+.right-addon input { 
+	padding-right: 	30px;
+}
+
+
+
+/**********************/
+/*MODAL DIALOG FENSTER*/
+/**********************/	
 .ng-modal-overlay {
-  /* A dark translucent div that covers the whole screen */
-  position:fixed;
-  z-index:9999;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background-color:#000000;
-  opacity: 0.8;
+  position: 		fixed;
+  z-index: 			9999;
+  top: 				0;
+  left: 			0;
+  width: 			100%;
+  height: 			100%;
+  background-color: #000000;
+  opacity: 			0.8;
 }
-.ng-modal-dialog {
-  /* A centered div above the overlay with a box shadow. */
-  z-index:10000;
-  position: fixed;
-  width: 50%; /* Default */
 
-  /* Center the dialog */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.ng-modal-dialog {
+  z-index: 			10000;
+  position: 		fixed;
+  width: 			50%; 
+  top: 				50%;
+  left: 			50%;
+  transform: 		translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
+  -moz-transform: 	translate(-50%, -50%);
 
   background-color: #fff;
-  box-shadow: 4px 4px 80px #000;
+  box-shadow: 		4px 4px 80px #000;
 }
+
 .ng-modal-dialog-content {
-  padding:25px;
-  text-align: left;
+  padding: 			25px;
+  text-align: 		left;
 }
+
 .ng-modal-close {
-  position: absolute;
-  top: 3px;
-  right: 5px;
-  padding: 5px;
-  cursor: pointer;
-  font-size: 120%;
-  display: inline-block;
-  font-weight: bold;
-  font-family: 'arial', 'sans-serif';
+  position: 		absolute;
+  top: 				3px;
+  right: 			5px;
+  padding: 			5px;
+  cursor: 			pointer;
+  font-size: 		120%;
+  display: 			inline-block;
+  font-weight: 		bold;
+  font-family: 		'arial', 'sans-serif';
 }	
 
+
+
+/*******************/
+/*DRAG&DROP OBJEKTE*/
+/*******************/	
 .sticky-note-background {
-	background: url(/images/bg_corkboard.jpg) top left repeat fixed;
-	height: 100%;
+	background: 	url(/images/bg_corkboard.jpg) top left repeat fixed;
+	height: 		100%;
 }
 
 .sticky-note {
-	position: absolute;
-	background: url(/images/sticky-note.png);
-	padding: 22px 10px 10px 15px;
-	width: 120px;
-	height: 90px;
-	cursor: pointer;
-	z-index: 0;
+	position: 		absolute;
+	background: 	url(/images/sticky-note.png);
+	padding: 		22px 10px 10px 15px;
+	width: 			120px;
+	height: 		90px;
+	cursor: 		pointer;
+	z-index: 		0;
 }
 
 .sticky-note .img {
-	background: transparent;
-	border: none;
-	display: block;
-	font-size: 10px;
-	font-weight: bold;
+	background: 	transparent;
+	border: 		none;
+	display: 		block;
+	font-size: 		10px;
+	font-weight: 	bold;
 }
 
 .sticky-note .title {
-	background: transparent;
-	border: none;
-	display: block;
-	font-size: 15px;
-	#font-weight: bold;
+	background: 	transparent;
+	border: 		none;
+	display: 		block;
+	font-size: 		12px;
+	font-weight: 	bold;
 }
 
 .sticky-note .body {
-	background: transparent;
-	border: none;
-	display: block;
-	font-size: 12px;
+	background: 	transparent;
+	border: 		none;
+	display: 		block;
+	font-size: 		12px;
 }
-
-.rotate {
-
-	/* Safari */
-	-webkit-transform: rotate(-7deg);
-	
-	/* Firefox */
-	-moz-transform: rotate(-7deg);
-	
-	/* IE */
-	-ms-transform: rotate(-7deg);
-	
-	/* Opera */
-	-o-transform: rotate(-7deg);
-	
-}
-
-.nopadding {
-	padding: 0 !important;
-	margin: 0 !important;
-}
-
-.glyphicon { cursor:pointer }
-
-.input { cursor:default }

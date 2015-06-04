@@ -62,34 +62,8 @@ angular.module('tableModule', [])
 		$scope.mannschaften = "";
 		
 		if(userFactory.getBenutzer("admin") === null){
-			var settings = new Object();
-			
-			settings.anzeige = new Object();
-			settings.anzeige.designauswahl = new Object();
-			settings.anzeige.designauswahl.firstdesign = true;
-			settings.anzeige.designauswahl.seconddesign = true;
-			settings.anzeige.standardDesign = "1";
-			settings.anzeige.favoritVerein = "";
-			settings.anzeige.spielplan = "ja";
-			settings.anzeige.verwaltung = "ja";
-			
-			settings.design = new Object();
-			settings.design.tableDesign = new Object();
-			settings.design.tableDesign.backgroundColorHeader = "#030094";
-			settings.design.tableDesign.textColorHeader = "#ffffff";
-			settings.design.tableDesign.backgroundColor = "#ffffff";
-			settings.design.tableDesign.textColor = "#000000";
-			settings.design.tableDesign.tableStriped = true;
-			settings.design.tableDesign.stripedColor = "#cccccc";
-			settings.design.tableDesign.captionColor = "#000000";
-			settings.design.tableDesign.highlightColor = "#9ca0ff";
-			settings.design.tableDesign.tableBordered = false;
-			
-			settings.liga = new Object();
-			settings.liga.leagues = new Array();
-			settings.liga.favoritLeague = new Object();
-			
-			userFactory.addBenutzer("admin", "passwort", settings);
+			$scope.firstStart = true;
+			$scope.willkommen = true;
 		}
 		
 		
@@ -122,20 +96,40 @@ angular.module('tableModule', [])
 		}
 	};
 	
-	$scope.loginBenutzer = function(name, passwort) {
+	$scope.checkLogin = function() {
 		
-		if(userFactory.getBenutzer(name) === null){
-			$scope.addBenutzer(name, passwort);
-			$scope.loginBenutzer(name, passwort);
-			//$scope.errorHeader = "Benutzer mit angegebenem Kennwort unbekannt ";
+		errorHeader = ''
+		if($scope.willkommen){
+			$scope.firstStart = true;
 		}
 		else{
-			activUser.user = userFactory.getBenutzer(name);
-			activUser.isLogin = true;
-			$scope.benutzer = activUser.user;
-			$scope.isLogin = activUser.isLogin;
-			$scope.initTableControllerVars();
+			$scope.showLogin = !$scope.showLogin; 
 		}
+		
+	};
+	
+	$scope.loginBenutzer = function(name, passwort) {
+		
+		$scope.errorHeader = "";
+		
+		var benutzer = userFactory.getBenutzer(name);
+		
+		if(benutzer != null){
+			if(passwort == benutzer.passwort){
+				activUser.user = userFactory.getBenutzer(name);
+				activUser.isLogin = true;
+				$scope.benutzer = activUser.user;
+				$scope.isLogin = activUser.isLogin;
+				$scope.initTableControllerVars();
+			}
+			else{
+				$scope.errorHeader = "Kennwort falsch";
+			}
+		}
+		else{
+			$scope.errorHeader = "Keinen Benutzer unter diesen Namen vorhanden";
+		}
+
 	};
 	
 	$scope.logoutBenutzer = function() {
@@ -145,11 +139,105 @@ angular.module('tableModule', [])
 		$scope.initTableControllerVars();
 	};
 	
-	$scope.addBenutzer = function(name, passwort) {
+	$scope.registiereBenutzer = function(benutzer) {
+		if(!$scope.inVerwendung && $scope.registration.benutzername && !$scope.isIncorrect && $scope.isGleich){	
+			$scope.registieren = false;
+			var settings = angular.copy(userFactory.getBenutzer('admin').settings);
+			
+			userFactory.addBenutzer(benutzer.benutzername, benutzer.passwort, settings);
+			
+			$scope.loginBenutzer(benutzer.benutzername, benutzer.passwort);
+		}
+	}
+	
+	$scope.registiereAdminAccount = function(passwort) {
+
+		if(!$scope.isIncorrect && $scope.isGleich){	
 		
-		var settings = angular.copy(userFactory.getBenutzer('admin').settings);
+			$scope.willkommen = false;
+			
+			var settings = new Object();
+			
+			settings.anzeige = new Object();
+			settings.anzeige.designauswahl = new Object();
+			settings.anzeige.designauswahl.firstdesign = true;
+			settings.anzeige.designauswahl.seconddesign = true;
+			settings.anzeige.standardDesign = "1";
+			settings.anzeige.favoritVerein = "";
+			settings.anzeige.spielplan = "ja";
+			settings.anzeige.verwaltung = "ja";
+			
+			settings.design = new Object();
+			settings.design.tableDesign = new Object();
+			settings.design.tableDesign.backgroundColorHeader = "#030094";
+			settings.design.tableDesign.textColorHeader = "#ffffff";
+			settings.design.tableDesign.backgroundColor = "#ffffff";
+			settings.design.tableDesign.textColor = "#000000";
+			settings.design.tableDesign.tableStriped = true;
+			settings.design.tableDesign.stripedColor = "#cccccc";
+			settings.design.tableDesign.captionColor = "#000000";
+			settings.design.tableDesign.highlightColor = "#9ca0ff";
+			settings.design.tableDesign.tableBordered = false;
+			
+			settings.liga = new Object();
+			settings.liga.leagues = new Array();
+			settings.liga.favoritLeague = new Object();
+			
+			userFactory.addBenutzer("admin", passwort, settings);
+			$scope.loginBenutzer("admin", passwort);
+			
+			$scope.registration = new Object();
+		}
+	}
+	
+	$scope.showRegistration = function() {
+		$scope.registieren = true;
+		$scope.inVerwendung = false;
+		$scope.isIncorrect = true;
+		$scope.isGleich = false;
+		$scope.registration = new Object();
+		$scope.allBenutzer = userFactory.getAllBenutzer();
 		
-		userFactory.addBenutzer(name, passwort, settings);
+		if(isEmpty($scope.registrationShown) || $scope.registrationShown == false){
+			$scope.registrationShown = true;
+			
+		}
+		else{
+			$scope.registrationShown = false;
+		}
+	};
+	
+	$scope.checkBenutzer = function(benutzer) {
+		$scope.inVerwendung = false;
+		var i=0;
+		while(i<$scope.allBenutzer.length && !$scope.inVerwendung){
+			if(benutzer.toLowerCase() == $scope.allBenutzer[i].name.toLowerCase()){
+				$scope.inVerwendung = true;
+			}
+			i++;
+		}
+	};
+	
+	$scope.checkPasswort = function(passwort) {
+		$scope.isIncorrect = false;
+		
+		if(passwort.length < 6){
+			$scope.isIncorrect = true;
+			$scope.fehlerText = "Passwort muss min. 6-stellig sein";
+		}
+		else if(!(/\d/.test(passwort))){
+			$scope.isIncorrect = true;
+			$scope.fehlerText = "Passwort muss min. eine Zahl enthalten";
+		}
+	};
+	
+	$scope.checkPasswortBst = function(passwort, passwortbst) {
+		if(passwort == passwortbst){
+			$scope.isGleich = true;
+		}
+		else{
+			$scope.isGleich = false;
+		}
 	};
 	
     $scope.isNumber = function (value) {
@@ -297,7 +385,14 @@ angular.module('tableModule', [])
   	  	return null;
     };
     
+    var findAllBenutzer = function () {
+    	return benutzerListe;
+    }
+    
     return {
+      getAllBenutzer: function () {
+    	return findAllBenutzer();  
+      },
       getBenutzer: function (name) {
         return findByName(name);
       },
