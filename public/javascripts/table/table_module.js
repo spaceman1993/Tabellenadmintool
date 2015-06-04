@@ -47,7 +47,7 @@ angular.module('tableModule', [])
 /**
  * Controller für Tabellen (beide Designs)
  */
-.controller("TableCtrl", ['$scope', '$http', '$filter', 'dataService', 'userFactory', 'activUser', function($scope, $http, $filter, dataService, userFactory, activUser) {
+.controller("TableCtrl", ['$scope', '$http', '$filter', '$timeout', 'benutzerFactory', 'activUser', function($scope, $http, $filter, $timeout, benutzerFactory, activUser) {
 	
 	var isEmpty = function (obj) {
 	    for(var key in obj) {
@@ -60,8 +60,8 @@ angular.module('tableModule', [])
 	$scope.initTableControllerVars = function() {
 		
 		$scope.mannschaften = "";
-		
-		if(userFactory.getBenutzer("admin") === null){
+
+		if(getLoginUser("admin") === null){
 			$scope.firstStart = true;
 			$scope.willkommen = true;
 		}
@@ -72,7 +72,7 @@ angular.module('tableModule', [])
 			$scope.benutzer = activUser.user;
 		}
 		else{
-			activUser.user = userFactory.getBenutzer("admin");
+			activUser.user = getLoginUser("admin");
 			$scope.benutzer = activUser.user;
 		}
 		
@@ -112,11 +112,11 @@ angular.module('tableModule', [])
 		
 		$scope.errorHeader = "";
 		
-		var benutzer = userFactory.getBenutzer(name);
+		var benutzer = getLoginUser(name);
 		
 		if(benutzer != null){
 			if(passwort == benutzer.passwort){
-				activUser.user = userFactory.getBenutzer(name);
+				activUser.user = benutzer;
 				activUser.isLogin = true;
 				$scope.benutzer = activUser.user;
 				$scope.isLogin = activUser.isLogin;
@@ -142,9 +142,11 @@ angular.module('tableModule', [])
 	$scope.registiereBenutzer = function(benutzer) {
 		if(!$scope.inVerwendung && $scope.registration.benutzername && !$scope.isIncorrect && $scope.isGleich){	
 			$scope.registieren = false;
-			var settings = angular.copy(userFactory.getBenutzer('admin').settings);
+			var settings = angular.copy(getLoginUser('admin').settings);
 			
-			userFactory.addBenutzer(benutzer.benutzername, benutzer.passwort, settings);
+			benutzer.settings = settings;
+			
+			addBenutzer(benutzer);
 			
 			$scope.loginBenutzer(benutzer.benutzername, benutzer.passwort);
 		}
@@ -155,6 +157,10 @@ angular.module('tableModule', [])
 		if(!$scope.isIncorrect && $scope.isGleich){	
 		
 			$scope.willkommen = false;
+			
+			var benutzer = new Object();
+			benutzer.benutzername = "admin";
+			benutzer.passwort = passwort;
 			
 			var settings = new Object();
 			
@@ -183,12 +189,35 @@ angular.module('tableModule', [])
 			settings.liga.leagues = new Array();
 			settings.liga.favoritLeague = new Object();
 			
-			userFactory.addBenutzer("admin", passwort, settings);
+			benutzer.settings = settings;
+			
+			addBenutzer(benutzer);
 			$scope.loginBenutzer("admin", passwort);
 			
 			$scope.registration = new Object();
 		}
 	}
+	
+	var getLoginUser = function(name){
+		var json = {"name" : name};
+	    
+		benutzerFactory.getUserByName(json ,function(data){
+			return data;
+		});
+	};
+	
+	var getAllBenutzer = function(){
+		benutzerFactory.getAllUser(function(data){
+			return data;
+		});
+	};
+	
+	var addBenutzer = function (benutzer) {
+		
+		var createJson = {"name" : benutzer.benutzername, "passwort" : benutzer.passwort, "einstellung" : benutzer.settings, "crypt" : "crypt"};
+		benutzerFactory.create(createJson ,function(data){});
+		
+	};
 	
 	$scope.showRegistration = function() {
 		$scope.registieren = true;
@@ -196,7 +225,9 @@ angular.module('tableModule', [])
 		$scope.isIncorrect = true;
 		$scope.isGleich = false;
 		$scope.registration = new Object();
-		$scope.allBenutzer = userFactory.getAllBenutzer();
+		$scope.allBenutzer = getAllBenutzer();
+		
+		
 		
 		if(isEmpty($scope.registrationShown) || $scope.registrationShown == false){
 			$scope.registrationShown = true;
@@ -366,39 +397,4 @@ angular.module('tableModule', [])
     });
   };
 	
-}])
-
-
-
-/**
- * Pseudo-Datenbank
- */
-.factory("userFactory", function () {
-    var benutzerListe = [];
-    
-    var findByName = function (name) {
-  	  for (var i = 0; i < benutzerListe.length; i++) {
-  	    if (benutzerListe[i].name === name) {
-  	      return benutzerListe[i];
-  	    }
-  	  }
-  	  	return null;
-    };
-    
-    var findAllBenutzer = function () {
-    	return benutzerListe;
-    }
-    
-    return {
-      getAllBenutzer: function () {
-    	return findAllBenutzer();  
-      },
-      getBenutzer: function (name) {
-        return findByName(name);
-      },
-      addBenutzer: function (name, passwort, settings) {
-        benutzerListe.push({name:name, passwort:passwort, settings:settings});
-      }
-    };
-    
-});
+}]);

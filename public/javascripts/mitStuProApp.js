@@ -62,23 +62,6 @@ app.run(['$state', '$rootScope', '$location', 'activUser', function($state, $roo
 }]);
 
 
-/**
- * Speichert Daten zwischen den Controllern/Bereichen
- */
-app.service('dataService', function() {
-	  // private variable
-var _leagues = new Array();
-var _activeLeagues = new Array();
-var _jugenden = new Array();
-var _tableDesign = new Object();
-
-this.leagues = _leagues;
-this.activeLeagues = _activeLeagues;
-this.jugenden = _jugenden;
-this.tableDesign = _tableDesign;
-});
-
-
 app.factory("benutzerFactory",[ '$http', function ($http) {
 	
 
