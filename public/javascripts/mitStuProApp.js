@@ -81,17 +81,8 @@ this.tableDesign = _tableDesign;
 
 app.factory("benutzerFactory",[ '$http', function ($http) {
 	
-$http({
-	headers: {
-		'Content-Type': 'application/x-www-form-urlencoded'
-	}
-})
-.then(function(result) {
-	console.log(result);
-}, function(error) {
-console.log(error);
-});
-	
+
+//	
 //name=Admin2&passwort=123&einstellung=test&crypt=abc123
 	
 var o = {
@@ -109,13 +100,16 @@ o.getAllUser = function(callback){
 	});
 };
 	
-o.getUserByName = function(user, callback){
-	$http.get('/benutzer/byName', user)
+o.getUserByName = function(name, callback){
+	console.log("Get User By Name + name = " + name);
+	$http.post('/benutzer/byName', name)
 	.success(function(data){
+		console.log("success");
 		o.user = data;
 		callback(o.user);
 	})
 	.error(function(error){
+		console.log("error");
 		o.user = null;
 		callback(null);
 	});
