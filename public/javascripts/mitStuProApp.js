@@ -22,17 +22,12 @@ app.config(['$stateProvider','$urlRouterProvider',function($stateProvider, $urlR
 	
 	$stateProvider
     .state('table', {
-    url: '/table',
-    views: {
-    	'main': {
-    		templateUrl: 'templates/table/table.html',
-    		controller: 'TableCtrl'
-    	  },
-	resolve: {
-		AllUser: ['$stateParams', 'benutzerFactory', function($stateParams, benutzerFactory) {
-			return benutzerFactory.getAllUsers();
-		}]
-	}
+      url: '/table',
+      views: {
+    	  'main': {
+    		   templateUrl: 'templates/table/table.html',
+    		   controller: 'TableCtrl'
+    	  }
       }
      
     });
@@ -76,13 +71,18 @@ app.factory("benutzerFactory",[ '$http', function ($http) {
 var o = {
 	user: {}
 };
-o.getAllUser = function(){
-	return $http.get('/benutzer/alle')
+o.getAllUser = function(callback){
+	$http.get('/benutzer/alle')
 	.success(function(data){
-		return data;
+		o.user = data;
+		callback(o.user);
+	})
+	.error(function(error){
+		o.user = null;
+		callback(null);
 	});
 };
-
+	
 o.getUserByName = function(name, callback){
 	console.log("Get User By Name + name = " + name);
 	$http.post('/benutzer/byName', name)

@@ -47,13 +47,7 @@ angular.module('tableModule', [])
 /**
  * Controller für Tabellen (beide Designs)
  */
-.controller("TableCtrl", ['$scope', '$http', '$filter', '$timeout', 'benutzerFactory', 'activUser', 'AllUser', function($scope, $http, $filter, $timeout, benutzerFactory, activUser, AllUser) {
-	
-	$scope.userList = AlleUser.data;
-	
-	console.log()
-	
-	
+.controller("TableCtrl", ['$scope', '$q', '$http', '$filter', '$timeout', 'benutzerFactory', 'activUser', function($scope, $q, $http, $filter, $timeout, benutzerFactory, activUser) {
 	
 	var isEmpty = function (obj) {
 	    for(var key in obj) {
@@ -67,39 +61,43 @@ angular.module('tableModule', [])
 		
 		$scope.mannschaften = "";
 
-		if(getLoginUser("admin") === null){
-			$scope.firstStart = true;
-			$scope.willkommen = true;
-		}
-		
-		
-		if(!isEmpty(activUser.user)){ // oder if activUser.isLogin === true;
-			$scope.isLogin = activUser.isLogin;
-			$scope.benutzer = activUser.user;
-		}
-		else{
-			activUser.user = getLoginUser("admin");
-			$scope.benutzer = activUser.user;
-		}
-		
-		if(!isEmpty($scope.benutzer)){
-			$scope.nickname = $scope.benutzer.name;
+		getLoginUser("admin").then(function(data) {
+			if(data === null){
+				$scope.firstStart = true;
+				$scope.willkommen = true;
+			}
 			
-			$scope.firstDesign = $scope.benutzer.settings.anzeige.designauswahl.firstdesign;
-			$scope.secondDesign = $scope.benutzer.settings.anzeige.designauswahl.seconddesign;
-			$scope.favoritVerein = $scope.benutzer.settings.anzeige.favoritVerein;
-			$scope.spielplan = $scope.benutzer.settings.anzeige.spielplan;
-			$scope.verwaltung = $scope.benutzer.settings.anzeige.verwaltung;
+			if(!isEmpty(activUser.user)){ // oder if activUser.isLogin === true;
+				$scope.isLogin = activUser.isLogin;
+				$scope.benutzer = activUser.user;
+			}
+			else if(data !== null){
+				activUser.user = data;
+				$scope.benutzer = activUser.user;
+			}
 			
-			$scope.design = $scope.benutzer.settings.anzeige.standardDesign;
-			$scope.tableDesign = $scope.benutzer.settings.design.tableDesign;
-			$scope.activeLeagues = $filter('filter')($scope.benutzer.settings.liga.leagues, {isActiv: 'true'});
-			$scope.favoritLeague = $scope.benutzer.settings.liga.favoritLeague;
-		}
+			if(!isEmpty($scope.benutzer)){
+				$scope.nickname = $scope.benutzer.name;
+				
+				$scope.firstDesign = $scope.benutzer.settings.anzeige.designauswahl.firstdesign;
+				$scope.secondDesign = $scope.benutzer.settings.anzeige.designauswahl.seconddesign;
+				$scope.favoritVerein = $scope.benutzer.settings.anzeige.favoritVerein;
+				$scope.spielplan = $scope.benutzer.settings.anzeige.spielplan;
+				$scope.verwaltung = $scope.benutzer.settings.anzeige.verwaltung;
+				
+				$scope.design = $scope.benutzer.settings.anzeige.standardDesign;
+				$scope.tableDesign = $scope.benutzer.settings.design.tableDesign;
+				$scope.activeLeagues = $filter('filter')($scope.benutzer.settings.liga.leagues, {isActiv: 'true'});
+				$scope.favoritLeague = $scope.benutzer.settings.liga.favoritLeague;
+			}
+			
+			if(!isEmpty($scope.favoritLeague)){
+				$scope.getTableForLeague($scope.favoritLeague);
+			}
+			
+			
+		});
 		
-		if(!isEmpty($scope.favoritLeague)){
-			$scope.getTableForLeague($scope.favoritLeague);
-		}
 	};
 	
 	$scope.checkLogin = function() {
@@ -148,13 +146,18 @@ angular.module('tableModule', [])
 	$scope.registiereBenutzer = function(benutzer) {
 		if(!$scope.inVerwendung && $scope.registration.benutzername && !$scope.isIncorrect && $scope.isGleich){	
 			$scope.registieren = false;
-			var settings = angular.copy(getLoginUser('admin').settings);
 			
-			benutzer.settings = settings;
+			getLoginUser("admin").then(function(data) {
+				var settings = angular.copy(data.settings);
+				
+				benutzer.settings = settings;
+				
+				addBenutzer(benutzer);
+				
+				$scope.loginBenutzer(benutzer.benutzername, benutzer.passwort);
+			})
 			
-			addBenutzer(benutzer);
 			
-			$scope.loginBenutzer(benutzer.benutzername, benutzer.passwort);
 		}
 	}
 	
@@ -207,13 +210,26 @@ angular.module('tableModule', [])
 	var getLoginUser = function(name){
 		var json = {"name" : name};
 	    
+		var deferred = $q.defer();
 		benutzerFactory.getUserByName(json ,function(data){
-			return data;
+		   
+			deferred.resolve(data);
+	
 		});
+		return deferred.promise;
+		
+//		return benutzerFactory.getUserByName(json ,function(data){
+//			console.log("TEST");
+//			console.log(data);
+//			return data;
+//		});
+		
 	};
 	
 	var getAllBenutzer = function(){
 		benutzerFactory.getAllUser(function(data){
+			console.log("TEST");
+			console.log(data);
 			return data;
 		});
 	};
