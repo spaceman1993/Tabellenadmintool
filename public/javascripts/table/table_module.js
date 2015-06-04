@@ -47,7 +47,13 @@ angular.module('tableModule', [])
 /**
  * Controller für Tabellen (beide Designs)
  */
-.controller("TableCtrl", ['$scope', '$http', '$filter', '$timeout', 'benutzerFactory', 'activUser', function($scope, $http, $filter, $timeout, benutzerFactory, activUser) {
+.controller("TableCtrl", ['$scope', '$http', '$filter', '$timeout', 'benutzerFactory', 'activUser', 'AllUser', function($scope, $http, $filter, $timeout, benutzerFactory, activUser, AllUser) {
+	
+	$scope.userList = AlleUser.data;
+	
+	console.log()
+	
+	
 	
 	var isEmpty = function (obj) {
 	    for(var key in obj) {
