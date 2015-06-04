@@ -340,5 +340,4 @@ angular.module('tableModule', [])
         benutzerListe.push({name:name, passwort:passwort, settings:settings});
       }
     };
-    
 });
