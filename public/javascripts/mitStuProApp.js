@@ -73,7 +73,7 @@ o.getAllUser = function(callback){
 	console.log("getAllUser");
 	$http.get('/benutzer/alle')
 	.success(function(data){
-		console.log("success getAllUser = " + data);
+		console.log("success getAllUser = " + data.name);
 		o.user = data;
 		callback(o.user);
 	})
@@ -85,10 +85,10 @@ o.getAllUser = function(callback){
 };
 	
 o.getUserByName = function(name, callback){
-	console.log("getUserByName + name = " + name);
+	console.log("getUserByName + name = " + name.name);
 	$http.post('/benutzer/byName', name)
 	.success(function(data){
-		console.log("success getUserByName =" +data);
+		console.log("success getUserByName =" +data.name);
 		o.user = data;
 		callback(o.user);
 	})
@@ -106,11 +106,11 @@ o.getUserById = function(userId){
 };
 
 o.updateUserByName = function(name, settings, callback){
-	console.log("updateUserByName + name = " + name);
+	console.log("updateUserByName + name = " + name.name);
 	console.log("updateUserByName + settings = " + settings);
 	$http.put('/Benutzer/updateSettings/byName', name , settings)
 	.success(function(data){
-		console.log("success updateUserByName =" +data);
+		console.log("success updateUserByName =" +data.name);
 		o.user = data;
 		callback(o.user);
 	})
@@ -123,10 +123,10 @@ o.updateUserByName = function(name, settings, callback){
 
 
 o.create = function(user, callback){
-	console.log("create + Benutzer = " + user);
+	console.log("create + Benutzer = " + user.name);
 	$http.post('/benutzer/save', user)
 	.success(function(data){
-		console.log("success create =" +data);
+		console.log("success create =" +data.name);
 	  	o.user = data;
 	  	callback(data);
   })
@@ -137,10 +137,10 @@ o.create = function(user, callback){
 };
 
 o.deleteUserByName = function(name, callback){
-	console.log("deleteUserByName + name = " + name);
+	console.log("deleteUserByName + name = " + name.name);
 	$http.post('/benutzer/byName', name)
 	.success(function(data){
-		console.log("success deleteUserByName =" +data);
+		console.log("success deleteUserByName =" +data.name);
 		o.user = data;
 		callback(o.user);
 	})
