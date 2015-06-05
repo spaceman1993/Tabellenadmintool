@@ -17,7 +17,6 @@
 			</span>
 			
 			<!-- Login -->
-			<span ng-show="errorHeader"> {{errorHeader}} </span>
 			<span ng-show="showLogin" class="pull-right">
 				<div class="space" style="margin-top:-8px; margin-bottom:-8px;">
 					<!-- Name -->
@@ -30,11 +29,12 @@
 	 					<i class="glyphicon glyphicon-lock"></i>
 	 					<input type="password" ng-model="passwordLogin" class="form-control input-sm" placeholder="Passwort" />
 					</div>
-				</div>
-				<!-- Submit -->
-				<div class="space" style="margin-top:-5px; margin-bottom:-5px;">
+					<!-- Submit -->
+				<div class="space" style="margin-top:-5px; margin-bottom:5px; display: inline-block;">
 					<a ng-click="showLogin = false; loginBenutzer(loginName, passwordLogin)"><span class="glyphicon glyphicon-ok-sign bigSizeGlyph green"></span></a>
 				</div>
+				</div>
+				
 			</span>
 			
 			<!-- Logout -->
@@ -45,6 +45,7 @@
 				<a class="space" ng-hide="isLogin || showLogin" href="" ng-click="checkLogin()"><span class="glyphicon glyphicon-log-in"></span> Login</a>
 				<a class="space" ng-show="verwaltung == 'ja' && !isLogin" href="" ng-click="showRegistration()"><span class="glyphicon glyphicon-edit"></span> Registrieren</a>
 			</span>
+			<span ng-show="errorHeader" class="pull-right"> {{errorHeader}} </span>
 		</div>
 		<!-- ENDE Design-Auswahl & Login -->
 
