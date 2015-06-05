@@ -64,35 +64,36 @@ app.run(['$state', '$rootScope', '$location', 'activUser', function($state, $roo
 
 app.factory("benutzerFactory",[ '$http', function ($http) {
 	
-
-//	
-//name=Admin2&passwort=123&einstellung=test&crypt=abc123
+	// Zugriff auf die Routes
 	
 var o = {
 	user: {}
 };
 o.getAllUser = function(callback){
+	console.log("getAllUser");
 	$http.get('/benutzer/alle')
 	.success(function(data){
+		console.log("success getAllUser = " + data);
 		o.user = data;
 		callback(o.user);
 	})
 	.error(function(error){
+		console.log("error getAllUser");
 		o.user = null;
 		callback(null);
 	});
 };
 	
 o.getUserByName = function(name, callback){
-	console.log("Get User By Name + name = " + name);
+	console.log("getUserByName + name = " + name);
 	$http.post('/benutzer/byName', name)
 	.success(function(data){
-		console.log("success");
+		console.log("success getUserByName =" +data);
 		o.user = data;
 		callback(o.user);
 	})
 	.error(function(error){
-		console.log("error");
+		console.log("error getUserByName");
 		o.user = null;
 		callback(null);
 	});
@@ -104,27 +105,51 @@ o.getUserById = function(userId){
 	});
 };
 
+o.updateUserByName = function(name, settings, callback){
+	console.log("updateUserByName + name = " + name);
+	console.log("updateUserByName + settings = " + settings);
+	$http.put('/Benutzer/updateSettings/byName', name , settings)
+	.success(function(data){
+		console.log("success updateUserByName =" +data);
+		o.user = data;
+		callback(o.user);
+	})
+	.error(function(error){
+		console.log("error updateUserByName");
+		o.user = null;
+		callback(null);
+	});
+};
+
+
 o.create = function(user, callback){
-  $http.post('/benutzer/save', user)
-  .success(function(data){
-  	o.user = data;
-  	callback(data);
+	console.log("create + Benutzer = " + user);
+	$http.post('/benutzer/save', user)
+	.success(function(data){
+		console.log("success create =" +data);
+	  	o.user = data;
+	  	callback(data);
   })
 	.error(function(error){
+		console.log("error create");
 
 	});
 };
 
-//o.update = function(user, callback){
-//  return $http.put('/benutzer' + user._id, user)
-//  .success(function(data){
-//      o.user = data;
-//      callback(o.user);
-//  })
-//	.error(function(error){
-//		callback(null);
-//  });
-//};
+o.deleteUserByName = function(name, callback){
+	console.log("deleteUserByName + name = " + name);
+	$http.post('/benutzer/byName', name)
+	.success(function(data){
+		console.log("success deleteUserByName =" +data);
+		o.user = data;
+		callback(o.user);
+	})
+	.error(function(error){
+		console.log("error deleteUserByName");
+		o.user = null;
+		callback(null);
+	});
+};
 
 return o;
     
