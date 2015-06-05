@@ -1,10 +1,16 @@
 var express = require('express');
 var router = express.Router();
-
 var mongoose = require('mongoose');
 var Benutzer = mongoose.model('Benutzer');
 
-//req.header("Content-Type", "application/x-www-form-urlencoded");
+router.use(function(req, res, next) {
+    console.log('Route zugriff!');
+    next();
+});
+
+router.get('/', function(req, res) {
+    res.json({ message: 'hooray! welcome to our api!' });   
+});
 
 router.get('/benutzer/alle', function(req, res, next) {
 	Benutzer.find()
@@ -14,6 +20,7 @@ router.get('/benutzer/alle', function(req, res, next) {
 			}
 
 			res.json(result);
+			return next();
 	});
 });
 
@@ -31,22 +38,14 @@ router.get('/benutzer/byID/:id', function(req, res, next) {
 	});
 });
 
-router.post('/benutzer/byName', function(req, res, next){
-	var newBenutzer = new Benutzer({
-		name : req.body.name,
-		passwort : req.body.passwort,
-		einstellung : req.body.einstellung,
-		crypt : req.body.crypt,
-		});
-		newBenutzer.save( function( err, result, count ){
-	});
-	
+router.post('/benutzer/byName', function(req, res, next){	
 	var query = Benutzer.findOne({name: req.body.name});
 	query.exec(function(err, result){
 		if(err){
 			return	next(err);
 		}
 		res.json(result);
+		return next();
 	});
 });
 
@@ -56,14 +55,37 @@ router.post('/benutzer/save', function(req, res) {
 		passwort : req.body.passwort,
 		einstellung : req.body.einstellung,
 		crypt : req.body.crypt,
-		});
-		newBenutzer.save( function( err, result, count ){
+	});
+	newBenutzer.save( function( err, result, count ){
 		res.json(result);
 	});
 });
 
-//router.delete('/benutzer/delete/byName', function(req, res, next) {
+router.put('/Benutzer/updateSettings/byName', function(req, res, next){
+	var query = Benutzer.findOne({name: req.body.name});
+	query.exec(function(err, result){
+		if(err){
+			return	next(err);
+		}
+		result.einstellung = req.body.einstellung;
+		result.save( function( err, result, count ){
+			res.json(result);
+			return next();
+		});
+	});
+});
 
-//});
+
+router.delete('/benutzer/delete/byName', function(req, res, next) {
+	Benutzer.remove({
+        name: req.body.name
+    }, function(err, bear) {
+        if (err){
+        	res.send(err);        	
+        }
+        res.json({ message: 'Successfully deleted', "name" : req.body.name });
+    });
+
+});
 
 module.exports = router;
