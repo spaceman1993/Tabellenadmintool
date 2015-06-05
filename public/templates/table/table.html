@@ -1,70 +1,86 @@
+<!-- Hauptseite, enthält:
+- Kopfzeile mit Login/Registration
+- Navigationen & Platzhalter für die Tabellen
+- Fußzeile
+-->
+
 <div ng-init="initTableControllerVars()">
-
 	<div class="panel panel-default">
-		
+	
+		<!-- Design-Auswahl & Login -->
 		<div class="panel-heading clearfix">
-			<div>
-				<a ng-show="firstDesign && secondDesign" href="" ng-click="design = 1"><span class="glyphicon glyphicon-list"></span> 1.Design</a>
-				<a ng-show="firstDesign && secondDesign" class="space" href="" ng-click="design = 2"><span class="glyphicon glyphicon-th"></span> 2.Design</a>
-
-
-				<div ng-show="showLogin" class="pull-right space" style="margin-top:-5px; margin-bottom:-5px;">
+		
+			<!-- Design-Auswahl -->
+			<span ng-show="isLogin">
+				<a href="" ng-click="design = 1"><span class="glyphicon glyphicon-list"></span> 1.Design</a>
+				<a href="" ng-click="design = 2" class="space"><span class="glyphicon glyphicon-th"></span> 2.Design</a>
+			</span>
+			
+			<!-- Login -->
+			<span ng-show="errorHeader"> {{errorHeader}} </span>
+			<span ng-show="showLogin" class="pull-right">
+				<div class="space" style="margin-top:-8px; margin-bottom:-8px;">
+					<!-- Name -->
+					<div class="inner-addon left-addon" style="width:120px; display: inline-block;">
+						<i class="glyphicon glyphicon-user"></i>
+						<input type="text" ng-model="loginName" class="form-control input-sm" placeholder="Benutzer" />
+					</div>
+					<!-- Passwort -->
+					<div class="inner-addon left-addon" style="width:120px; display: inline-block;">
+	 					<i class="glyphicon glyphicon-lock"></i>
+	 					<input type="password" ng-model="passwordLogin" class="form-control input-sm" placeholder="Passwort" />
+					</div>
+				</div>
+				<!-- Submit -->
+				<div class="space" style="margin-top:-5px; margin-bottom:-5px;">
 					<a ng-click="showLogin = false; loginBenutzer(loginName, passwordLogin)"><span class="glyphicon glyphicon-ok-sign bigSizeGlyph green"></span></a>
 				</div>
-
-				<div ng-show="showLogin" class="pull-right space" style="margin-top:-8px; margin-bottom:-8px;">
-					<div class="inner-addon left-addon" style="width:120px; display: inline-block;">
-   						<i class="glyphicon glyphicon-user"></i>
-   						<input type="text" ng-model="loginName" class="form-control input-sm" placeholder="Benutzer" />
-					</div>
-
-					<div class="inner-addon left-addon" style="width:120px; display: inline-block;">
-   						<i class="glyphicon glyphicon-lock"></i>
-   						<input type="password" ng-model="passwordLogin" class="form-control input-sm" placeholder="Passwort" />
-					</div>
-				</div>
-
-				<a class="pull-right space" ng-show="isLogin" href="" ng-click="logoutBenutzer()"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
-				<span class="pull-right" ng-show="isLogin"> <b>{{nickname}}</b> </span>
-
-				<a class="pull-right space" ng-hide="isLogin || showLogin" href="" ng-click="checkLogin()"><span class="glyphicon glyphicon-log-in"></span> Login</a>
-				<a class="pull-right space" ng-show="verwaltung == 'ja' && !isLogin" href="" ng-click="showRegistration()"><span class="glyphicon glyphicon-edit"></span> Registrieren</a>
-
-				<span class="pull-right" ng-show="errorHeader"> {{errorHeader}} </span>
-
-			</div>
+			</span>
+			
+			<!-- Logout -->
+			<span class="pull-right">
+				<a class="space" ng-show="isLogin" href="" ng-click="logoutBenutzer()"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+				<span ng-show="isLogin"> <b>{{nickname}}</b> </span>
+	
+				<a class="space" ng-hide="isLogin || showLogin" href="" ng-click="checkLogin()"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+				<a class="space" ng-show="verwaltung == 'ja' && !isLogin" href="" ng-click="showRegistration()"><span class="glyphicon glyphicon-edit"></span> Registrieren</a>
+			</span>
 		</div>
-		
+		<!-- ENDE Design-Auswahl & Login -->
+
 		<!-- Menü für erstes Design -->
 		<div ng-show="design == 1" class="panel-heading-nostyle">
 			<div class="btn-group" style="width:100%">
+				
+				<!-- Männlich -->
 				<div class="btn-group" style="width:50%">
 					<button class="btn btn-primary btn-lg btn-block  active dropdown-toggle " data-toggle="dropdown"> 
 						M&auml;nnlich
 					</button>
 					<ul class="dropdown-menu" role="menu">
-    					<li ng-repeat="league in activeLeagues | filter: { gender: 'M&auml;nnlich' }:true">
+						<li ng-repeat="league in activeLeagues | filter: { gender: 'M&auml;nnlich' }:true">
 							<a ng-click="getTableForLeague(league)">{{getNameForLeague(league)}} ({{league.name}})</a>
 						</li>
-  					</ul>
+					</ul>
 				</div>
 
+				<!-- Weiblich -->
 				<div class="btn-group " style="width:50%">
 					<button class="btn btn-danger btn-lg btn-block active dropdown-toggle " data-toggle="dropdown"> 
 						Weiblich
 					</button>
 					<ul class="dropdown-menu" role="menu">
-    					<li ng-repeat="league in activeLeagues | filter: { gender: 'Weiblich' }:true">
+	  					<li ng-repeat="league in activeLeagues | filter: { gender: 'Weiblich' }:true">
 							<a ng-click="getTableForLeague(league)">{{getNameForLeague(league)}} ({{league.name}})</a>
 						</li>
-  					</ul>
+					</ul>
 				</div>
 			</div>					
 		</div>
 		<!-- ENDE Menü für erstes Design -->	
-		
+
 		<div class="panel-body" ng-style="design == 1 && {'top':'105px'} || design == 2 && {'top':'38px'}">
-		
+
 			<!-- Menü für zweites Design -->
 			<div ng-show="design == 2">
 				<div class="sidebar-Design sticky-note-background">
@@ -77,60 +93,82 @@
 				</div>
 			</div>
 			<!-- ENDE Menü für zweites Design -->
-		
-
+	
+	
 			<!-- Anzeige -->
 			<div ng-class="{'data-Design': design == 2}">
-
+			
 				<!-- Ladebildschirm -->
 				<div class="center-div" ng-show="loading">
 					<img src="images/loading-animation.gif" height="200" width="200">
 				</div>
-				<!-- ENDE Ladebildschirm -->
-
+			
 				<!-- Tabellen -->
 				<div ng-show="mannschaften">
 					<h2>{{leagueName}}</h2>
 					<ligatabelle mannschaften = "mannschaften" favoritverein = "favoritVerein" tabledesign="tableDesign"></ligatabelle>	
 					<spielplantabelle nextgames = "nextGames" tabledesign = "tableDesign"></spielplantabelle>
 				</div>
-				<!-- ENDE Tabellen -->
-
+			
 				<!-- Error-Anzeige -->
-   				<div ng-show="error">
- 							<h3 class="red">Fehler!</h3>
-					<strong>{{error}}</strong>
+				<div ng-show="error">
+					<div class="alert alert-danger" ng-init="alert2 = getAlert(2)">
+						<div class="alert-title">
+							{{alert2.title}}
+						</div>
+						<div class="alert-msg">
+							{{alert2.msg}}
+							<div class="error-code">Code: {{alert2.code}}</div>
+						</div>
+						<div class="alert-img">
+							<img src="{{alert2.img}}" />
+						</div>
+					</div>
 				</div>
-				<!-- ENDE Error-Anzeige -->
-
+			
 				<!-- Placeholder -->
 				<div ng-hide="mannschaften || loading || error">
-					Noch keine Ligen vorhanden
+					<div class="alert alert-info" ng-init="alert1 = getAlert(1)">
+						<div class="alert-title">
+							{{alert1.title}}
+						</div>
+						<div class="alert-msg">
+							{{alert1.msg}}
+							<div class="error-code">Code: {{alert1.code}}</div>
+						</div>
+						<div class="alert-img">
+							<img src="{{alert1.img}}" />
+						</div>
+					</div>
 				</div>
 				<!-- ENDE Placeholder -->
-
-     				</div>
+				
+			</div>
 			<!-- ENDE Anzeige -->
-			
+				
 		</div>
 
-		
 		<div class="panel-footer">	
 			<div>
 				&copy; Copyright by Jan G&uuml;nther, Michael Weber & Ren&eacute; R&ouml;se
-
+		
 				<a ng-show="isLogin" href="#/settings" class="pull-right">
 					<span class="glyphicon glyphicon-wrench"></span> Zu den Einstellungen
 				</a>
 			</div>
 		</div>
-
+		
+		<!-- Registration eines Benutzers -->
 		<modal-dialog show="registrationShown" width="60%" height="460px">
+		  	
 		  	<h2>Registrierung</h2>
 		  	<hr style="margin-top: 0px; margin-bot: 10px;">
 		  	
+		  	<!-- Formular -->
 		  	<div ng-show="registieren">
 				<form role="form">
+				
+					<!-- Benutzername -->
 					<div class="form-group" ng-class="{'has-error': inVerwendung, 'has-success': !inVerwendung && registration.benutzername.length > 0 }">
 						<label for="benutzer" class="control-label">Benutzername:</label>
 						<input type="text" ng-enter="registiereBenutzer(registration)" ng-change="checkBenutzer(registration.benutzername)" ng-model="registration.benutzername" class="form-control" id="benutzer">
@@ -139,6 +177,7 @@
 						<br ng-hide="inVerwendung">
 					</div>
 					
+					<!-- Passwort -->
 					<div class="form-group"  ng-class="{'has-error': isIncorrect, 'has-success': !isIncorrect && registration.passwort.length > 0 }">
 						<label for="pwd" class="control-label">Passwort:</label>
 						<input type="password" ng-enter="registiereBenutzer(registration)" ng-change="checkPasswort(registration.passwort); checkPasswortBst(registration.passwort, registration.passwortbst)" ng-model="registration.passwort" class="form-control" id="pwd">
@@ -147,6 +186,7 @@
 						<br ng-hide="isIncorrect">
 					</div>
 					
+					<!-- Passwort bestätigen -->
 					<div class="form-group" ng-class="{'has-error': !isGleich && registration.passwortbst.length > 0, 'has-success': isGleich && registration.passwortbst.length > 0}">
 						<label for="pwdbst" class="control-label">Passwort bestätigen:</label>
 						<input type="password" ng-enter="registiereBenutzer(registration)" ng-change="checkPasswortBst(registration.passwort, registration.passwortbst)" ng-model="registration.passwortbst" class="form-control" id="pwdbst">
@@ -158,6 +198,7 @@
 					<button type="button" ng-click="registiereBenutzer(registration)" class="btn btn-default" ng-class="{'disabled': inVerwendung || !registration.benutzername || isIncorrect || !isGleich }">Submit</button>
 				</form>
 			</div>
+			<!-- ENDE Formular -->
 			
 			<div ng-hide="registieren">
 				<h3>Herzlichen Dank !</h3>
@@ -173,12 +214,13 @@
 			</div>
 			
 		</modal-dialog>
-		
-		
+		<!-- ENDE Registration eines Benutzers -->
+
+		<!-- Registration des Administrators -->
 		<modal-dialog show="firstStart" width="90%" height="90%">
 			<h2>Tabellenadministrations-Tool</h2>
 			<hr style="margin-top: 0px; margin-bot: 10px;">
-			
+					
 			<div ng-show="willkommen">
 				<p><strong>Herzlich willkommen, </strong></p>
 				<p>wir freuen uns, dass Sie sich für unser Tabellenadministations-Tool entschieden haben. <br/></p>
@@ -188,6 +230,8 @@
 				selbstständig festlegen und haben die Wahl zwischen zwei verschiedenen Anzeigemöglichkeiten. </p>
 				<p>Bevor Sie sich jetzt aber ins Gefecht stürzen, müssen Sie zuerst einmal ein Passwort für Ihren Administator-Account festlegen. </p>
 				<br/>
+				
+				<!-- Passwort -->
 				<div class="form-group"  ng-class="{'has-error': isIncorrect, 'has-success': !isIncorrect && registration.passwort.length > 0 }">
 					<label for="pwd" class="control-label">Passwort:</label>
 					<input type="password" ng-enter="registiereAdminAccount(registration.passwort)" ng-change="checkPasswort(registration.passwort); checkPasswortBst(registration.passwort, registration.passwortbst)" ng-model="registration.passwort" class="form-control" id="pwd">
@@ -196,6 +240,7 @@
 					<br ng-hide="isIncorrect">
 				</div>
 				
+				<!-- Passwort bestätigen -->
 				<div class="form-group" ng-class="{'has-error': !isGleich && registration.passwortbst.length > 0, 'has-success': isGleich}">
 					<label for="pwdbst" class="control-label">Passwort bestätigen:</label>
 					<input type="password" ng-enter="registiereAdminAccount(registration.passwort)" ng-change="checkPasswortBst(registration.passwort, registration.passwortbst)" ng-model="registration.passwortbst" class="form-control" id="pwdbst">
@@ -220,5 +265,7 @@
 				<h5>Sie sind nun angemeldet!!!</h5>
 			</div>
 		</modal-dialog>
+		<!-- ENDE Registration des Administrators -->
 
+	</div>
 </div>

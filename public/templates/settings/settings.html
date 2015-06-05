@@ -1,3 +1,9 @@
+<!-- Einstellungen, enthält:
+- Navigation für die möglichen Einstellungsseiten
+- Platzhalter für die Einstellungsseiten
+- Fußzeile
+-->
+
 <div class="panel panel-default" ng-init="initSettingsController()">
 
 	<!-- Kopflastige Navigationsleiste zur Auswahl des Managers -->
@@ -8,14 +14,15 @@
 			<button style="width:33.3%" class="btn btn-lg btn btn-danger" ng-click="show = 'ligaManager'; ligaSettings = false"> Liga-Manager </button>
 		</div>
 	</div>
-	<!-- ENDE Kopflastige Navigationsleiste zur Auswahl des Managers -->
 
+	<!-- Platzhalter für die Manager/Einstellungen -->
 	<div class="panel-body" style="top: 77px;">
 		<div ui-view="anzeigenmanager" ng-show="show == 'anzeigenManager'"></div>
 		<div ui-view="designmanager" ng-show="show == 'designManager'"></div>
 		<div ui-view="ligamanager" ng-show="show == 'ligaManager'"></div>
 	</div>
 
+	<!-- Fußzeile -->
 	<div class="panel-footer clearfix">	
 			<div>&copy; Copyright by Jan G&uuml;nther, Michael Weber & Ren&eacute; R&ouml;se
 

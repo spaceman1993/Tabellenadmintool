@@ -5,15 +5,20 @@
 angular.module('settingsModule', [])
 
 
+/**
+ * AngularJS-Routing-Konfiguration für die Settings-Seite
+ */
 .config(['$stateProvider', function($stateProvider){
 	$stateProvider
 		.state('settings', {
 			url: '/settings',
 			views: {
+				// Settings-Hauptseite in den Main-Container der index.ejs
 				'main' : {
 					templateUrl: './templates/settings/settings.html',
 					controller: 'SettingsCtrl'
 				},
+				// Settings-Inhalte in die Settings-Hauptseite
 				'anzeigenmanager@settings' : {
 					templateUrl: 'templates/settings/anzeigenmanager.html'
 				},

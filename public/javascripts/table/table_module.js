@@ -47,7 +47,7 @@ angular.module('tableModule', [])
 /**
  * Controller für Tabellen (beide Designs)
  */
-.controller("TableCtrl", ['$scope', '$q', '$http', '$filter', '$timeout', 'benutzerFactory', 'activUser', function($scope, $q, $http, $filter, $timeout, benutzerFactory, activUser) {
+.controller("TableCtrl", ['$scope', '$q', '$http', '$filter', '$timeout', 'benutzerFactory', 'activUser', 'alerts', function($scope, $q, $http, $filter, $timeout, benutzerFactory, activUser, alerts) {
 
 	var isEmpty = function (obj) {
 	    for(var key in obj) {
@@ -445,6 +445,15 @@ angular.module('tableModule', [])
      
     });
   };
+  
+  $scope.getAlert = function(code) {
+	  return alerts.getAlert(code);
+  };
+  
+  /*
+   * Folgendes ist identisch in der Funktionalität. Was ist besser?
+   * $scope.getAlert = alerts.getAlert;
+   */
 	
 }]);
 

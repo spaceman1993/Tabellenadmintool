@@ -12,7 +12,16 @@
 	  
 		<div class="container-fluid">
 			<div class="row">
-				<div ui-view="main">Falls Sie diese Nachricht sehen, funktioniert das Angular-Routing nicht und Sie sollten manuell nach localhost:3000/#/table navigieren und sich an den Administrator wenden.</div>
+				<div ui-view="main">
+				
+					<!-- Standardinhalt des main-Containers -->
+					<div class="alert alert-info">
+						<div class="alert-title">Hinweis!</div>
+						<div class="alert-msg">Falls Sie diese Nachricht sehen, funktioniert das Angular-Routing nicht und Sie sollten manuell nach localhost:3000/#/table navigieren und sich an den Administrator wenden.</div>
+						<div class="alert-code">Code: 1</div>
+					</div>
+					
+				</div>
 			</div>
 		</div>
 		

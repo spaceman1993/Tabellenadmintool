@@ -1,41 +1,44 @@
+<!-- Tabelle der kommenden Spiele & Hallenort -->
 <div ng-show="nextgames">
-<table class="table table-condensed" ng-class="{'table-bordered' : tabledesign.tableBordered}">
-	<caption ng-style="{'color':tabledesign.captionColor}">Spielplan</caption>
-	<thead>
-		<tr ng-style="{'color':tabledesign.textColorHeader, 'background-color':tabledesign.backgroundColorHeader}">
-			<th>Tag</th>
-			<th>Datum</th>
-			<th>Zeit</th>
-			<th>Halle</th>
-			<th>Nr</th>
-			<th>Heimmannschaft</th>
-			<th>Gastmannschaft</th>
-			<th>Tore</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr ng-repeat="nextGame in nextgames" ng-style="{'color':tabledesign.textColor, 'background-color':tabledesign.backgroundColor, 'background-color': $index%2==0 && tabledesign.tableStriped && tabledesign.stripedColor || tabledesign.backgroundColor }">
-		<td>{{nextGame.tag}}</td>
-			<td>{{nextGame.datum}}</td>
-			<td>{{nextGame.zeit}}</td>
-			<td><a ng-click="getHallenadresseForHalle(nextGame.hallenlink)" href="" ng-attr-title="{{nextGame.hallenname}}" data-toggle="tooltip">{{nextGame.halle}}</a></td>
-			<td>{{nextGame.nr}}</td>
-			<td>{{nextGame.heimmannschaft}}</td>
-			<td>{{nextGame.gastmannschaft}}</td>
-		<td>{{nextGame.tore}}</td>
-		</tr>
-	</tbody>
-</table>
-
-<modal-dialog show="modalShown" width="90%" height="90%">
-  	<h2>Überblick Hallenort</h2>
-	<div ng-show="hallenaddress" address-based-google-map address="hallenaddress" zoom="15"> </div>	
-	<!-- Ladebildschirm -->
-	<div ng-hide="hallenaddress" class="center-div">
-		<img src="images/loading-animation.gif"/ height="200" width="200">
-	</div>
-	<!-- ENDE Ladebildschirm -->
-</modal-dialog>
+	<!-- Spielplan -->
+	<table class="table table-condensed" ng-class="{'table-bordered' : tabledesign.tableBordered}">
+		<caption ng-style="{'color':tabledesign.captionColor}">Spielplan</caption>
+		<thead>
+			<tr ng-style="{'color':tabledesign.textColorHeader, 'background-color':tabledesign.backgroundColorHeader}">
+				<th>Tag</th>
+				<th>Datum</th>
+				<th>Zeit</th>
+				<th>Halle</th>
+				<th>Nr</th>
+				<th>Heimmannschaft</th>
+				<th>Gastmannschaft</th>
+				<th>Tore</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="nextGame in nextgames" ng-style="{'color':tabledesign.textColor, 'background-color':tabledesign.backgroundColor, 'background-color': $index%2==0 && tabledesign.tableStriped && tabledesign.stripedColor || tabledesign.backgroundColor }">
+			<td>{{nextGame.tag}}</td>
+				<td>{{nextGame.datum}}</td>
+				<td>{{nextGame.zeit}}</td>
+				<td><a ng-click="getHallenadresseForHalle(nextGame.hallenlink)" href="" ng-attr-title="{{nextGame.hallenname}}" data-toggle="tooltip">{{nextGame.halle}}</a></td>
+				<td>{{nextGame.nr}}</td>
+				<td>{{nextGame.heimmannschaft}}</td>
+				<td>{{nextGame.gastmannschaft}}</td>
+			<td>{{nextGame.tore}}</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<!-- Hallenort -->
+	<modal-dialog show="modalShown" width="90%" height="90%">
+	  	<h2>Überblick Hallenort</h2>
+		<div ng-show="hallenaddress" address-based-google-map address="hallenaddress" zoom="15"> </div>	
+		
+		<!-- Ladebildschirm -->
+		<div ng-hide="hallenaddress" class="center-div">
+			<img src="images/loading-animation.gif"/ height="200" width="200">
+		</div>
+	</modal-dialog>
 
 </div>							
 				

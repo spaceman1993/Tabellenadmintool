@@ -9,16 +9,6 @@ var app = angular.module('mitStuPro', ['ui.router', 'ui.bootstrap', 'colorpicker
  * Definiert Routen zum Befüllen von ui-view des ui.routers in views/index.ejs
  */
 app.config(['$stateProvider','$urlRouterProvider',function($stateProvider, $urlRouterProvider) {
-
-	$stateProvider
-    .state('home', {
-      url: '/home',
-      views: {
-    	  'main': {
-    		  templateUrl: 'templates/home.html' // Zu Testzwecken
-    	  }
-      }
-    });
 	
 	$stateProvider
     .state('table', {
@@ -432,3 +422,20 @@ app.directive('addressBasedGoogleMap', function () {
         },
     };
 });
+
+
+app.service('alerts', ['$filter', function($filter){
+	var arr_alerts = new Array();
+	
+	arr_alerts.push({code:1, title:"Hinweis!", msg:"Noch keine Ligen vorhanden.", img:""});
+	arr_alerts.push({code:2, title:"Fehler!", msg:"Die Liga kann aufgrund von Auslesefehlern nicht korrekt dargestellt werden.", img:""});
+	arr_alerts.push({code:3, title:"Fehler!", msg:"Noch keine Ligen .", img:""});
+	
+	return {
+		getAlert: function(code) {
+			var alerts = $filter('filter')(arr_alerts, {code: code}, true);
+			console.log(alerts[0].code);
+			return alerts[0];
+		}
+	}
+}]);

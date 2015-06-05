@@ -386,3 +386,28 @@ a {
 	display: 		block;
 	font-size: 		12px;
 }
+
+
+
+/*******************/
+/*ERRORS & HINWEISE*/
+/*******************/
+/*
+.alert alert-danger
+.alert alert-info
+.alert alert-success
+.alert alert-warning
+*/
+.alert-title {
+	font-size: 3em;
+	font-weight: bold;
+}
+.alert-msg {
+	font-size: 1.2em;
+}
+.error-code {
+	font-family: courier;
+}
+.alert-img{
+	
+}
