@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
+	crypto = require('crypto');
 var Benutzer = mongoose.model('Benutzer');
 
 router.use(function(req, res, next) {
@@ -52,12 +53,33 @@ router.post('/benutzer/byName', function(req, res, next){
 router.post('/benutzer/save', function(req, res) {	
 	var newBenutzer = new Benutzer({
 		name : req.body.name,
-		passwort : req.body.passwort,
-		einstellung : req.body.einstellung,
-		crypt : req.body.crypt,
+		settings : req.body.settings,
 	});
+	
+	newBenutzer.crypt = crypto.randomBytes(16).toString('base64');
+	newBenutzer.passwort = crypto.pbkdf2Sync(req.body.passwort, new Buffer(newBenutzer.crypt, 'base64'), 10000, 64).toString('base64');
+	
 	newBenutzer.save( function( err, result, count ){
 		res.json(result);
+	});
+});
+
+router.post('/benutzer/login', function(req, res, next) {	
+	var query = Benutzer.findOne({name: req.body.name});
+	query.exec(function(err, result){
+		if(err){
+			res.json({"name" : "code404"});
+			return	next(err);
+		}
+		
+		var pass = crypto.pbkdf2Sync(req.body.passwort, new Buffer(result.crypt, 'base64'), 10000, 64).toString('base64');
+		
+		if (result.passwort === pass){
+			res.json(result);
+		}else{
+			res.json(null);
+		}
+		return next();
 	});
 });
 
@@ -67,7 +89,7 @@ router.put('/Benutzer/updateSettings/byName', function(req, res, next){
 		if(err){
 			return	next(err);
 		}
-		result.einstellung = req.body.einstellung;
+		result.settings = req.body.settings;
 		result.save( function( err, result, count ){
 			res.json(result);
 			return next();
