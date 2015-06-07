@@ -242,9 +242,9 @@ angular.module('settingsModule', [])
 	 * Initialisierung der Standarddesigns des Programms
 	 */
 	var initApplicationDesigns = function(){
-		$scope.applicationDesign1 = createApplicationDesign("#CB8C1D", 20, "#030094", "#FFFFFF", "#F2EFE4", "#000000", "#ff0000");
-		$scope.applicationDesign2 = createApplicationDesign("#CB8C1D", 20, "#238c4e", "#FFFFFF", "#F2EFE4", "#000000", "#0600ff");
-		$scope.applicationDesign3 = createApplicationDesign("#CB8C1D", 20, "#a11515", "#FFFFFF", "#F2EFE4", "#000000", "#000000");
+		$scope.applicationDesign1 = createApplicationDesign("#030094", "#FFFFFF", "#F2EFE4", "#000000", "#ff0000");
+		$scope.applicationDesign2 = createApplicationDesign("#238c4e", "#FFFFFF", "#F2EFE4", "#000000", "#0600ff");
+		$scope.applicationDesign3 = createApplicationDesign("#a11515", "#FFFFFF", "#F2EFE4", "#000000", "#000000");
 	};
 	
 	
@@ -264,10 +264,8 @@ angular.module('settingsModule', [])
 	 * 			
 	 * @return: Applicationdesign-Objekt
 	 */
-	var createApplicationDesign = function(backgroundColor, abstandRand, backgroundColorHeaderFooter, textColorHeaderFooter, backgroundColorBody, textColorBody, actionColor){
+	var createApplicationDesign = function(backgroundColorHeaderFooter, textColorHeaderFooter, backgroundColorBody, textColorBody, actionColor){
 		var applicationDesign = {};
-		applicationDesign.backgroundColor = backgroundColor;
-		applicationDesign.abstandRand = abstandRand;
 		
 		applicationDesign.backgroundColorHeaderFooter = backgroundColorHeaderFooter;
 		applicationDesign.textColorHeaderFooter = textColorHeaderFooter;

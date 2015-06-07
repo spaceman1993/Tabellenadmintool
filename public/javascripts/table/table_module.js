@@ -255,15 +255,12 @@ angular.module('tableModule', [])
 			
 			settings.design.applicationDesign = {};
 			
-			settings.design.applicationDesign.backgroundColor = "black";
-			settings.design.applicationDesign.abstandRand = "10px";
+			settings.design.applicationDesign.backgroundColorHeaderFooter = "#030094";
+			settings.design.applicationDesign.textColorHeaderFooter = "#FFFFFF";
 			
-			settings.design.applicationDesign.backgroundColorHeaderFooter = "blue";
-			settings.design.applicationDesign.textColorHeaderFooter = "yellow";
-			
-			settings.design.applicationDesign.backgroundColorBody = "green";
-			settings.design.applicationDesign.textColorBody = "orange";
-			settings.design.applicationDesign.actionColor = "red";
+			settings.design.applicationDesign.backgroundColorBody = "#F2EFE4";
+			settings.design.applicationDesign.textColorBody = "#000000";
+			settings.design.applicationDesign.actionColor = "#ff0000";
 			
 			settings.liga = {};
 			settings.liga.leagues = [];
