@@ -65,11 +65,6 @@ app.run(['$state', '$rootScope', '$location', 'activUser', function($state, $roo
 }]);
 
 
-app.controller('MainCtrl', ['$scope', 'activUser', function ($scope, activUser) {
-	$scope.user = activUser.user;
-	$scope.test = activUser.isLogin;
-}]);
-
 app.factory("benutzerFactory",[ '$http', function ($http) {
 	  
 	  // Zugriff auf die Routes
@@ -196,8 +191,11 @@ app.service("activUser", function() {
 
 
 /**
- * Mit dieser Direktive kann mann eine selbstdefinierte Funktion ausführen, indem
+ * Mit dieser Direktive kann man eine selbstdefinierte Funktion ausführen, indem
  * die ENTER-Taste bestätigt wird
+ * @params: scope 		-> Der aktive Scope
+ * 			element 	-> Element, bei dessen Fokussierung die ENTER-Taste abgefangen wird
+ * 			attrs		-> Attribute
  */
 app.directive('ngEnter', function () {
     return function (scope, element, attrs) {
