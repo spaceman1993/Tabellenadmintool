@@ -68,7 +68,7 @@ angular.module('settingsModule', [])
 	};
 	
 	
-	var updateSettings = function(){
+	$scope.updateSettings = function(){
 		benutzerFactory.updateUserByName({"name":activUser.user.name, "settings": $scope.settings}, function(user) {
     		
     	});
@@ -126,7 +126,7 @@ angular.module('settingsModule', [])
 			$scope.anzeige.designauswahl.seconddesign = false;
 		}
 		
-		updateSettings();
+		$scope.updateSettings();
 	};
 	
 	
@@ -139,7 +139,7 @@ angular.module('settingsModule', [])
 		
 		$scope.anzeige.standardDesign = standardDesign;
 		
-		updateSettings();
+		$scope.updateSettings();
 	};
 	
 	
@@ -155,7 +155,7 @@ angular.module('settingsModule', [])
 			$scope.anzeige.standardDesign = "2";
 		}
 		
-		updateSettings();
+		$scope.updateSettings();
 	};
 
 	
@@ -172,7 +172,7 @@ angular.module('settingsModule', [])
 			$scope.anzeige.standardDesign = "1";
 		}
 		
-		updateSettings();
+		$scope.updateSettings();
 	};
     
 
@@ -184,7 +184,7 @@ angular.module('settingsModule', [])
 	$scope.changeFavorisierterVerein = function(vereinsname){
 		$scope.anzeige.favoritVerein = vereinsname;
 		
-		updateSettings();
+		$scope.updateSettings();
 	};
 	
 	
@@ -198,7 +198,7 @@ angular.module('settingsModule', [])
 
 		$scope.anzeige.spielplan = spielplan;
 
-		updateSettings();
+		$scope.updateSettings();
 	};
 	
 	
@@ -211,7 +211,7 @@ angular.module('settingsModule', [])
 	$scope.changeLogin = function(verwaltung){
 
 		$scope.anzeige.verwaltung = verwaltung;
-		updateSettings();
+		$scope.updateSettings();
 	};
 	
 	
@@ -330,7 +330,7 @@ angular.module('settingsModule', [])
 		$scope.applicationDesign.textColorBody = design.textColorBody;
 		$scope.applicationDesign.actionColor = design.actionColor;
 		
-		updateSettings();
+		$scope.updateSettings();
 	};
 	
 	
@@ -350,7 +350,7 @@ angular.module('settingsModule', [])
 		$scope.tableDesign.highlightColor = design.highlightColor;
 		$scope.tableDesign.tableBordered = design.tableBordered;
 		
-		updateSettings();
+		$scope.updateSettings();
 	};
 	
 	
@@ -365,6 +365,7 @@ angular.module('settingsModule', [])
 	var initLigaManager = function() {
 		$scope.liga = $scope.settings.liga;
 		$scope.leagues = $scope.liga.leagues;
+		$scope.favoritLeague = $scope.liga.favoritLeague;
 		
 		//Tabellen werden gruppiert nach Jugenden zur besseren Übersicht über die Ligen
 		$scope.jugenden = $filter('listGroupBy')( $scope.leagues, 'jugend');	
@@ -439,7 +440,7 @@ angular.module('settingsModule', [])
 	$scope.getAllLeagues = function(ligenplanLink) {
 
 		//Initialisieren der Variablen
-		$scope.liga.favoritLeague = null;
+		$scope.favoritLeague = null;
 		$scope.quelle = false;
 		$scope.leagues = null;
 		$scope.jugenden = null;
@@ -529,7 +530,7 @@ angular.module('settingsModule', [])
 	    	//LigaManager-Variablen werden aktualisiert
 	    	$scope.settings.liga.leagues = leagues;
 	    	
-	    	updateSettings();
+	    	$scope.updateSettings();
 	    	
 	    	initLigaManager();
 
@@ -558,8 +559,8 @@ angular.module('settingsModule', [])
 	 * @params: league -> Liga die favorisiert wird
 	 */
 	$scope.changeFavorit = function(league){
-		$scope.settings.liga.favoritLeague = league;
-		updateSettings();
+		$scope.favoritLeague = league;
+		$scope.updateSettings();
 	};
 	
 	
@@ -578,7 +579,7 @@ angular.module('settingsModule', [])
 			$scope.searchStart = true;
 			findAllLeaguesOfVerein($scope.liga.searchVerein);
 			$scope.changeFavorisierterVerein($scope.liga.searchVerein);
-			updateSettings();
+			$scope.updateSettings();
 		}
 		//Deaktivierung des Suchfelds
 		else{
@@ -682,7 +683,7 @@ angular.module('settingsModule', [])
 		  else{
 			  addActivLeague(league);
 		  }
-		  updateSettings();
+		  $scope.updateSettings();
 	  };
 	  
 	  /**
@@ -698,7 +699,7 @@ angular.module('settingsModule', [])
 		  $scope.activJugenden =  $filter('listGroupBy')( $scope.activeLeagues, 'jugend');
 		  
 		  //Wenn noch kein favorisierte Liga da ist, wird diese Liga favorisiert
-		  if(isEmpty($scope.liga.favoritLeague)){
+		  if(isEmpty($scope.favoritLeague)){
 			  $scope.changeFavorit($scope.activeLeagues[0]);
 		  }
 		  
@@ -718,7 +719,7 @@ angular.module('settingsModule', [])
 		  $scope.activJugenden =  $filter('listGroupBy')( $scope.activeLeagues, 'jugend');
 		  
 		  //Falls diese Liga die favorisierte Liga war, wird die allererste aktive Liga als favorisiert eingestellt
-		  if($scope.liga.favoritLeague === league){
+		  if($scope.favoritLeague === league){
 			  $scope.changeFavorit($scope.activeLeagues[0]);
 		  }
 		  
@@ -733,7 +734,7 @@ angular.module('settingsModule', [])
 	   */
 	  $scope.changeSpecialName = function(league, specialName) {
 		  league.specialName = specialName;
-		  updateSettings();
+		  $scope.updateSettings();
 	  };
 	  
 	  /**

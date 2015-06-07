@@ -50,6 +50,11 @@ h2 {
 	color: 			#333333;
 }
 
+help-caption {
+	font-size: 		30px;
+	color: 			#333333;
+}
+
 .borderless > tbody > tr > td {
     border-top-style: 		none;
     border-bottom-style: 	none;
@@ -96,7 +101,7 @@ span.glyphicon-circle-arrow-left {
 /******************************************/
 .panel {
 	position: 		relative;
-	height : 		99%;
+	height : 		100%;
 	margin-bottom: 	0;
 }
 
@@ -112,7 +117,7 @@ span.glyphicon-circle-arrow-left {
 
 .panel-body {
 	position: 		absolute;
-  	bottom: 		38px;
+  	bottom: 		37px;
   	right: 			0px;
   	left: 			0px;
   	overflow-y: 	auto;

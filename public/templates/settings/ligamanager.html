@@ -96,12 +96,12 @@
 			<!-- Listen gruppiert nach Jugenden -->
 			<div ng-repeat="jugend in activJugenden">
 
-				<!-- Listeneintr&auml;ge -->
+				<!-- Listeneinträge -->
 				<div class="list-group">
    					<ul class="list-group-item active">
 						<strong class="default-cursor">{{ jugend.label }}</strong>
 					</ul>
-					<ul class="list-group-item clearfix" ng-repeat="data in jugend.list">
+					<ul class="list-group-item clearfix" ng-repeat="data in jugend.list" style="color:black;">
 						<span ng-click="changeFavorit(data)" style="cursor:pointer;">{{data.name}}</span> 
 						<span ng-show="data.specialName"> ({{data.specialName}}) </span>
 
@@ -121,12 +121,12 @@
 							<input type="text" ng-model="specialName" ng-enter="changeSpecialName(data, specialName); edit = false" autofocus="edit">
 						</span>
 
-						<span ng-show="settings.liga.favoritLeague == data">
+						<span ng-show="favoritLeague == data">
      						<span class="pull-right glyphicon glyphicon-heart red"></span>
    						</span>
 					</ul>
 				</div>
-				<!-- ENDE Listeneintr&auml;ge -->
+				<!-- ENDE Listeneinträge -->
 			</div>
 			<!-- ENDE Listen gruppiert nach Jugenden -->
 		</div>
@@ -170,7 +170,7 @@
 			</ul>
 	
 			<div ng-show="isShow">
-				<ul class="list-group-item hand-cursor" ng-repeat="data in jugend.list" ng-click="changeActiv(data)" ng-class="{selected: data.isActiv}">
+				<ul class="list-group-item hand-cursor" ng-repeat="data in jugend.list" ng-click="changeActiv(data)" ng-class="{selected: data.isActiv}" style="color:black;">
 					{{data.name}}
 				</ul>
 			</div>
