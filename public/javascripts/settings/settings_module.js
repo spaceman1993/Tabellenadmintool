@@ -388,6 +388,12 @@ angular.module('settingsModule', [])
 		$scope.error = true;
 	};
 	
+	
+	$scope.refresh = function(){
+		$scope.jugenden = new Array();
+	}
+	
+	
 	/**
 	 * Überprüft ob Liga-Daten vorliegen und aktiviert bei Fund das PopUp-Fenster für den Update-Hinweis
 	 * Sonst direkte suche nach den Ligen
