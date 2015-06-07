@@ -146,34 +146,32 @@ angular.module('tableModule', [])
 	 */
 	$scope.loginBenutzer = function(name, passwort) {
 		  
-		$scope.showLogin = false; 
-		
-		$scope.errorHeader = "";
+		  $scope.errorHeader = "";
 		  
-		//Daten werden aus der Datenbank für den Benutzer ausgelesen und überprüfung, ob Passwort übereinstimmt
-		benutzerFactory.login({"name" : name, "passwort" : passwort }, function(benutzer){
-		//Passwort übereinstimmt oder...
-		if(benutzer !== null && benutzer.name !== "code404" && benutzer.name !== "code403"){
-		//Benutzer nicht gefunden
-		
-		activUser.user = benutzer;
-		activUser.isLogin = true;
-		$scope.benutzer = activUser.user;
-		$scope.isLogin = activUser.isLogin;
-		
-		//Daten für den Controller werden aktualisiert
-		$scope.initTableControllerVars();
-		}
-		//Bei Falscheingabe wird ein Error ausgegeben
-		else if(benutzer.name !== "code403"){
-		 $scope.errorHeader = "Kennwort falsch";
-		}
-		//Bei nicht vorliegen des Benutzers wird ein Error ausgegeben
-		else{
-		$scope.errorHeader = "Keinen Benutzer unter diesen Namen vorhanden";
-		}
+		  //Daten werden aus der Datenbank für den Benutzer ausgelesen und überprüfung, ob Passwort übereinstimmt
+		  benutzerFactory.login({"name" : name, "passwort" : passwort }, function(benutzer){
+		   //Passwort übereinstimmt oder...
+		   if(benutzer !== null && benutzer.name !== "code404" && benutzer.name !== "code403"){
+		    //Benutzer nicht gefunden
 
-  });
+		    activUser.user = benutzer;
+		    activUser.isLogin = true;
+		    $scope.benutzer = activUser.user;
+		    $scope.isLogin = activUser.isLogin;
+		    
+		    //Daten für den Controller werden aktualisiert
+		    $scope.initTableControllerVars();
+		    }
+		    //Bei Falscheingabe wird ein Error ausgegeben
+		    else if(benutzer.name === "code403"){
+		     $scope.errorHeader = "Kennwort falsch";
+		    }
+		    //Bei nicht vorliegen des Benutzers wird ein Error ausgegeben
+		    else{
+		     $scope.errorHeader = "Keinen Benutzer unter diesen Namen vorhanden";
+		    }
+
+		  });
 	};
 	
 	/**
