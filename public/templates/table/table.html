@@ -17,19 +17,19 @@
 
 				<!-- Login-Button -->
 				<div ng-show="showLogin" class="pull-right space" style="margin-top:-5px; margin-bottom:-5px;">
-					<a ng-click="showLogin = false; loginBenutzer(loginName, passwordLogin)" ng-style="{'color':applicationDesign.actionColor}"><span class="glyphicon glyphicon-ok-sign bigSizeGlyph green"></span></a>
+					<a ng-click="loginBenutzer(loginName, passwordLogin)" ng-style="{'color':applicationDesign.actionColor}"><span class="glyphicon glyphicon-ok-sign bigSizeGlyph green"></span></a>
 				</div>
 
 				<!-- Login-Formular -->
 				<div ng-show="showLogin" class="pull-right space" style="margin-top:-8px; margin-bottom:-8px;">
 					<div class="inner-addon left-addon" style="width:120px; display: inline-block; color: black;">
    						<i class="glyphicon glyphicon-user"></i>
-   						<input type="text" ng-model="loginName" class="form-control input-sm" placeholder="Benutzer" />
+   						<input type="text" ng-model="loginName" ng-enter="loginBenutzer(loginName, passwordLogin)" class="form-control input-sm" placeholder="Benutzer" />
 					</div>
 
 					<div class="inner-addon left-addon" style="width:120px; display: inline-block; color: black;">
    						<i class="glyphicon glyphicon-lock"></i>
-   						<input type="password" ng-model="passwordLogin" class="form-control input-sm" placeholder="Passwort" />
+   						<input type="password" ng-model="passwordLogin" ng-enter="loginBenutzer(loginName, passwordLogin)" class="form-control input-sm" placeholder="Passwort" />
 					</div>
 				</div>
 
