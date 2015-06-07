@@ -5,26 +5,20 @@ body {
 	height: 		100%;
 	min-width: 		800px;
 	min-height: 	500px;
-	padding: 		20px;
   	font: 			14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  	background-color: #CB8C1D;
 }
+
+a:hover {
+	opacity: 0.8;
+	text-decoration: none;
+}
+
 
 h2 {
 	display: 		inline-block;
 	margin: 		0px;
 	margin-bottom: 	10px;
 	color: 			#333333;
-}
-
-alertText {
-	color: 			#FF0000;
-	font-size: 		18px;
-}
-
-meldungText {
-	color: 			#009900;
-	font-size: 		18px;
 }
 
 .center-div {
@@ -104,7 +98,6 @@ span.glyphicon-circle-arrow-left {
 	position: 		relative;
 	height : 		99%;
 	margin-bottom: 	0;
-	border-color: 	#4C3327;
 }
 
 .panel-default > .panel-heading {
@@ -131,34 +124,6 @@ span.glyphicon-circle-arrow-left {
     right: 			0;
     bottom: 		0;
 }
-
-
-
-/*************************/
-/*PANEL FARBEINSTELLUNGEN*/
-/*************************/
-.panel-default > .panel-heading {
-  	background-color: #4C3327;
-  	border-color: 	#4C3327;
-  	color: 			#BD3632;
-}
-
-.panel-default > .panel-heading-nostyle {
-  	background-color: #F2EFE4;
-  	border-color: 	#4C3327;
-}
-
-.panel-body {
-  	background-color: #F2EFE4;
-  	border-color: 	#4C3327;
-}
-
-.panel .panel-footer {
-  	background-color: #4C3327;
-  	border-color: 	#4C3327;
-  	color: 			white;
-}
-
 
 
 /****************************/
@@ -399,15 +364,25 @@ a {
 .alert alert-warning
 */
 .alert-title {
-	font-size: 3em;
-	font-weight: bold;
+	font-size: 		3em;
+	font-weight: 	bold;
 }
 .alert-msg {
-	font-size: 1.2em;
+	font-size: 		1.2em;
 }
-.error-code {
-	font-family: courier;
+.alert-code {
+	font-family: 	Courier;
 }
-.alert-img{
+.alert-img {
 	
+}
+
+alertText {
+	color: 			#FF0000;
+	font-size: 		18px;
+}
+
+meldungText {
+	color: 			#009900;
+	font-size: 		18px;
 }

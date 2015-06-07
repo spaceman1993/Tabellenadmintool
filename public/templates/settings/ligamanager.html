@@ -54,12 +54,14 @@
 
 <!-- Error-Anzeige -->
 <div ng-show="error">
-	<h3 class="red">Fehler!</h3>
-	<p ng-bind-html="error | unsafe"></p>
-	<br/>
-	<div style="width: 100%;">
-		<caption>{{errorpicturecaption}}</caption><br/>
-		<img ng-src="{{errorpicture}}" style=" max-width: 100%; max-height: 100%;"/>
+	<div class="alert alert-danger">
+		<div class="alert-title">Fehler!</div>
+		<div class="alert-msg">Der von Ihnen angegebene Ligenplan-Link scheint ungültig zu sein.<br />
+		Achten Sie darauf, dass Sie den Link verwenden, der die Gesamtübersicht aller Ligen enthält.<br />
+		Beispiel: <a href='https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/leaguePage?championship=Bremer+HV+15/16' target='_blank'> https://bremerhv-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/leaguePage?championship=Bremer+HV+15/16</a></div>
+		<strong>Ligenplan-Gesamtübersicht:</strong>
+		<div class="alert-img"><img src="/images/Ligenplanlink.png" /></div>
+		<div class="alert-code">Code: 4</div>
 	</div>
 </div>
 <!-- ENDE Error-Anzeige -->
@@ -78,10 +80,11 @@
 
 	<!-- Anzeige, wenn keine Daten vorhanden sind -->
 	<div ng-hide="activJugenden.length > 0 || error">
-		<div class="col-md-12">
-			<strong>Hinweis!</strong></br>
-			Sie haben noch keine Ligen gew&auml;hlt, die Sie verwalten k&ouml;nnen!</br>
-			Um dies zu &Äuml;ndern, begeben Sie sich bitte in den <a href="" ng-click="ligaSettings = true">Einstellungsmanager</a> des Liga-Managers.
+		<div class="alert alert-info">
+			<div class="alert-title">Hinweis!</div>
+			<div class="alert-msg">Sie haben noch keine Ligen gew&auml;hlt, die Sie verwalten k&ouml;nnen!</br>
+			Um dies zu &auml;ndern, begeben Sie sich bitte in den <a href="" style="color: #000000;" ng-click="ligaSettings = true">Einstellungsmanager</a> des Liga-Managers.
+			<div class="alert-code">Code: 5</div>
 		</div>
 	</div>
 	<!-- ENDE Anzeige, wenn keine Daten vorhanden sind -->
@@ -148,9 +151,12 @@
 
 	<!-- Anzeige, wenn keine Daten vorhanden sind -->
 	<div ng-hide="jugenden.length > 0 || quelle || loading || error">
-		<strong>Hinweis!</strong></br>
-		Sie haben noch keine Daten-Quelle ausgew&auml;hlt!</br>
-		Um dies zu &auml;ndern, w&auml;hlen Sie bitte das Aktualisieren-Symbol am oberen rechten Seitenrand aus und geben Sie Ihre Quelle an.
+		<div class="alert alert-info">
+			<div class="alert-title">Hinweis!</div>
+			<div class="alert-msg">Sie haben noch keine Daten-Quelle ausgew&auml;hlt!</br>
+			Um dies zu &auml;ndern, w&auml;hlen Sie bitte das Aktualisieren-Symbol am oberen rechten Seitenrand aus und geben Sie Ihre Quelle an.
+			<div class="alert-code">Code: 6</div>
+		</div>
 	</div>
 	<!-- ENDE Anzeige, wenn keine Daten vorhanden sind -->
 
@@ -175,6 +181,6 @@
 
 <!-- Ladebildschirm -->
 <div class="center-div" ng-show="loading">
-	<img src="images/loading-animation.gif"/ height="200px" width="200px">
+	<img src="images/loading-animation.gif" height="200px" width="200px" />
 </div>
 <!-- ENDE Ladebildschirm -->

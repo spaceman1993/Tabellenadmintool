@@ -4,10 +4,10 @@
 - Fußzeile
 -->
 
-<div class="panel panel-default" ng-init="initSettingsController()">
+<div class="panel panel-default" ng-init="initSettingsController()" ng-style="{'border-color':applicationDesign.backgroundColorHeaderFooter}">
 
 	<!-- Kopflastige Navigationsleiste zur Auswahl des Managers -->
-	<div class="panel-heading">
+	<div class="panel-heading" ng-style="{'background-color':applicationDesign.backgroundColorHeaderFooter, 'border-color':applicationDesign.backgroundColorHeaderFooter, 'color':applicationDesign.textColorHeaderFooter}">
 		<div class="btn-group" style="width:100%">
 			<button style="width:33.3%" class="btn btn-lg btn btn-primary" ng-click="show = 'anzeigenManager'"> Anzeigen-Manager </button>
 			<button style="width:33.3%" class="btn btn-lg btn btn-success" ng-click="show = 'designManager'"> Design-Manager </button>
@@ -16,17 +16,17 @@
 	</div>
 
 	<!-- Platzhalter für die Manager/Einstellungen -->
-	<div class="panel-body" style="top: 77px;">
+	<div class="panel-body" style="top: 77px;" ng-style="{'background-color':applicationDesign.backgroundColorBody, 'color':applicationDesign.textColorBody}">
 		<div ui-view="anzeigenmanager" ng-show="show == 'anzeigenManager'"></div>
 		<div ui-view="designmanager" ng-show="show == 'designManager'"></div>
 		<div ui-view="ligamanager" ng-show="show == 'ligaManager'"></div>
 	</div>
 
 	<!-- Fußzeile -->
-	<div class="panel-footer clearfix">	
-			<div>&copy; Copyright by Jan G&uuml;nther, Michael Weber & Ren&eacute; R&ouml;se
+	<div class="panel-footer clearfix" ng-style="{'background-color':applicationDesign.backgroundColorHeaderFooter, 'border-color':applicationDesign.backgroundColorHeaderFooter, 'color':applicationDesign.textColorHeaderFooter}">	
+			<div>&copy; Copyright by Jan Robert G&uuml;nther, Michael Weber & Ren&eacute; R&ouml;se
 
-			<a href="#/table" class="pull-right">
+			<a href="#/table" class="pull-right" ng-style="{'color':applicationDesign.actionColor}">
 				<span class="glyphicon glyphicon-list"></span> Zu den Tabellen
 			</a>
 		</div>

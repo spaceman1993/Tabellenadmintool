@@ -9,6 +9,7 @@ var app = angular.module('mitStuPro', ['ui.router', 'ui.bootstrap', 'colorpicker
  * Definiert Routen zum Befüllen von ui-view des ui.routers in views/index.ejs
  */
 app.config(['$stateProvider','$urlRouterProvider',function($stateProvider, $urlRouterProvider) {
+
 	
 	$stateProvider
     .state('table', {
@@ -37,7 +38,19 @@ app.config(['$stateProvider','$urlRouterProvider',function($stateProvider, $urlR
  * Wird beim Start ausgeführt. Überprüft, ob der Nutzer der Seite eingeloggt ist.
  */
 app.run(['$state', '$rootScope', '$location', 'activUser', function($state, $rootScope, $location, activUser) {
-    $rootScope.$on( '$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
+   
+	var applicationDesign = {};
+	applicationDesign.backgroundColor = "red";
+	applicationDesign.abstandRand = "50px";
+	
+	$rootScope.user = activUser.user;
+	
+//	window.setTimeout(function(){ 
+//		$rootScope.applicationDesign = activUser.user.settings.design.applicationDesign;
+//
+//	},10000);
+	
+	$rootScope.$on( '$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
     	var goesToLogin = toState.name === "table" || toState.name === "home";
         if(goesToLogin){
            return; //Nutzer geht schon zum Login oder einer freien Seite.
@@ -52,106 +65,114 @@ app.run(['$state', '$rootScope', '$location', 'activUser', function($state, $roo
 }]);
 
 
-app.factory("benutzerFactory",[ '$http', function ($http) {
-	
-	// Zugriff auf die Routes
-	
-var o = {
-	user: {}
-};
-o.getAllUser = function(callback){
-	console.log("getAllUser");
-	$http.get('/benutzer/alle')
-	.success(function(data){
-		console.log("success getAllUser = " + data);
-		o.user = data;
-		callback(o.user);
-	})
-	.error(function(error){
-		console.log("error getAllUser");
-		o.user = null;
-		callback(null);
-	});
-};
-	
-o.getUserByName = function(name, callback){
-	console.log("getUserByName + name = " + name.name);
-	$http.post('/benutzer/byName', name)
-	.success(function(data){
-		console.log("success getUserByName =" +data);
-		o.user = data;
-		callback(o.user);
-	})
-	.error(function(error){
-		console.log("error getUserByName");
-		o.user = null;
-		callback(null);
-	});
-};
-
-o.getUserById = function(userId){
-	return $http.get('/benutzer/byID' + userId).success(function(data){
-		return data;
-	});
-};
-
-o.updateUserByName = function(name, settings, callback){
-	console.log("updateUserByName + name = " + name.name);
-	console.log("updateUserByName + settings = " + settings);
-	$http.put('/Benutzer/updateSettings/byName', name , settings)
-	.success(function(data){
-		console.log("success updateUserByName =" +data);
-		o.user = data;
-		callback(o.user);
-	})
-	.error(function(error){
-		console.log("error updateUserByName");
-		o.user = null;
-		callback(null);
-	});
-};
-
-
-o.create = function(user, callback){
-	console.log("create + Benutzer = " + user.name);
-	$http.post('/benutzer/save', user)
-	.success(function(data){
-		console.log("success create =" +data);
-	  	o.user = data;
-	  	callback(data);
-  })
-	.error(function(error){
-		console.log("error create");
-
-	});
-};
-
-o.deleteUserByName = function(name, callback){
-	console.log("deleteUserByName + name = " + name.name);
-	$http.post('/benutzer/byName', name)
-	.success(function(data){
-		console.log("success deleteUserByName =" +data);
-		o.user = data;
-		callback(o.user);
-	})
-	.error(function(error){
-		console.log("error deleteUserByName");
-		o.user = null;
-		callback(null);
-	});
-};
-
-return o;
-    
+app.controller('MainCtrl', ['$scope', 'activUser', function ($scope, activUser) {
+	$scope.user = activUser.user;
+	$scope.test = activUser.isLogin;
 }]);
+
+app.factory("benutzerFactory", ['$http', function ($http) {
+	 
+	 // Zugriff auf die Routes
+	 
+	var o = {
+	 user: {}
+	};
+	o.getAllUser = function(callback){
+	 console.log("getAllUser");
+	 $http.get('/benutzer/alle')
+	 .success(function(data){
+	  console.log("success getAllUser = " + data);
+	  o.user = data;
+	  callback(o.user);
+	 })
+	 .error(function(error){
+	  console.log("error getAllUser");
+	  o.user = null;
+	  callback(null);
+	 });
+	};
+	 
+	o.getUserByName = function(name, callback){
+	 console.log("getUserByName + name = " + name.name);
+	 $http.post('/benutzer/byName', name)
+	 .success(function(data){
+	  console.log("success getUserByName =" +data);
+	  o.user = data;
+	  callback(o.user);
+	 })
+	 .error(function(error){
+	  console.log("error getUserByName");
+	  o.user = null;
+	  callback(null);
+	 });
+	};
+
+	o.getUserById = function(userId){
+	 return $http.get('/benutzer/byID' + userId).success(function(data){
+	  return data;
+	 });
+	};
+
+	o.updateUserByName = function(name, callback){
+	 console.log("updateUserByName + name = " + name.name);
+	 $http.put('/Benutzer/updateSettings/byName', name)
+	 .success(function(data){
+	  console.log("success updateUserByName =" +data);
+	  o.user = data;
+	  callback(o.user);
+	 })
+	 .error(function(error){
+	  console.log("error updateUserByName");
+	  o.user = null;
+	  callback(null);
+	 });
+	};
+
+
+	o.create = function(user, callback){
+	 console.log("create + Benutzer = " + user.name);
+	 $http.post('/benutzer/save', user)
+	 .success(function(data){
+	  console.log("success create =" +data);
+	    o.user = data;
+	    callback(data);
+	  })
+	 .error(function(error){
+	  console.log("error create");
+
+	 });
+	};
+
+	o.deleteUserByName = function(name, callback){
+	 console.log("deleteUserByName + name = " + name.name);
+	 $http.post('/benutzer/byName', name)
+	 .success(function(data){
+	  console.log("success deleteUserByName =" +data);
+	  o.user = data;
+	  callback(o.user);
+	 })
+	 .error(function(error){
+	  console.log("error deleteUserByName");
+	  o.user = null;
+	  callback(null);
+	 });
+	};
+
+	return o;
+	    
+	}]);
 
 
 /**
- * Speichert den aktiven Benutzer
+ * Mit Hilfe dieses Service wird der aktiv angemeldete Benutzer an die
+ * verschiedenen Controllern der Applikation weitergeleitet
  */
 app.service("activUser", function() {
-  var _user = new Object();
+  var _user = {};
   var _isLogin = false;
+  var _test = "test";
+  
+  this.test = _test;
   
   this.user = _user;
   this.isLogin = _isLogin;
@@ -159,7 +180,8 @@ app.service("activUser", function() {
 
 
 /**
- * Direktive zum Abfangen und Ausführen der Enter-Taste
+ * Mit dieser Direktive kann mann eine selbstdefinierte Funktion ausführen, indem
+ * die ENTER-Taste bestätigt wird
  */
 app.directive('ngEnter', function () {
     return function (scope, element, attrs) {
@@ -177,8 +199,12 @@ app.directive('ngEnter', function () {
 
 
 /**
- * Filter 
- * TODO
+ * Dieser Filter gruppiert eine Arrayliste anhand einer seiner Attribute
+ * 
+ * @params: list 		-> Die zu gruppierende Arrayliste
+ * 			attribute 	-> Das Attribut, an dem die Arrayliste gruppiert werden soll
+ * 
+ * @return: Eine nach dem Attribute gruppierte Arrayliste
  */
 app.filter('listGroupBy', function() {
 	return function(list, attribute) {
@@ -207,8 +233,14 @@ app.filter('listGroupBy', function() {
 
 
 /**
- * Filter
- * TODO
+ * Dieser Filter sortiert eine ArrayListe nach einem seiner bestimmten Felder
+ * und kann diese logisch in der Reihenfolge oder umgekehrt ausgeben.
+ * 
+ * @params:	items 	-> Die zu sortierende Arrayliste
+ * 			field 	-> Das Feld nach das im Array sortiert werden soll
+ * 			reverse -> Sortierrichtung (true/false)
+ * 
+ * @return:	Eine nach dem Feld sortierte ArrayListe
  */
 app.filter('orderObjectBy', function() {
 	  return function(items, field, reverse) {
@@ -224,6 +256,10 @@ app.filter('orderObjectBy', function() {
 	  };
 	});
 
+/**
+ * Dieser Filter erlaubt der Applikation von JavaScript kommende Textpassagen
+ * mit HTML-TAGS auf HTML-Templates darstellen zu können 
+ */
 app.filter('unsafe', function($sce) {
     return function(val) {
         return $sce.trustAsHtml(val);
@@ -231,8 +267,15 @@ app.filter('unsafe', function($sce) {
 });
 
 /**
- * Direktive für die Ligatabelle
- * TODO
+ * Diese Directive repräsentiert die Ausgabe einer Ligatabelle einer bestimmten Liga.
+ * Dabei kann mit der Parameterübergabe das Design der Tabelle bestimmt werden und sein
+ * favorisierter Verein hervorgehoben werden.
+ * 
+ * @params:	mannschaften 	-> Die Mannschaftsliste mit den notwendigen Informationen
+ * 			favoritverein 	-> Favorisierter Verein der hervorgehoben dargestellt wird
+ * 			tabledesign 	-> Das zu verwendete Design für die Tabelle
+ * 			
+ * @return:	Die Ligatabelle als Directive
  */
 app.directive('ligatabelle', function () {
     // return the directive definition object 
@@ -245,6 +288,16 @@ app.directive('ligatabelle', function () {
         },
         controller: function ($scope) {
        
+        	/**
+        	 * Überprüft anhand der aktuell vorliegenden mannschaft und des favorisierten Vereins, ob diese übereinstimmen
+        	 * und bestimmt dadurch, ob die Zeile hervorgehoben dargestellt wird oder standardmäßig vorliegen soll.
+        	 * Dabei muss der favorisierte Verein mit mindestens 3 Zeichen dargestellt worden sein. 
+        	 * 
+        	 * @params:	mannschaft 	-> Aktuelle Mannschaft die überprüft werden soll
+        	 * 
+        	 * @return: true 		-> Wenn Mannschaft übereinstimmt mit Favorit
+        	 * 			false 		-> Wenn Mannschaft nicht übereinstimmt
+        	 */
         	$scope.isHighlight = function (mannschaft) {
             	if(String($scope.favoritverein).length > 3 && String(mannschaft.mannschaft).toLowerCase().match($scope.favoritverein.toLowerCase())){
             		return true;
@@ -254,6 +307,14 @@ app.directive('ligatabelle', function () {
             	}
             };
             
+            /**
+             * Überprüft, ob der übergebende Parameter eine Zahl ist und liefert die passende Antwort zurück
+             * 
+             * @params: value	-> Der String der überprüft werden soll
+             * 
+             * @return: true	-> Wenn Parameter eine Zahl ist
+             * 			false	-> Wenn keine Zahl ist
+             */
             $scope.isNumber = function (value) {
                 return !isNaN(value);
             };
@@ -267,8 +328,13 @@ app.directive('ligatabelle', function () {
 
 
 /**
- * Direktive für die Spielplantabelle
- * TODO
+ * Diese Directive repräsentiert die Ausgabe der Spielplantabelle einer bestimmten Liga.
+ * Dabei kann mit der Parameterübergabe das Design der Tabelle bestimmt werden.
+ * 
+ * @params:	nextgames 		-> Die Spieleliste mit den notwendigen Informationen
+ * 			tabledesign 	-> Das zu verwendete Design für die Tabelle
+ * 			
+ * @return:	Die Spielplantabelle als Directive
  */
 app.directive("spielplantabelle", [function () {
     // return the directive definition object 
@@ -282,10 +348,21 @@ app.directive("spielplantabelle", [function () {
             
         	$scope.modalShown = false;
         	
+        	/**
+        	 * Bestimmt, ob das PopUp der Kartenanzeige angezeigt werden soll oder nicht
+        	 */
       	  	$scope.toggleModal = function() {
       	  		$scope.modalShown = !$scope.modalShown;
       	  	};
         	
+      	  	/**
+      	  	 * Bestimmt die Hallenadresse, die sich hinter dem Hallenlink des Spiels verbirgt und
+      	  	 * liefert den Adresse in einer scope-Variable zurück
+      	  	 * 
+      	  	 * @params:	hallenlink	-> Die Stelle an der nach der Adresse gesucht werden soll
+      	  	 * 
+      	  	 * @return: $scope.hallenaddress -> Die gefundene Adresse 
+      	  	 */
         	$scope.getHallenadresseForHalle = function (hallenlink){
         		$scope.hallenaddress = "";
         		hallenlink = "https://bremerhv-handball.liga.nu" + hallenlink;
@@ -311,8 +388,16 @@ app.directive("spielplantabelle", [function () {
 
 
 /**
- * Direktive
- * TODO
+ * Diese Directive ermöglicht den Aufruf eines PopUps. 
+ * Die Größe des PopUps kann mittels Attribute bestimmt werden.
+ * Das PopUp wird zentriert dargestellt und der Rest der Webanwendung
+ * wird grau-durchlässig dargestellt.
+ * 
+ * @params:	control -> Stellt eine logische Verbindung zum übergeordneten Controller 
+ * 						her um aus ihm die Directive steuern zu können
+ * 			show	-> Bestimmt ob das PopUp angezeigt werden soll oder nicht (true/false)
+ * 
+ * @return Das PopUp als Directive
  */
 app.directive("modalDialog", [function() {
 	  return {
@@ -321,32 +406,51 @@ app.directive("modalDialog", [function() {
 	    	control: '=',
 	    	show: '='
 	    },
-	    replace: true, // Replace with the template below
-	    transclude: true, // we want to insert custom content inside the directive
+	    replace: true,
+	    transclude: true,
 	    link: function(scope, element, attrs) {
+	    	//Übergebende control Variable wird in Directive übernommen. Wenn keine vorhanden, dann ein leeres Objekt.
 	    	scope.internalControl = scope.control || {};
 	    	scope.dialogStyle = {};
 	      
+	    	//Attribute Width bestimmt die Breite des PopUps
 	    	if (attrs.width){
 	    		scope.dialogStyle.width = attrs.width;
 	    	}
 	      
+	    	//Attribute Height bestimmt die Höhe des PopUps
 	    	if (attrs.height){
 	    		scope.dialogStyle.height = attrs.height;
 	    	}
 	      
+	    	//Lässt das PopUp verschwinden
 	    	scope.internalControl.hideModal = function() {
 	    		scope.show = false;
 	    	};
 	    },
-	    template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='internalControl.hideModal()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-close' ng-click='internalControl.hideModal()'>X</div><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
+	    template: 	"<div class='ng-modal' ng-show='show'>" +
+	    			"	<div class='ng-modal-overlay' ng-click='internalControl.hideModal()'>" +
+	    			"	</div>" +
+	    			"	<div class='ng-modal-dialog' ng-style='dialogStyle'>" +
+	    			"		<div class='ng-modal-close' ng-click='internalControl.hideModal()'>" +
+	    			"			X" +
+	    			"		</div>" +
+	    			"		<div class='ng-modal-dialog-content' ng-transclude>" +
+	    			"		</div>" +
+	    			"	</div>" +
+	    			"</div>"
 	  };
 }]);
 
 
 /**
- * Direktive
- * TODO
+ * Diese Directive kann anhand einer Adresse den Ort auf einer GoogleMap-Karte darstellen.
+ * Dabei kann der Zoom-Faktor auf den Ort bestimmt werden.
+ * 
+ * @params:	address -> Addresse des zu findenen Ortes
+ * 			zoom	-> Zoomstufe auf den Ort
+ * 
+ * @return:	Die GoogleMap-Karte mit dem marktierten Ort als Directive
  */
 app.directive('addressBasedGoogleMap', function () {
     return {
@@ -362,32 +466,51 @@ app.directive('addressBasedGoogleMap', function () {
             var map;
             var marker;
             
+            /**
+             * Überprüft ob ein Objekt leer ist
+             * 
+             * @params: obj -> Zu überprüfende Objekt
+             * 
+             * @return: true 	-> Objekt ist leer
+             * 			false	-> Objekt ist gefüllt
+             */
             var isEmpty = function (obj) {
         	    for(var key in obj) {
-        	        if(obj.hasOwnProperty(key))
+        	        if(obj.hasOwnProperty(key)){
         	            return false;
+        	        }
         	    }
         	    return true;
         	};
             
+        	/**
+        	 * Initialisiert die Standardvariablen der GoogleMap-API
+        	 */
             var initialize = function () {
                 geocoder = new google.maps.Geocoder();
                 latlng = new google.maps.LatLng(-34.397, 150.644);
             };
             
+            /**
+             * Markiert den gefundenen Ort auf der Karte
+             */
             var markAdressToMap = function () {
                 geocoder.geocode({ 'address': $scope.address }, 
                 function (results, status) 
                   {
-                    if (status == google.maps.GeocoderStatus.OK) {
+                    if (status === google.maps.GeocoderStatus.OK) {
                         map.setCenter(results[0].geometry.location);
-                        marker = new google.maps.Marker({
+                        
+                        //Erstellt die Markierung für den Ort
+                        var marker = new google.maps.Marker({
                             map: map,
                             position: results[0].geometry.location,
                             animation:google.maps.Animation.BOUNCE
                         });
                         
-                        infowindow = new google.maps.InfoWindow({
+                        //Erstellt ein kleines Infofenster in dem die Adresse steht,
+                        //das über der Markierung schwebt
+                        var infowindow = new google.maps.InfoWindow({
                       	  content: $scope.address
                       	  });
 
@@ -396,6 +519,9 @@ app.directive('addressBasedGoogleMap', function () {
                 });
             };
             
+            /**
+             * Erzeugt die Karte mit den angegebenen Parametern und dem gefundenen Ort
+             */
             $scope.$watch("address", function () {
             	
             	var mapOptions = {
@@ -405,10 +531,12 @@ app.directive('addressBasedGoogleMap', function () {
                     };
                 map = new google.maps.Map(document.getElementById('addressMap'), mapOptions);
             	
+                //Wird benötigt um die Karte korrekt darzustellen 
+                //aufgrund der prozentuallen Abhängigkeit der Kartengröße
             	window.setTimeout(function(){ 
             		google.maps.event.trigger(map, 'resize');
             		
-            		if ($scope.address != undefined) {
+            		if ($scope.address !== undefined) {
                     	if(!isEmpty(marker)){
                     		marker.setMap(null);
                     	}
@@ -422,20 +550,3 @@ app.directive('addressBasedGoogleMap', function () {
         },
     };
 });
-
-
-app.service('alerts', ['$filter', function($filter){
-	var arr_alerts = new Array();
-	
-	arr_alerts.push({code:1, title:"Hinweis!", msg:"Noch keine Ligen vorhanden.", img:""});
-	arr_alerts.push({code:2, title:"Fehler!", msg:"Die Liga kann aufgrund von Auslesefehlern nicht korrekt dargestellt werden.", img:""});
-	arr_alerts.push({code:3, title:"Fehler!", msg:"Noch keine Ligen .", img:""});
-	
-	return {
-		getAlert: function(code) {
-			var alerts = $filter('filter')(arr_alerts, {code: code}, true);
-			console.log(alerts[0].code);
-			return alerts[0];
-		}
-	}
-}]);

@@ -8,23 +8,23 @@
 		<link rel="stylesheet" href="/stylesheets/plugins/angular-spinkit.min.css">
 		<link rel="stylesheet" href="/stylesheets/style.css">
 	</head>
-	<body ng-app="mitStuPro">
+	<body ng-app="mitStuPro" ng-controller="MainCtrl" ng-style="{'background-color':user.settings.design.applicationDesign.backgroundColor}">
 	  
 		<div class="container-fluid">
 			<div class="row">
-				<div ui-view="main">
-				
-					<!-- Standardinhalt des main-Containers -->
-					<div class="alert alert-info">
-						<div class="alert-title">Hinweis!</div>
-						<div class="alert-msg">Falls Sie diese Nachricht sehen, funktioniert das Angular-Routing nicht und Sie sollten manuell nach localhost:3000/#/table navigieren und sich an den Administrator wenden.</div>
-						<div class="alert-code">Code: 1</div>
-					</div>
-					
-				</div>
+ 				<div ui-view="main">
+ 				
+ 					<!-- Standardinhalt des main-Containers -->
+ 					<div class="alert alert-info">
+ 						<div class="alert-title">Hinweis!</div>
+ 						<div class="alert-msg">Falls Sie diese Nachricht sehen, funktioniert das Angular-Routing nicht und Sie sollten manuell nach localhost:3000/#/table navigieren und sich an den Administrator wenden.</div>
+ 						<div class="alert-code">Code: 1</div>
+ 					</div>
+ 					
+ 				</div>
 			</div>
 		</div>
-		
+		{{user}}{{'|'}}{{user.settings.design.applicationDesign.backgroundColor}}{{'|'}}{{test}}
 		<!--  Javascript -->
 		<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
 		<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>

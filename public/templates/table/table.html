@@ -5,64 +5,61 @@
 -->
 
 <div ng-init="initTableControllerVars()">
-	<div class="panel panel-default">
-	
-		<!-- Design-Auswahl & Login -->
-		<div class="panel-heading clearfix">
+	<div class="panel panel-default" ng-style="{'border-color':applicationDesign.backgroundColorHeaderFooter}">
 		
-			<!-- Design-Auswahl -->
-			<span ng-show="isLogin">
-				<a href="" ng-click="design = 1"><span class="glyphicon glyphicon-list"></span> 1.Design</a>
-				<a href="" ng-click="design = 2" class="space"><span class="glyphicon glyphicon-th"></span> 2.Design</a>
-			</span>
-			
-			<!-- Login -->
-			<span ng-show="showLogin" class="pull-right">
-				<div class="space" style="margin-top:-8px; margin-bottom:-8px;">
-					<!-- Name -->
-					<div class="inner-addon left-addon" style="width:120px; display: inline-block;">
-						<i class="glyphicon glyphicon-user"></i>
-						<input type="text" ng-model="loginName" class="form-control input-sm" placeholder="Benutzer" />
-					</div>
-					<!-- Passwort -->
-					<div class="inner-addon left-addon" style="width:120px; display: inline-block;">
-	 					<i class="glyphicon glyphicon-lock"></i>
-	 					<input type="password" ng-model="passwordLogin" class="form-control input-sm" placeholder="Passwort" />
-					</div>
-					<!-- Submit -->
-				<div class="space" style="margin-top:-5px; margin-bottom:5px; display: inline-block;">
-					<a ng-click="showLogin = false; loginBenutzer(loginName, passwordLogin)"><span class="glyphicon glyphicon-ok-sign bigSizeGlyph green"></span></a>
+		<!-- Design-Auswahl & Login -->
+		<div class="panel-heading clearfix" ng-style="{'background-color':applicationDesign.backgroundColorHeaderFooter, 'border-color':applicationDesign.backgroundColorHeaderFooter, 'color':applicationDesign.textColorHeaderFooter}">
+			<div>
+				<!-- Design-Auswahl -->
+				<a ng-show="firstDesign && secondDesign" href="" ng-click="design = 1" ng-style="{'color':applicationDesign.actionColor}"><span class="glyphicon glyphicon-list"></span> 1.Design</a>
+				<a ng-show="firstDesign && secondDesign" class="space" href="" ng-click="design = 2" ng-style="{'color':applicationDesign.actionColor}"><span class="glyphicon glyphicon-th"></span> 2.Design</a>
+
+
+				<!-- Login-Button -->
+				<div ng-show="showLogin" class="pull-right space" style="margin-top:-5px; margin-bottom:-5px;">
+					<a ng-click="showLogin = false; loginBenutzer(loginName, passwordLogin)" ng-style="{'color':applicationDesign.actionColor}"><span class="glyphicon glyphicon-ok-sign bigSizeGlyph green"></span></a>
 				</div>
+
+				<!-- Login-Formular -->
+				<div ng-show="showLogin" class="pull-right space" style="margin-top:-8px; margin-bottom:-8px;">
+					<div class="inner-addon left-addon" style="width:120px; display: inline-block; color: black;">
+   						<i class="glyphicon glyphicon-user"></i>
+   						<input type="text" ng-model="loginName" class="form-control input-sm" placeholder="Benutzer" />
+					</div>
+
+					<div class="inner-addon left-addon" style="width:120px; display: inline-block; color: black;">
+   						<i class="glyphicon glyphicon-lock"></i>
+   						<input type="password" ng-model="passwordLogin" class="form-control input-sm" placeholder="Passwort" />
+					</div>
 				</div>
-				
-			</span>
-			
-			<!-- Logout -->
-			<span class="pull-right">
-				<a class="space" ng-show="isLogin" href="" ng-click="logoutBenutzer()"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
-				<span ng-show="isLogin"> <b>{{nickname}}</b> </span>
-	
-				<a class="space" ng-hide="isLogin || showLogin" href="" ng-click="checkLogin()"><span class="glyphicon glyphicon-log-in"></span> Login</a>
-				<a class="space" ng-show="verwaltung == 'ja' && !isLogin" href="" ng-click="showRegistration()"><span class="glyphicon glyphicon-edit"></span> Registrieren</a>
-			</span>
-			<span ng-show="errorHeader" class="pull-right"> {{errorHeader}} </span>
+
+				<!-- Logout -->
+				<a class="pull-right space" ng-show="isLogin" href="" ng-click="logoutBenutzer()" ng-style="{'color':applicationDesign.actionColor}"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+				<span class="pull-right" ng-show="isLogin"> <b>{{nickname}}</b> </span>
+
+				<!-- Registration -->
+				<a class="pull-right space" ng-hide="isLogin || showLogin" href="" ng-click="checkLogin()" ng-style="{'color':applicationDesign.actionColor}"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+				<a class="pull-right space" ng-show="verwaltung == 'ja' && !isLogin" href="" ng-click="showRegistration()" ng-style="{'color':applicationDesign.actionColor}"><span class="glyphicon glyphicon-edit"></span> Registrieren</a>
+
+				<span class="pull-right" ng-show="errorHeader"> {{errorHeader}} </span>
+			</div>
 		</div>
 		<!-- ENDE Design-Auswahl & Login -->
-
+		
 		<!-- Menü für erstes Design -->
-		<div ng-show="design == 1" class="panel-heading-nostyle">
+		<div ng-show="design == 1" class="panel-heading-nostyle" ng-style="{'background-color':applicationDesign.backgroundColorBody}">
 			<div class="btn-group" style="width:100%">
-				
+			
 				<!-- Männlich -->
 				<div class="btn-group" style="width:50%">
 					<button class="btn btn-primary btn-lg btn-block  active dropdown-toggle " data-toggle="dropdown"> 
 						M&auml;nnlich
 					</button>
 					<ul class="dropdown-menu" role="menu">
-						<li ng-repeat="league in activeLeagues | filter: { gender: 'M&auml;nnlich' }:true">
+    					<li ng-repeat="league in activeLeagues | filter: { gender: 'M&auml;nnlich' }:true">
 							<a ng-click="getTableForLeague(league)">{{getNameForLeague(league)}} ({{league.name}})</a>
 						</li>
-					</ul>
+  					</ul>
 				</div>
 
 				<!-- Weiblich -->
@@ -71,17 +68,17 @@
 						Weiblich
 					</button>
 					<ul class="dropdown-menu" role="menu">
-	  					<li ng-repeat="league in activeLeagues | filter: { gender: 'Weiblich' }:true">
+    					<li ng-repeat="league in activeLeagues | filter: { gender: 'Weiblich' }:true">
 							<a ng-click="getTableForLeague(league)">{{getNameForLeague(league)}} ({{league.name}})</a>
 						</li>
-					</ul>
+  					</ul>
 				</div>
 			</div>					
 		</div>
 		<!-- ENDE Menü für erstes Design -->	
-
-		<div class="panel-body" ng-style="design == 1 && {'top':'105px'} || design == 2 && {'top':'38px'}">
-
+		
+		<div class="panel-body" ng-style="design == 1 && {'top':'105px', 'background-color':applicationDesign.backgroundColorBody, 'color':applicationDesign.textColorBody} || design == 2 && {'top':'38px', 'background-color':applicationDesign.backgroundColorBody, 'color':applicationDesign.textColorBody}">
+			
 			<!-- Menü für zweites Design -->
 			<div ng-show="design == 2">
 				<div class="sidebar-Design sticky-note-background">
@@ -94,71 +91,62 @@
 				</div>
 			</div>
 			<!-- ENDE Menü für zweites Design -->
-	
-	
+
 			<!-- Anzeige -->
 			<div ng-class="{'data-Design': design == 2}">
-			
+
 				<!-- Ladebildschirm -->
 				<div class="center-div" ng-show="loading">
-					<img src="images/loading-animation.gif" height="200" width="200">
+					<img src="images/loading-animation.gif" height="200" width="200" />
 				</div>
-			
+
 				<!-- Tabellen -->
 				<div ng-show="mannschaften">
-					<h2>{{leagueName}}</h2>
+					<h2 ng-style="{'color':applicationDesign.textColorBody}">{{leagueName}}</h2>
 					<ligatabelle mannschaften = "mannschaften" favoritverein = "favoritVerein" tabledesign="tableDesign"></ligatabelle>	
+					<div ng-show="nextGames">
 					<spielplantabelle nextgames = "nextGames" tabledesign = "tableDesign"></spielplantabelle>
-				</div>
-			
-				<!-- Error-Anzeige -->
-				<div ng-show="error">
-					<div class="alert alert-danger" ng-init="alert2 = getAlert(2)">
-						<div class="alert-title">
-							{{alert2.title}}
-						</div>
-						<div class="alert-msg">
-							{{alert2.msg}}
-							<div class="error-code">Code: {{alert2.code}}</div>
-						</div>
-						<div class="alert-img">
-							<img src="{{alert2.img}}" />
-						</div>
 					</div>
 				</div>
-			
-				<!-- Placeholder -->
+
+				<!-- Error -->
+   				<div ng-show="error">
+   				
+ 					<div class="alert alert-danger">
+ 						<div class="alert-title">Fehler!</div>
+ 						<div class="alert-msg">Die Liga kann aufgrund von Auslesefehlern nicht korrekt dargestellt werden.<br />
+						Wenn dieser Fehler nur bei einer Liga auftritt, wurden die Daten noch nicht richtig vom Ergebnisdienstleister konfiguriert.</div>
+ 						<div class="alert-code">Code: 2</div>
+ 					</div>
+
+				</div>
+
+				<!-- Hinweis -->
 				<div ng-hide="mannschaften || loading || error">
-					<div class="alert alert-info" ng-init="alert1 = getAlert(1)">
-						<div class="alert-title">
-							{{alert1.title}}
-						</div>
-						<div class="alert-msg">
-							{{alert1.msg}}
-							<div class="error-code">Code: {{alert1.code}}</div>
-						</div>
-						<div class="alert-img">
-							<img src="{{alert1.img}}" />
-						</div>
-					</div>
+					<div class="alert alert-info">
+ 						<div class="alert-title">Hinweis!</div>
+ 						<div class="alert-msg">Sie haben noch keine Liga ausgewählt.<br />
+ 						Wenn Sie über das Menü keine Liga auswählen können, melden Sie sich an und fügen Sie eine Liga über den Liga-Manager hinzu oder wenden Sie sich an den Administrator.</div>
+ 						<div class="alert-code">Code: 3</div>
+ 						<div class="alert-img"><img src="images/ligahinzufuegen.png" /></div>
+ 					</div>
 				</div>
-				<!-- ENDE Placeholder -->
-				
-			</div>
+
+     		</div>
 			<!-- ENDE Anzeige -->
-				
 		</div>
 
-		<div class="panel-footer">	
+		<!-- Fußzeile -->
+		<div class="panel-footer" ng-style="{'background-color':applicationDesign.backgroundColorHeaderFooter, 'border-color':applicationDesign.backgroundColorHeaderFooter, 'color':applicationDesign.textColorHeaderFooter}">	
 			<div>
-				&copy; Copyright by Jan G&uuml;nther, Michael Weber & Ren&eacute; R&ouml;se
-		
-				<a ng-show="isLogin" href="#/settings" class="pull-right">
+				&copy; Copyright by Jan Robert G&uuml;nther, Michael Weber & Ren&eacute; R&ouml;se
+
+				<a ng-show="isLogin" href="#/settings" class="pull-right" ng-style="{'color':applicationDesign.actionColor}">
 					<span class="glyphicon glyphicon-wrench"></span> Zu den Einstellungen
 				</a>
 			</div>
 		</div>
-		
+
 		<!-- Registration eines Benutzers -->
 		<modal-dialog show="registrationShown" width="60%" height="460px">
 		  	
@@ -168,7 +156,7 @@
 		  	<!-- Formular -->
 		  	<div ng-show="registieren">
 				<form role="form">
-				
+					
 					<!-- Benutzername -->
 					<div class="form-group" ng-class="{'has-error': inVerwendung, 'has-success': !inVerwendung && registration.benutzername.length > 0 }">
 						<label for="benutzer" class="control-label">Benutzername:</label>
@@ -216,12 +204,13 @@
 			
 		</modal-dialog>
 		<!-- ENDE Registration eines Benutzers -->
-
+		
 		<!-- Registration des Administrators -->
 		<modal-dialog show="firstStart" width="90%" height="90%">
+			
 			<h2>Tabellenadministrations-Tool</h2>
 			<hr style="margin-top: 0px; margin-bot: 10px;">
-					
+			
 			<div ng-show="willkommen">
 				<p><strong>Herzlich willkommen, </strong></p>
 				<p>wir freuen uns, dass Sie sich für unser Tabellenadministations-Tool entschieden haben. <br/></p>
@@ -236,7 +225,6 @@
 				<div class="form-group"  ng-class="{'has-error': isIncorrect, 'has-success': !isIncorrect && registration.passwort.length > 0 }">
 					<label for="pwd" class="control-label">Passwort:</label>
 					<input type="password" ng-enter="registiereAdminAccount(registration.passwort)" ng-change="checkPasswort(registration.passwort); checkPasswortBst(registration.passwort, registration.passwortbst)" ng-model="registration.passwort" class="form-control" id="pwd">
-					
 					<label ng-show="isIncorrect" class="control-label">{{fehlerText}}</label>
 					<br ng-hide="isIncorrect">
 				</div>
@@ -245,7 +233,6 @@
 				<div class="form-group" ng-class="{'has-error': !isGleich && registration.passwortbst.length > 0, 'has-success': isGleich}">
 					<label for="pwdbst" class="control-label">Passwort bestätigen:</label>
 					<input type="password" ng-enter="registiereAdminAccount(registration.passwort)" ng-change="checkPasswortBst(registration.passwort, registration.passwortbst)" ng-model="registration.passwortbst" class="form-control" id="pwdbst">
-					
 					<label ng-show="!isGleich && registration.passwortbst.length > 0" class="control-label">Passwort stimmt nicht überein</label>
 					<br ng-hide="!isGleich && registration.passwortbst.length > 0">
 				</div>
@@ -267,6 +254,5 @@
 			</div>
 		</modal-dialog>
 		<!-- ENDE Registration des Administrators -->
-
 	</div>
 </div>
