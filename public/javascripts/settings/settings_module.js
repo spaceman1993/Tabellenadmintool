@@ -242,9 +242,9 @@ angular.module('settingsModule', [])
 	 * Initialisierung der Standarddesigns des Programms
 	 */
 	var initApplicationDesigns = function(){
-		$scope.applicationDesign1 = createApplicationDesign("#CB8C1D", 20, "#4C3327", "#FFFFFF", "#F2EFE4", "#000000", "#FF0000");
-		$scope.applicationDesign2 = createApplicationDesign("#CB8C1D", 20, "#FF0000", "#FFFFFF", "#F2EFE4", "#000000", "#FF0000");
-		$scope.applicationDesign3 = createApplicationDesign("#CB8C1D", 20, "#00FF00", "#FFFFFF", "#F2EFE4", "#000000", "#FF0000");
+		$scope.applicationDesign1 = createApplicationDesign("#CB8C1D", 20, "#030094", "#FFFFFF", "#F2EFE4", "#000000", "#ff0000");
+		$scope.applicationDesign2 = createApplicationDesign("#CB8C1D", 20, "#238c4e", "#FFFFFF", "#F2EFE4", "#000000", "#0600ff");
+		$scope.applicationDesign3 = createApplicationDesign("#CB8C1D", 20, "#a11515", "#FFFFFF", "#F2EFE4", "#000000", "#000000");
 	};
 	
 	
@@ -253,8 +253,8 @@ angular.module('settingsModule', [])
 	 */
 	var initTableDesigns = function(){
 		$scope.tableDesign1 = createTableDesign("#030094", "#ffffff", "#ffffff", "#000000", true, "#cccccc", "#000000", "#9ca0ff", false);
-		$scope.tableDesign2 = createTableDesign("#238c4e", "#ffffff", "#ffffff", "#000000", true, "#cccccc", "#000000", "#9ca0ff", false);
-		$scope.tableDesign3 = createTableDesign("#a11515", "#ffffff", "#ffffff", "#000000", true, "#cccccc", "#000000", "#9ca0ff", false);
+		$scope.tableDesign2 = createTableDesign("#238c4e", "#ffffff", "#ffffff", "#000000", true, "#cccccc", "#000000", "#9cffa0", false);
+		$scope.tableDesign3 = createTableDesign("#a11515", "#ffffff", "#ffffff", "#000000", true, "#cccccc", "#000000", "#ff9ca0", false);
 	};
 	
 	/**
