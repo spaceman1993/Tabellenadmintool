@@ -75,15 +75,17 @@ router.post('/benutzer/login', function(req, res, next) {
 		var pass = 0;
 		if(result !== null){
 			pass = crypto.pbkdf2Sync(req.body.passwort, new Buffer(result.crypt, 'base64'), 10000, 64).toString('base64');
-		}
-
-		
-		if (result.passwort === pass){
-			console.log("Login  #"+req.body.name+"#" );
-			res.json(result);
+			
+			if (result.passwort === pass){
+				console.log("Login  #"+req.body.name+"#" );
+				res.json(result);
+			}else{
+				console.log("Passwort stimmt nicht #"+req.body.name+"#" );
+				res.json({"name" : "code403"});
+			}
 		}else{
-			console.log("Passwort stimmt nicht #"+req.body.name+"#" );
-			res.json({"name" : "code403"});
+			console.log("Benutzer nicht gefunden #"+req.body.name+"#" );
+			res.json({"name" : "code404"});
 		}
 		return next();
 	});
