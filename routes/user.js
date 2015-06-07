@@ -73,7 +73,7 @@ router.post('/benutzer/login', function(req, res, next) {
 			return	next(err);
 		}
 		var pass = 0;
-		if(result !== null){
+		if(result !== null && req.body.passwort !== null){
 			pass = crypto.pbkdf2Sync(req.body.passwort, new Buffer(result.crypt, 'base64'), 10000, 64).toString('base64');
 			
 			if (result.passwort === pass){
@@ -83,6 +83,9 @@ router.post('/benutzer/login', function(req, res, next) {
 				console.log("Passwort stimmt nicht #"+req.body.name+"#" );
 				res.json({"name" : "code403"});
 			}
+		}else if(req.body.passwort === null){
+			console.log("Passwort stimmt nicht #"+req.body.name+"#" );
+			res.json({"name" : "code403"});
 		}else{
 			console.log("Benutzer nicht gefunden #"+req.body.name+"#" );
 			res.json({"name" : "code404"});
