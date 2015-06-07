@@ -72,8 +72,11 @@ router.post('/benutzer/login', function(req, res, next) {
 			res.json({"name" : "code404"});
 			return	next(err);
 		}
+		var pass = 0;
+		if(result !== null){
+			pass = crypto.pbkdf2Sync(req.body.passwort, new Buffer(result.crypt, 'base64'), 10000, 64).toString('base64');
+		}
 
-		var pass = crypto.pbkdf2Sync(req.body.passwort, new Buffer(result.crypt, 'base64'), 10000, 64).toString('base64');
 		
 		if (result.passwort === pass){
 			console.log("Login  #"+req.body.name+"#" );
