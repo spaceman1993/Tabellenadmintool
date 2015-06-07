@@ -145,35 +145,33 @@ angular.module('tableModule', [])
 	 * 			passwort -> Passwort des Benutzers
 	 */
 	$scope.loginBenutzer = function(name, passwort) {
-		
-		$scope.errorHeader = "";
-		
-		//Daten werden aus der Datenbank für den Benutzer ausgelesen
-		benutzerFactory.getUserByName({"name":name}, function(benutzer){
-			
-			//Bei vorliegen eines Benutzers wird der Login weiter überprüft
-			if(benutzer !== null){
-				//Überprüfung, ob Passwort übereinstimmt
-				if(passwort === benutzer.passwort){
-					activUser.user = benutzer;
-					activUser.isLogin = true;
-					$scope.benutzer = activUser.user;
-					$scope.isLogin = activUser.isLogin;
-					
-					//Daten für den Controller werden aktualisiert
-					$scope.initTableControllerVars();
-				}
-				//Bei Falscheingabe wird ein Error ausgegeben
-				else{
-					$scope.errorHeader = "Kennwort falsch";
-				}
-			}
-			//Bei nicht vorliegen des Benutzers wird ein Error ausgegeben
-			else{
-				$scope.errorHeader = "Keinen Benutzer unter diesen Namen vorhanden";
-			}
+		  
+		  $scope.errorHeader = "";
+		  
+		  //Daten werden aus der Datenbank für den Benutzer ausgelesen und überprüfung, ob Passwort übereinstimmt
+		  benutzerFactory.login({"name" : name, "passwort" : passwort }, function(benutzer){
+		   //Passwort übereinstimmt oder...
+		   if(benutzer !== null && benutzer.name !== "code404" && benutzer.name !== "code403"){
+		    //Benutzer nicht gefunden
 
-		})
+		    activUser.user = benutzer;
+		    activUser.isLogin = true;
+		    $scope.benutzer = activUser.user;
+		    $scope.isLogin = activUser.isLogin;
+		    
+		    //Daten für den Controller werden aktualisiert
+		    $scope.initTableControllerVars();
+		    }
+		    //Bei Falscheingabe wird ein Error ausgegeben
+		    else if(benutzer.name !== "code403"){
+		     $scope.errorHeader = "Kennwort falsch";
+		    }
+		    //Bei nicht vorliegen des Benutzers wird ein Error ausgegeben
+		    else{
+		     $scope.errorHeader = "Keinen Benutzer unter diesen Namen vorhanden";
+		    }
+
+		  });
 	};
 	
 	/**
@@ -205,7 +203,7 @@ angular.module('tableModule', [])
 				
 				benutzerFactory.create({"name":benutzer.benutzername, "passwort":benutzer.passwort, "settings": settings}, function(newBenutzer){
 					
-						$scope.loginBenutzer(newBenutzer.name, newBenutzer.passwort);
+						$scope.loginBenutzer(newBenutzer.name, benutzer.passwort);
 
 				});
 			
@@ -267,7 +265,7 @@ angular.module('tableModule', [])
 			//Admin wird in der Datenbank übernommen
 			benutzerFactory.create({"name":"admin", "passwort": passwort, "settings": settings}, function(admin){
 				//Admin wird direkt angemeldet
-				$scope.loginBenutzer(admin.name, admin.passwort);
+				$scope.loginBenutzer(admin.name, passwort);
 				
 				$scope.registration = {};
 			});

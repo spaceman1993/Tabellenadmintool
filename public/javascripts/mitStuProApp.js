@@ -70,97 +70,113 @@ app.controller('MainCtrl', ['$scope', 'activUser', function ($scope, activUser) 
 	$scope.test = activUser.isLogin;
 }]);
 
-app.factory("benutzerFactory", ['$http', function ($http) {
-	 
-	 // Zugriff auf die Routes
-	 
-	var o = {
-	 user: {}
-	};
-	o.getAllUser = function(callback){
-	 console.log("getAllUser");
-	 $http.get('/benutzer/alle')
-	 .success(function(data){
-	  console.log("success getAllUser = " + data);
-	  o.user = data;
-	  callback(o.user);
-	 })
-	 .error(function(error){
-	  console.log("error getAllUser");
-	  o.user = null;
-	  callback(null);
-	 });
-	};
-	 
-	o.getUserByName = function(name, callback){
-	 console.log("getUserByName + name = " + name.name);
-	 $http.post('/benutzer/byName', name)
-	 .success(function(data){
-	  console.log("success getUserByName =" +data);
-	  o.user = data;
-	  callback(o.user);
-	 })
-	 .error(function(error){
-	  console.log("error getUserByName");
-	  o.user = null;
-	  callback(null);
-	 });
-	};
-
-	o.getUserById = function(userId){
-	 return $http.get('/benutzer/byID' + userId).success(function(data){
-	  return data;
-	 });
-	};
-
-	o.updateUserByName = function(name, callback){
-	 console.log("updateUserByName + name = " + name.name);
-	 $http.put('/Benutzer/updateSettings/byName', name)
-	 .success(function(data){
-	  console.log("success updateUserByName =" +data);
-	  o.user = data;
-	  callback(o.user);
-	 })
-	 .error(function(error){
-	  console.log("error updateUserByName");
-	  o.user = null;
-	  callback(null);
-	 });
-	};
-
-
-	o.create = function(user, callback){
-	 console.log("create + Benutzer = " + user.name);
-	 $http.post('/benutzer/save', user)
-	 .success(function(data){
-	  console.log("success create =" +data);
-	    o.user = data;
-	    callback(data);
+app.factory("benutzerFactory",[ '$http', function ($http) {
+	  
+	  // Zugriff auf die Routes
+	  
+	 var o = {
+	  user: {}
+	 };
+	 o.getAllUser = function(callback){
+	  console.log("getAllUser");
+	  $http.get('/benutzer/alle')
+	  .success(function(data){
+	   console.log("success getAllUser = " + data);
+	   o.user = data;
+	   callback(o.user);
 	  })
-	 .error(function(error){
-	  console.log("error create");
+	  .error(function(error){
+	   console.log("error getAllUser");
+	   o.user = null;
+	   callback(null);
+	  });
+	 };
+	  
+	 o.getUserByName = function(name, callback){
+	  console.log("getUserByName + name = " + name.name);
+	  $http.post('/benutzer/byName', name)
+	  .success(function(data){
+	   console.log("success getUserByName =" +data);
+	   o.user = data;
+	   callback(o.user);
+	  })
+	  .error(function(error){
+	   console.log("error getUserByName");
+	   o.user = null;
+	   callback(null);
+	  });
+	 };
+	 
+	 o.login = function(name, callback){
+	   console.log("login + name = " + name.name);
+	   console.log("login + pass = " + name.passwort);
+	   $http.post('/benutzer/login', name)
+	   .success(function(data){
+	    console.log("success login =" +data);
+	    o.user = data;
+	    callback(o.user);
+	   })
+	   .error(function(error){
+	    console.log("error login");
+	    o.user = null;
+	    callback(null);
+	   });
+	  };
 
-	 });
-	};
+	 o.getUserById = function(userId){
+	  return $http.get('/benutzer/byID' + userId).success(function(data){
+	   return data;
+	  });
+	 };
 
-	o.deleteUserByName = function(name, callback){
-	 console.log("deleteUserByName + name = " + name.name);
-	 $http.post('/benutzer/byName', name)
-	 .success(function(data){
-	  console.log("success deleteUserByName =" +data);
-	  o.user = data;
-	  callback(o.user);
-	 })
-	 .error(function(error){
-	  console.log("error deleteUserByName");
-	  o.user = null;
-	  callback(null);
-	 });
-	};
+	 o.updateUserByName = function(name, callback){
+	  console.log("updateUserByName + name = " + name.name);
+	  $http.put('/Benutzer/updateSettings/byName', name)
+	  .success(function(data){
+	   console.log("success updateUserByName =" +data);
+	   o.user = data;
+	   callback(o.user);
+	  })
+	  .error(function(error){
+	   console.log("error updateUserByName");
+	   o.user = null;
+	   callback(null);
+	  });
+	 };
 
-	return o;
-	    
-	}]);
+
+	 o.create = function(user, callback){
+	  console.log("create + Benutzer = " + user.name);
+	  $http.post('/benutzer/save', user)
+	  .success(function(data){
+	   console.log("success create =" +data);
+	     o.user = data;
+	     callback(data);
+	   })
+	  .error(function(error){
+	   console.log("error create");
+
+	  });
+	 };
+
+	 o.deleteUserByName = function(name, callback){
+	  console.log("deleteUserByName + name = " + name.name);
+	  $http.post('/benutzer/byName', name)
+	  .success(function(data){
+	   console.log("success deleteUserByName =" +data);
+	   o.user = data;
+	   callback(o.user);
+	  })
+	  .error(function(error){
+	   console.log("error deleteUserByName");
+	   o.user = null;
+	   callback(null);
+	  });
+	 };
+
+	 return o;
+	     
+}]);
 
 
 /**

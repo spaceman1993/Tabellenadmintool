@@ -426,7 +426,7 @@ angular.module('settingsModule', [])
 	 * @params: league -> Die zu löschende Liga
 	 */
 	$scope.showDeleteModal = function(league){
-		$scope.showDelete = true;
+		$scope.liga.showDelete = true;
 		$scope.deleteLeague = league;
 	};
 	
